@@ -1,5 +1,5 @@
 import './App.css'
-import TripPlanner from './TripPlanner'
+import TripPlanner from './components/TripPlanner.tsx'
 
 function App() {
   return <TripPlanner />
