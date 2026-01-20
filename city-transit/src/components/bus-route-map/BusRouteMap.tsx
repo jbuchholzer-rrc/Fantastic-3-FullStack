@@ -22,10 +22,24 @@ export default function BusRouteMap() {
           width="100%"
           height="180"
           role="img"
-          aria-label="Static bus route illustration"
+          aria-label="Static illustration of bus routes"
         >
-          <line x1="20" y1="90" x2="300" y2="90" stroke="#1565c0" strokeWidth="4" />
-          <line x1="300" y1="90" x2="520" y2="40" stroke="#2e7d32" strokeWidth="4" />
+          <line
+            x1="20"
+            y1="90"
+            x2="300"
+            y2="90"
+            stroke="#1565c0"
+            strokeWidth="4"
+          />
+          <line
+            x1="300"
+            y1="90"
+            x2="520"
+            y2="40"
+            stroke="#2e7d32"
+            strokeWidth="4"
+          />
         </svg>
 
         <ul className="stop-list">
