@@ -1,30 +1,24 @@
-import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
-import './App.css'
-import TripPlanner from './TripPlanner'
-import BusRouteMap from './components/bus-route-map/BusRouteMap'
+2import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './layout/Layout';
+import BusRouteMapPage from './pages/BusRouteMapPage';
+import { StopsProvider } from './context/StopsContext';
 
 function App() {
   const [selectedFrom, setSelectedFrom] = useState('')
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>City Transit Planner</h1>
-      </header>
-
-      <main>
-        <Routes>
-          <Route path="/" element={<TripPlanner selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} />} />
-          <Route path="/map" element={<BusRouteMap />} />
-        </Routes>
-      </main>
-
-      <footer className="app-footer">
-        <p>Team Members: Khush, Harsh, Jack</p>
-      </footer>
-    </div>
-  )
+    <StopsProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<div>Home Page</div>} />
+            <Route path="/bus-route-map" element={<BusRouteMapPage />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </StopsProvider>
+  );
 }
 
 export default App
