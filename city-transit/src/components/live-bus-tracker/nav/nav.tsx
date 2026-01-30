@@ -13,6 +13,9 @@ const Nav = () => {
       <NavLink to="/favorites">
         Favorites
       </NavLink>
+      <NavLink to="/bus-route-map">
+        Bus Route Map
+      </NavLink>
     </nav>
   );
 };
