@@ -2,17 +2,17 @@ import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import TripPlanner from './TripPlanner'
+import LiveBusTracker from './LiveBusTracker'
+import BusRouteMap from './BusRouteMap'
 
 function App() {
-  // Shared state managed at top level
   const [selectedFrom, setSelectedFrom] = useState('')
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<TripPlanner selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} />}
-      />
+      <Route path="/" element={<TripPlanner selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} />} />
+      <Route path="/live" element={<LiveBusTracker selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} />} />
+      <Route path="/map" element={<BusRouteMap selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} />} />
     </Routes>
   )
 }
