@@ -5,6 +5,7 @@
  */
 
 import { useState } from 'react'
+import TripForm from './TripForm'
 
 type TripPlannerProps = {
   selectedFrom: string
@@ -33,33 +34,19 @@ function TripPlanner({ selectedFrom, setSelectedFrom }: TripPlannerProps) {
     <div>
       <h2>Trip Planner</h2>
 
-      {/* Trip Form */}
+      {/* Shows current selection in real time */}
+      <p>From: {selectedFrom || 'not selected'}</p>
+      <p>To: {selectedTo || 'not selected'}</p>
+
+      {/* Trip Form Component */}
       <div className="card">
-        <select value={selectedFrom} onChange={(e) => setSelectedFrom(e.target.value)}>
-          <option value="">From</option>
-          <option value="Portage & Main">Portage & Main</option>
-          <option value="The Forks">The Forks</option>
-          <option value="Polo Park">Polo Park</option>
-          <option value="St Vital Centre">St Vital Centre</option>
-          <option value="U of M">U of M</option>
-          <option value="Osborne Village">Osborne Village</option>
-          <option value="HSC">HSC</option>
-          <option value="Kildonan Place">Kildonan Place</option>
-        </select>
-
-        <select value={selectedTo} onChange={(e) => setSelectedTo(e.target.value)}>
-          <option value="">To</option>
-          <option value="Portage & Main">Portage & Main</option>
-          <option value="The Forks">The Forks</option>
-          <option value="Polo Park">Polo Park</option>
-          <option value="St Vital Centre">St Vital Centre</option>
-          <option value="U of M">U of M</option>
-          <option value="Osborne Village">Osborne Village</option>
-          <option value="HSC">HSC</option>
-          <option value="Kildonan Place">Kildonan Place</option>
-        </select>
-
-        <br /><br />
+        <TripForm
+          selectedFrom={selectedFrom}
+          setSelectedFrom={setSelectedFrom}
+          selectedTo={selectedTo}
+          setSelectedTo={setSelectedTo}
+        />
+        <br />
         <button onClick={handleSaveTrip}>Save Trip</button>
       </div>
 
