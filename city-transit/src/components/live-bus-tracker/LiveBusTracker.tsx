@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./LiveBusTracker.css";
+import "LiveBusTracker.css";
 
 type BusStatus = "On Time" | "Delayed";
 

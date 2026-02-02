@@ -1,4 +1,4 @@
-import BusStatusCard from "../components/bus-status-card/BusStatusCard";
+import BusStatusCard from "../components/bus-status-card/busStatusCard";
 
 interface TrackedBus {
   id: number;
