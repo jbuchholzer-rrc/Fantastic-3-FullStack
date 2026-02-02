@@ -1,10 +1,12 @@
-import "./App.css";
+2import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './layout/Layout';
 import BusRouteMapPage from './pages/BusRouteMapPage';
 import { StopsProvider } from './context/StopsContext';
 
 function App() {
+  const [selectedFrom, setSelectedFrom] = useState('')
+
   return (
     <StopsProvider>
       <Router>
@@ -19,4 +21,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
