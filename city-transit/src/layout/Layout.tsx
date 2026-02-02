@@ -5,8 +5,8 @@ function Layout({ children }: { children: React.ReactNode }) {
     <>
       <header>
         <h1>Winnipeg Transit Tracker</h1>
-        <Nav /> 
-      </header>e
+        <Nav />
+      </header>
 
       <main>{children}</main>
 

@@ -10,6 +10,10 @@ import TripForm from './TripForm'
 type TripPlannerProps = {
   selectedFrom: string
   setSelectedFrom: (value: string) => void
+  selectedTo: string
+  setSelectedTo: (value: string) => void
+  savedTrips: string[]
+  setSavedTrips: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 function TripPlanner({ selectedFrom, setSelectedFrom }: TripPlannerProps) {

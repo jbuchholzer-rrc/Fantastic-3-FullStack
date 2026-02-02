@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import "./Nav.css";
+import "./nav.css";
 
 const Nav = () => {
   return (
@@ -15,6 +15,9 @@ const Nav = () => {
       </NavLink>
       <NavLink to="/bus-route-map">
         Bus Route Map
+      </NavLink>
+      <NavLink to="/trip-planner">
+        Trip Planner
       </NavLink>
     </nav>
   );

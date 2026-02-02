@@ -4,7 +4,7 @@
 }
 
 .bus-route-map h2 {
-  color: #0d47a1;
+  color: #003A8F;
   margin-bottom: 1rem;
 }
 
@@ -13,12 +13,16 @@
   border-radius: 8px;
   padding: 1rem;
   background-color: #ffffff;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
 .stop-list {
   list-style: none;
   padding: 0;
-  margin-top: 1rem;
+  margin: 0;
+  flex: 1;
 }
 
 .stop-list li {
@@ -31,6 +35,7 @@
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .stop-list button:hover {

@@ -19,32 +19,33 @@ export default function BusRouteMap() {
 
       <div className="map-area">
         <svg
-          width="100%"
+          width="100"
           height="180"
           role="img"
           aria-label="Static illustration of bus routes"
         >
           <line
-            x1="20"
-            y1="90"
-            x2="300"
-            y2="90"
-            stroke="#1565c0"
+            x1="50"
+            y1="20"
+            x2="50"
+            y2="160"
+            stroke="#003A8F"
             strokeWidth="4"
           />
-          <line
-            x1="300"
-            y1="90"
-            x2="520"
-            y2="40"
-            stroke="#2e7d32"
-            strokeWidth="4"
-          />
+          {stops.map((stop, index) => (
+            <circle
+              key={stop.id}
+              cx="50"
+              cy={20 + index * 35}
+              r="6"
+              fill="#003A8F"
+            />
+          ))}
         </svg>
 
         <ul className="stop-list">
-          {stops.map((stop) => (
-            <li key={stop.id}>
+          {stops.map((stop, index) => (
+            <li key={stop.id} style={{ marginTop: index === 0 ? '0' : '1rem' }}>
               <button type="button">{stop.name}</button>
             </li>
           ))}

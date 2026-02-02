@@ -33,11 +33,11 @@ function BusRouteMapPage() {
       <button onClick={addStop}>Add Stop</button>
 
       {/* Dynamic List (I.3) */}
-      <ul>
+      <ul style={{ listStyle: 'none', padding: 0, marginTop: '1rem' }}>
         {stops.map((stop, index) => (
-          <li key={index}>
+          <li key={index} style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             {stop}
-            <button onClick={() => removeStop(index)}>❌</button>
+            <button onClick={() => removeStop(index)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}>❌</button>
           </li>
         ))}
       </ul>
