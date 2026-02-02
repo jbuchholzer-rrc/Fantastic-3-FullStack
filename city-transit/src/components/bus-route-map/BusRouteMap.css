@@ -1,0 +1,43 @@
+.bus-route-map {
+  padding: 1.5rem;
+  background-color: #f4f6f8;
+}
+
+.bus-route-map h2 {
+  color: #003A8F;
+  margin-bottom: 1rem;
+}
+
+.map-area {
+  border: 2px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #ffffff;
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.stop-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+
+.stop-list li {
+  margin-bottom: 0.5rem;
+}
+
+.stop-list button {
+  width: 100%;
+  padding: 0.5rem;
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.stop-list button:hover {
+  background-color: #bbdefb;
+}

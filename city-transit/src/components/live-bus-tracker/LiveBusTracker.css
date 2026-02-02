@@ -1,0 +1,49 @@
+.live-bus-tracker {
+  background-color: #fbeae8ff; /* Sky Blue background */
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  color: #003A8F; /* Transit Blue text */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.live-bus-tracker h2 {
+  font-size: 30px; /* H2: 30px */
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #003A8F; /* Transit Blue */
+}
+
+.bus-list {
+  list-style: none;
+  padding: 0;
+}
+
+.bus-card {
+  background-color: #FFFFFF; /* White background */
+  border: 1px solid #6B7280; /* Neutral Gray border */
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bus-card div {
+  margin-bottom: 5px;
+  font-size: 16px; /* Body text */
+}
+
+.bus-card strong {
+  color: #003A8F; /* Transit Blue */
+}
+
+.status-on-time {
+  color: #003A8F; /* Transit Blue for on time */
+  font-weight: bold;
+}
+
+.status-delayed {
+  color: hsla(8, 92%, 50%, 1.00); /* Warning Orange for delayed */
+  font-weight: bold;
+}
