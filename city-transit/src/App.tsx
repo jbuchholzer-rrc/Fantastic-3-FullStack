@@ -1,37 +1,34 @@
-import './App.css'
-import { Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
-import Layout from './layout/Layout'
-import LiveBusTrackerPage from './pages/liveBusTrackerPage'
-import FavoritesPage from './pages/FavoritesPage'
-import BusRouteMapPage from './pages/BusRouteMapPage'
-import TripPlannerPage from './pages/TripPlannerPage'
-
-interface TrackedBus {
-  id: number;
-  routeNumber: string;
-  destination: string;
-  eta: number;
-  status: "On Time" | "Delayed";
-}
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
 function App() {
-  const [trackedBuses, setTrackedBuses] = useState<TrackedBus[]>([]);
-  const [favorites, setFavorites] = useState<TrackedBus[]>([]);
-  const [selectedFrom, setSelectedFrom] = useState('');
-  const [selectedTo, setSelectedTo] = useState('');
-  const [savedTrips, setSavedTrips] = useState<string[]>([]);
+  const [count, setCount] = useState(0)
 
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<section><h2>Home</h2><p>Welcome to the Winnipeg Transit Tracker app.</p><p>Tracked Buses: {trackedBuses.length}</p></section>} />
-        <Route path="/live-bus-tracker" element={<LiveBusTrackerPage trackedBuses={trackedBuses} setTrackedBuses={setTrackedBuses} favorites={favorites} setFavorites={setFavorites} />} />
-        <Route path="/favorites" element={<FavoritesPage favorites={favorites} setFavorites={setFavorites} />} />
-        <Route path="/bus-route-map" element={<BusRouteMapPage />} />
-        <Route path="/trip-planner" element={<TripPlannerPage selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} selectedTo={selectedTo} setSelectedTo={setSelectedTo} savedTrips={savedTrips} setSavedTrips={setSavedTrips} />} />
-      </Routes>
-    </Layout>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
   )
 }
 
