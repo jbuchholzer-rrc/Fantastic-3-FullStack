@@ -1,10 +1,13 @@
 import { Outlet } from "react-router-dom";
+import Nav from '../components/live-bus-tracker/nav/nav'
 
 function Layout() {
   return (
     <>
       <header>
         <h1>Winnipeg Transit Tracker</h1>
+
+        <Nav />
       </header>
 
       <main>

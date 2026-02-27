@@ -5,11 +5,14 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import './App.css'
 import App from './App.tsx'
+import { StopsProvider } from './context/StopsContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <StopsProvider>
+        <App />
+      </StopsProvider>
     </BrowserRouter>
   </StrictMode>,
 )

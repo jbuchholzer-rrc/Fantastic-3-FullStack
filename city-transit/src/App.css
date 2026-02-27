@@ -20,7 +20,7 @@
 }
 
 main {
-  padding: 2rem;
+  padding: 1.5rem;
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
 }
