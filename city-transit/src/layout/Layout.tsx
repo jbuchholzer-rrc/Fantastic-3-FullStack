@@ -1,12 +1,11 @@
+import React from 'react'
 import Nav from "../components/live-bus-tracker/nav/nav"
-import Nav from '../components/live-bus-tracker/nav/nav'
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header>
         <h1>Winnipeg Transit Tracker</h1>
-        <Nav /> 
         <Nav />
       </header>
 
