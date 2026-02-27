@@ -1,35 +1,35 @@
+/**
+ * @author Jack Buchholzer
+ * TripForm — the from/to dropdowns for trip planning
+ *
+ * This component only handles the form UI.
+ * The stop names now come from props (originally from the repository
+ * through the hook) instead of being hardcoded here.
+ */
+
 type TripFormProps = {
+  stops: string[]
   selectedFrom: string
   setSelectedFrom: (value: string) => void
   selectedTo: string
   setSelectedTo: (value: string) => void
 }
 
-function TripForm({ selectedFrom, setSelectedFrom, selectedTo, setSelectedTo }: TripFormProps) {
+function TripForm({ stops, selectedFrom, setSelectedFrom, selectedTo, setSelectedTo }: TripFormProps) {
   return (
     <div>
       <select value={selectedFrom} onChange={(e) => setSelectedFrom(e.target.value)}>
         <option value="">From</option>
-        <option value="Portage & Main">Portage & Main</option>
-        <option value="The Forks">The Forks</option>
-        <option value="Polo Park">Polo Park</option>
-        <option value="St Vital Centre">St Vital Centre</option>
-        <option value="U of M">U of M</option>
-        <option value="Osborne Village">Osborne Village</option>
-        <option value="HSC">HSC</option>
-        <option value="Kildonan Place">Kildonan Place</option>
+        {stops.map((stop) => (
+          <option key={stop} value={stop}>{stop}</option>
+        ))}
       </select>
 
       <select value={selectedTo} onChange={(e) => setSelectedTo(e.target.value)}>
         <option value="">To</option>
-        <option value="Portage & Main">Portage & Main</option>
-        <option value="The Forks">The Forks</option>
-        <option value="Polo Park">Polo Park</option>
-        <option value="St Vital Centre">St Vital Centre</option>
-        <option value="U of M">U of M</option>
-        <option value="Osborne Village">Osborne Village</option>
-        <option value="HSC">HSC</option>
-        <option value="Kildonan Place">Kildonan Place</option>
+        {stops.map((stop) => (
+          <option key={stop} value={stop}>{stop}</option>
+        ))}
       </select>
     </div>
   )
