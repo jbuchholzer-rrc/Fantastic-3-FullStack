@@ -36,13 +36,13 @@ This sprint focused on refactoring the frontend to use the hook-service-reposito
 
 | Requirement | Description | Status |
 |-------------|-------------|--------|
-| T.1 | Hook Definition - useBuses - Completed
-| T.2 | Service Definition - BusService - completed
-| T.4 | Shared-page-state Refactor - BusContext - completed
-| I.1 | Repository Definition - BusRepository - completed
-| I.2 | Test Data - 12 bus items - completed
-| I.3 | Refactored Components - completed
-| I.4 | Architecture Document -completed
+| T.1 | Hook Definition - useBuses | Completed |
+| T.2 | Service Definition - BusService | completed |
+| T.4 | Shared-page-state Refactor - BusContext | completed |
+| I.1 | Repository Definition - BusRepository | completed |
+| I.2 | Test Data - 12 bus items | completed |
+| I.3 | Refactored Components | completed 
+| I.4 | Architecture Document | completed |
 
 ### Key Changes
 - Created reusable hooks for presentation logic
