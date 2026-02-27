@@ -1,4 +1,4 @@
-import "./BusStatusCard.css";
+import "./busStatusCard.css";
 
 interface BusStatusCardProps {
   routeNumber: string;

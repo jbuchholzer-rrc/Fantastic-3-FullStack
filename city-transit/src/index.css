@@ -7,6 +7,36 @@
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #eceff1;
+  background-color: #FFFFFF;
   color: #263238;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #003a8f;
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+select {
+  padding: 0.5rem;
+  border: 1px solid #90caf9;
+  border-radius: 4px;
+  background-color: #ffffff;
+  margin-right: 0.5rem;
+}
+
+.card {
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #ffffff;
+  margin-bottom: 1rem;
 }

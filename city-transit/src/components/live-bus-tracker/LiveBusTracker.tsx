@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { useBuses } from "../../hooks/useBuses";
 import type { Bus } from "../../types/Bus";
 import "./LiveBusTracker.css";
+import "LiveBusTracker.css";
 
 const LiveBusTracker = () => {
   const { buses, delayedBuses, sortByETA, loading } = useBuses();
