@@ -15,8 +15,8 @@
  */
 
 import useTrips from '../hooks/useTrips'
-import TripForm from '../TripForm'
-import Trip from '../types/trip'
+import TripForm from '../components/TripForm'
+import type { Trip } from '../types/trip'
 
 function TripPlannerPage() {
   // the hook gives us everything we need for this page

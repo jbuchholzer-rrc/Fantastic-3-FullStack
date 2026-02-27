@@ -2,7 +2,7 @@
  * Trip type definition
  * Represents a single transit trip in the Winnipeg Transit system
  */
-type Trip = {
+export type Trip = {
   id: number
   from: string
   to: string
@@ -13,5 +13,3 @@ type Trip = {
   fare: number
   status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled'
 }
-
-export default Trip

@@ -7,7 +7,7 @@
  * Next sprint this will connect to a real database.
  */
 
-import Trip from '../types/trip'
+import type { Trip } from '../types/trip'
 import testTrips from '../data/tripData'
 
 // in-memory copy of our test data (acts like a database table)

@@ -113,9 +113,9 @@ This page shows both patterns: using the hook for presentation state, and using 
 
 ---
 
-## TripForm (`src/TripForm.tsx`)
+## TripForm (`src/components/TripForm.tsx`)
 
-**What:** The From/To dropdown form. Updated to receive stop names as props instead of hardcoding them.
+**What:** The From/To dropdown form. Receives stop names as props from the page instead of hardcoding them.
 
 **How it fits:** It's a simple UI component. It doesn't know about the service or repository. The page passes it data from the hook, and it renders dropdowns.
 
@@ -145,6 +145,7 @@ User Sees  <- TripPlannerPage <- useTrips hook <- tripService <-------+
 
 ## Changes to Existing Files
 
-- **App.tsx** — Removed duplicate Router (was nested with main.tsx), removed unused useState, added routes for `/trip-planner` and `/saved-trips`
-- **TripForm.tsx** — Now receives `stops` array as a prop instead of hardcoding Winnipeg stops
-- **TripPlanner.tsx** — Old component, replaced by TripPlannerPage. Can be removed.
+- **App.tsx** — Removed trip planner state (selectedFrom, selectedTo, savedTrips) since the hook owns that now. Added routes for `/trip-planner` and `/saved-trips`.
+- **TripForm.tsx** — Moved to `src/components/`. Now receives `stops` array as a prop instead of hardcoding Winnipeg stops.
+- **TripPlanner.tsx** — Old component with prop drilling, removed. Replaced by TripPlannerPage.
+- **nav.tsx** — Added "Saved Trips" link to the navigation.

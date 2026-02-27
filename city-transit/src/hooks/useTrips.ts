@@ -22,7 +22,7 @@
  */
 
 import { useState } from 'react'
-import Trip from '../types/trip'
+import type { Trip } from '../types/trip'
 import tripService from '../services/tripService'
 
 function useTrips() {

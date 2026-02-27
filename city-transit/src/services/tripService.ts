@@ -9,7 +9,7 @@
  * It does NOT fetch data directly (that's the repository's job).
  */
 
-import Trip from '../types/trip'
+import type { Trip } from '../types/trip'
 import tripRepository from '../repository/tripRepository'
 
 // search for trips that match a from/to combination
