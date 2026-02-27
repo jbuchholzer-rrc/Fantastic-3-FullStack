@@ -1,50 +1,49 @@
+/**
+ * I.3: LiveBusTracker Component
+ * 
+ * Purpose:
+ * This is the main component that demonstrates the complete hook-service-repository architecture.
+ * It shows how all three layers work together.
+ * 
+ * Architecture:
+ * 1. Presentation Layer: This component (LiveBusTracker)
+ * 2. Hook Layer: useBuses - handles presentation logic
+ * 3. Service Layer: BusService - handles business logic
+ * 4. Repository Layer: BusRepository - handles data access
+ * 
+ * How it works:
+ * - Component uses useBuses hook for presentation logic
+ * - Hook uses BusService for business operations
+ * - Service uses BusRepository for CRUD operations
+ * - Repository manages test data (will be replaced with database in next module)
+ */
+
 import { useEffect, useState } from "react";
+import { useBuses } from "../../hooks/useBuses";
+import type { Bus } from "../../types/Bus";
 import "./LiveBusTracker.css";
 
-type BusStatus = "On Time" | "Delayed";
-
-interface Bus {
-  id: number;
-  routeNumber: string;
-  destination: string;
-  nextStop: string;
-  eta: number;
-  status: BusStatus;
-}
-
 const LiveBusTracker = () => {
-  const [buses, setBuses] = useState<Bus[]>([
-    {
-      id: 1,
-      routeNumber: "D19",
-      destination: "Corydon",
-      nextStop: "Stafford St",
-      eta: 5,
-      status: "On Time",
-    },
-    {
-      id: 2,
-      routeNumber: "FX3",
-      destination: "Transcona",
-      nextStop: "Plessis Rd",
-      eta: 12,
-      status: "Delayed",
-    },
-    {
-      id: 3,
-      routeNumber: "F8",
-      destination: "Pembina",
-      nextStop: "Plaza Dr",
-      eta: 3,
-      status: "On Time",
-    },
-  ]);
+  const { buses, delayedBuses, sortByETA, loading } = useBuses();
+  const [displayMode, setDisplayMode] = useState<"all" | "sorted">("all");
+
+  // Local state for simulating real-time ETA updates
+  const [displayedBuses, setDisplayedBuses] = useState<Bus[]>([]);
+
+  // Update displayed buses based on mode
+  useEffect(() => {
+    if (displayMode === "sorted") {
+      setDisplayedBuses(sortByETA());
+    } else {
+      setDisplayedBuses(buses);
+    }
+  }, [buses, displayMode, sortByETA]);
 
   // Simulate real-time ETA updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setBuses((prevBuses) =>
-        prevBuses.map((bus) => ({
+      setDisplayedBuses(prev => 
+        prev.map(bus => ({
           ...bus,
           eta: bus.eta > 1 ? bus.eta - 1 : 1,
         }))
@@ -54,20 +53,47 @@ const LiveBusTracker = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (loading) {
+    return <div>Loading buses...</div>;
+  }
+
   return (
     <section className="live-bus-tracker">
       <h2>Live Bus Tracker</h2>
-      <ul className="bus-list">
-        {buses.map((bus: Bus) => (
-          <li key={bus.id} className="bus-card">
-            <div><strong>Route:</strong> {bus.routeNumber}</div>
-            <div><strong>Destination:</strong> {bus.destination}</div>
-            <div><strong>Next Stop:</strong> {bus.nextStop}</div>
-            <div><strong>ETA:</strong> {bus.eta} min</div>
-            <div><strong>Status:</strong> <span className={bus.status === "On Time" ? "status-on-time" : "status-delayed"}>{bus.status}</span></div>
-          </li>
+      
+      {/* Display mode toggle */}
+      <div className="controls">
+        <button 
+          onClick={() => setDisplayMode("all")}
+          className={displayMode === "all" ? "active" : ""}
+        >
+          All Buses
+        </button>
+        <button 
+          onClick={() => setDisplayMode("sorted")}
+          className={displayMode === "sorted" ? "active" : ""}
+        >
+          Sort by ETA
+        </button>
+      </div>
+
+      {/* Show delayed count */}
+      <p className="delayed-count">
+        Delayed Buses: {delayedBuses.length}
+      </p>
+
+      {/* Bus list */}
+      <div className="bus-list">
+        {displayedBuses.map(bus => (
+          <div key={bus.id} className={`bus-item ${bus.status.toLowerCase().replace(" ", "-")}`}>
+            <h3>{bus.routeNumber}</h3>
+            <p>Destination: {bus.destination}</p>
+            <p>Next Stop: {bus.nextStop}</p>
+            <p>ETA: {bus.eta} min</p>
+            <p className="status">Status: {bus.status}</p>
+          </div>
         ))}
-      </ul>
+      </div>
     </section>
   );
 };

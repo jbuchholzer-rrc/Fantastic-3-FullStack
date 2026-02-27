@@ -1,4 +1,4 @@
-import Nav from "../components/nav/Nav"
+import Nav from "../components/live-bus-tracker/nav/nav"
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -6,7 +6,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       <header>
         <h1>Winnipeg Transit Tracker</h1>
         <Nav /> 
-      </header>e
+      </header>
 
       <main>{children}</main>
 

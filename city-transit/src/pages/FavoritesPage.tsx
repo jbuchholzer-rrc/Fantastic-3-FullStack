@@ -1,20 +1,14 @@
-import BusStatusCard from "../components/bus-status-card/BusStatusCard";
+import { useBusContext } from "../context/BusContext";
+import BusStatusCard from "../components/bus-status-card/busStatusCard";
 
-interface TrackedBus {
-  id: number;
-  routeNumber: string;
-  destination: string;
-  eta: number;
-  status: "On Time" | "Delayed";
-}
+/**
+ * I.3: FavoritesPage - Uses BusContext for shared page state (T.4)
+ * Replaces prop drilling from App.tsx with useBusContext hook
+ */
+const FavoritesPage = () => {
+  const { favorites, setFavorites } = useBusContext();
 
-interface FavoritesPageProps {
-  favorites: TrackedBus[];
-  setFavorites: React.Dispatch<React.SetStateAction<TrackedBus[]>>;
-}
-
-const FavoritesPage = ({ favorites, setFavorites }: FavoritesPageProps) => {
-  const removeFavorite = (id: number) => {
+  const removeFavorite = (id: string) => {
     setFavorites(favorites.filter((bus) => bus.id !== id));
   };
 
