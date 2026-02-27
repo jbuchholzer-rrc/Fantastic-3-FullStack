@@ -1,54 +1,64 @@
-import "./BusRouteMap.css";
-
-type Stop = {
-  id: number;
-  name: string;
-};
-
-const stops: Stop[] = [
-  { id: 1, name: "Downtown Station" },
-  { id: 2, name: "City Hall" },
-  { id: 3, name: "University of Manitoba" },
-  { id: 4, name: "Polo Park Mall" },
-];
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
+import { useState } from "react";
+import { transitRoutes } from "../../data/transitData";
 
 export default function BusRouteMap() {
+
+  // currently selected route
+  const [selectedRouteId, setSelectedRouteId] = useState("BLUE");
+
+  // find route object
+  const selectedRoute = transitRoutes.find(r => r.id === selectedRouteId)!;
+
+  // convert stops → polyline positions
+  const positions = selectedRoute.stops.map(stop =>
+    [stop.lat, stop.lng] as [number, number]
+  );
+
   return (
-    <section className="bus-route-map" aria-labelledby="route-map-title">
-      <h2 id="route-map-title">Bus Route Map</h2>
+    <section>
+      <h2>Bus Route Map</h2>
 
-      <div className="map-area">
-        <svg
-          width="100%"
-          height="180"
-          role="img"
-          aria-label="Static illustration of bus routes"
+      {/* Route Selector */}
+      <select
+        value={selectedRouteId}
+        onChange={(e) => setSelectedRouteId(e.target.value)}
+      >
+        {transitRoutes.map(route => (
+          <option key={route.id} value={route.id}>
+            {route.label}
+          </option>
+        ))}
+      </select>
+
+      {/* Map */}
+      <div style={{ height: "500px", width: "100%", marginTop: "10px" }}>
+        <MapContainer
+          key={selectedRoute.id}   // forces map refresh when route changes
+          center={positions[0]}
+          zoom={12}
+          style={{ height: "100%", width: "100%" }}
         >
-          <line
-            x1="20"
-            y1="90"
-            x2="300"
-            y2="90"
-            stroke="#1565c0"
-            strokeWidth="4"
+          <TileLayer
+            attribution="&copy; OpenStreetMap contributors"
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <line
-            x1="300"
-            y1="90"
-            x2="520"
-            y2="40"
-            stroke="#2e7d32"
-            strokeWidth="4"
-          />
-        </svg>
 
-        <ul className="stop-list">
-          {stops.map((stop) => (
-            <li key={stop.id}>
-              <button type="button">{stop.name}</button>
-            </li>
+          {/* Stops */}
+          {selectedRoute.stops.map(stop => (
+            <Marker key={`${selectedRoute.id}-${stop.id}`} position={[stop.lat, stop.lng]}>
+              <Popup>{stop.name}</Popup>
+            </Marker>
           ))}
-        </ul>
+
+          {/* Route Line */}
+          <Polyline
+            key={selectedRoute.id}
+            positions={positions}
+            pathOptions={{ color: selectedRoute.color, weight: 5 }}
+          />
+
+        </MapContainer>
       </div>
     </section>
   );

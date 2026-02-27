@@ -9,7 +9,11 @@ export const stopRepository = {
   },
 
   add(name: string): Stop {
-    const newStop: Stop = { id: Date.now(), name };
+    const newStop: Stop = {
+        id: Date.now(), name,
+        lat: 0,
+        lng: 0
+    };
     stops.push(newStop);
     return newStop;
   },
