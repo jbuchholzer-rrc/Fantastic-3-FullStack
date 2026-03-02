@@ -6,6 +6,7 @@ import LiveBusTrackerPage from './pages/liveBusTrackerPage'
 import FavoritesPage from './pages/FavoritesPage'
 import BusRouteMapPage from './pages/BusRouteMapPage'
 import TripPlannerPage from './pages/TripPlannerPage'
+import SavedTripsPage from './pages/SavedTripsPage'
 
 interface TrackedBus {
   id: number;
@@ -18,9 +19,6 @@ interface TrackedBus {
 function App() {
   const [trackedBuses, setTrackedBuses] = useState<TrackedBus[]>([]);
   const [favorites, setFavorites] = useState<TrackedBus[]>([]);
-  const [selectedFrom, setSelectedFrom] = useState('');
-  const [selectedTo, setSelectedTo] = useState('');
-  const [savedTrips, setSavedTrips] = useState<string[]>([]);
 
   return (
     <Layout>
@@ -29,7 +27,8 @@ function App() {
         <Route path="/live-bus-tracker" element={<LiveBusTrackerPage trackedBuses={trackedBuses} setTrackedBuses={setTrackedBuses} favorites={favorites} setFavorites={setFavorites} />} />
         <Route path="/favorites" element={<FavoritesPage favorites={favorites} setFavorites={setFavorites} />} />
         <Route path="/bus-route-map" element={<BusRouteMapPage />} />
-        <Route path="/trip-planner" element={<TripPlannerPage selectedFrom={selectedFrom} setSelectedFrom={setSelectedFrom} selectedTo={selectedTo} setSelectedTo={setSelectedTo} savedTrips={savedTrips} setSavedTrips={setSavedTrips} />} />
+        <Route path="/trip-planner" element={<TripPlannerPage />} />
+        <Route path="/saved-trips" element={<SavedTripsPage />} />
       </Routes>
     </Layout>
   )

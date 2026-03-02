@@ -19,6 +19,9 @@ const Nav = () => {
       <NavLink to="/trip-planner">
         Trip Planner
       </NavLink>
+      <NavLink to="/saved-trips">
+        Saved Trips
+      </NavLink>
     </nav>
   );
 };
