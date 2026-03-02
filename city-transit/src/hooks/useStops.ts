@@ -3,9 +3,9 @@ import { stopService } from "../services/StopService";
 import { Stop } from "../types/Stop";
 
 /**
- * Custom hook for managing stops UI state
- * Returns stop list and UI handlers
- */
+ Custom hook for managing stops UI state
+ Returns stop list and UI handlers
+*/
 export function useStops() {
   const [stops, setStops] = useState<Stop[]>(stopService.getStops());
 
