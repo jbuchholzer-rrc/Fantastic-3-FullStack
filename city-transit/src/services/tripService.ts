@@ -10,7 +10,7 @@
  */
 
 import type { Trip } from '../types/trip'
-import tripRepository from '../repository/tripRepository'
+import tripRepository from '../repositories/tripRepository'
 
 // search for trips that match a from/to combination
 // if only "from" is provided, returns all trips leaving from that stop

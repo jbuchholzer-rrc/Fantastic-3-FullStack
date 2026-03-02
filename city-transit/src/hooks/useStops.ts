@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { stopService } from "../services/StopService";
-import { Stop } from "../types/Stop";
+import type { Stop } from "../types/Stop";
 
 /**
  * Custom hook for managing stops UI state

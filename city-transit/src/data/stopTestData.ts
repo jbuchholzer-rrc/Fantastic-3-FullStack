@@ -1,4 +1,4 @@
-import { Stop } from "../types/Stop";
+import type { Stop } from "../types/Stop";
 
 export const stopTestData: Stop[] = [
   { id: 1, name: "Downtown", lat: 49.8951, lng: -97.1384 },

@@ -1,19 +1,16 @@
-import { Outlet } from "react-router-dom";
 import Nav from '../components/live-bus-tracker/nav/nav'
-import React from 'react'
-import Nav from "../components/live-bus-tracker/nav/nav"
+import type { ReactNode } from 'react'
 
-function Layout() {
+function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <header>
         <h1>Winnipeg Transit Tracker</h1>
-
         <Nav />
       </header>
 
       <main>
-        <Outlet />
+        {children}
       </main>
 
       <footer>
@@ -23,5 +20,4 @@ function Layout() {
   );
 }
 
-export default Layout;
 export default Layout

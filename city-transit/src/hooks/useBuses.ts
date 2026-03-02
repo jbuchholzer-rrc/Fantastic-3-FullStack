@@ -19,7 +19,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import type { Bus } from "../types/Bus";
-import { BusService } from "../service/BusServices";
+import { BusService } from "../services/BusServices";
 
 export const useBuses = () => {
   const [buses, setBuses] = useState<Bus[]>([]);
