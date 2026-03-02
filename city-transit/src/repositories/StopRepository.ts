@@ -1,5 +1,5 @@
 import { stopTestData } from "../data/stopTestData";
-import { Stop } from "../types/Stop";
+import type { Stop } from "../types/Stop";
 
 let stops: Stop[] = [...stopTestData];
 
