@@ -1,5 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Nav from '../components/live-bus-tracker/nav/nav'
+import React from 'react'
+import Nav from "../components/live-bus-tracker/nav/nav"
 
 function Layout() {
   return (
@@ -22,3 +24,4 @@ function Layout() {
 }
 
 export default Layout;
+export default Layout

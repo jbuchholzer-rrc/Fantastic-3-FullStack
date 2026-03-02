@@ -1,47 +1,46 @@
 import { useState } from "react";
+import { useBusContext } from "../context/BusContext";
 import BusStatusCard from "../components/bus-status-card/busStatusCard";
 
-interface TrackedBus {
-  id: number;
-  routeNumber: string;
-  destination: string;
-  eta: number;
-  status: "On Time" | "Delayed";
-}
+/**
+ * I.3: LiveBusTrackerPage
+ * 
+ * Purpose:
+ * This page demonstrates the use of BusContext for shared page state (T.4).
+ * Instead of receiving props from App.tsx, it uses the useBusContext hook.
+ * 
+ * Architecture:
+ * - Uses BusContext (T.4) for shared state between pages
+ */
 
-interface LiveBusTrackerPageProps {
-  trackedBuses: TrackedBus[];
-  setTrackedBuses: React.Dispatch<React.SetStateAction<TrackedBus[]>>;
-  favorites: TrackedBus[];
-  setFavorites: React.Dispatch<React.SetStateAction<TrackedBus[]>>;
-}
-
-const LiveBusTrackerPage = ({ trackedBuses, setTrackedBuses, favorites, setFavorites }: LiveBusTrackerPageProps) => {
+const LiveBusTrackerPage = () => {
+  const { trackedBuses, setTrackedBuses, favorites, setFavorites } = useBusContext();
   const [routeInput, setRouteInput] = useState("");
 
   const addBus = () => {
     if (!routeInput.trim()) return;
 
-    const destinations = ["Downtown", "Corydon", "Transcona", "Pembina", "Stafford"," St. Vital"," Fort Garry","Waverley","selkirk"];
+    const destinations = ["Downtown", "Corydon", "Transcona", "Pembina", "Stafford", "St. Vital", "Fort Garry", "Waverley", "Selkirk"];
     const randomDestination = destinations[Math.floor(Math.random() * destinations.length)];
 
-    const newBus: TrackedBus = {
-      id: Date.now(),
+    const newBus = {
+      id: Date.now().toString(),
       routeNumber: routeInput,
       destination: randomDestination,
+      nextStop: "Upcoming",
       eta: Math.floor(Math.random() * 10) + 1,
-      status: Math.random() > 0.7 ? "Delayed" : "On Time",
+      status: Math.random() > 0.7 ? "Delayed" as const : "On Time" as const,
     };
 
     setTrackedBuses([...trackedBuses, newBus]);
     setRouteInput("");
   };
 
-  const removeBus = (id: number) => {
+  const removeBus = (id: string) => {
     setTrackedBuses(trackedBuses.filter((bus) => bus.id !== id));
   };
 
-  const toggleFavorite = (bus: TrackedBus) => {
+  const toggleFavorite = (bus: typeof trackedBuses[0]) => {
     const isFav = favorites.some((fav) => fav.id === bus.id);
     if (isFav) {
       setFavorites(favorites.filter((fav) => fav.id !== bus.id));
@@ -54,7 +53,6 @@ const LiveBusTrackerPage = ({ trackedBuses, setTrackedBuses, favorites, setFavor
     <section>
       <h2>Live Bus Tracker</h2>
 
-      {/* I.2 – Form Component */}
       <div>
         <input
           type="text"
@@ -65,7 +63,6 @@ const LiveBusTrackerPage = ({ trackedBuses, setTrackedBuses, favorites, setFavor
         <button onClick={addBus}>Track Bus</button>
       </div>
 
-      {/* I.3 – List with add/remove */}
       <div>
         {trackedBuses.map((bus) => (
           <BusStatusCard
