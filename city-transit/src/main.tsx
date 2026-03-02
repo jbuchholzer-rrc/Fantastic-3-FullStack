@@ -6,12 +6,15 @@ import './index.css'
 import './App.css'
 import App from './App.tsx'
 import { StopsProvider } from './context/StopsContext.tsx'
+import { BusProvider } from './context/BusContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <StopsProvider>
-        <App />
+        <BusProvider>
+          <App />
+        </BusProvider>
       </StopsProvider>
     </BrowserRouter>
   </StrictMode>,
