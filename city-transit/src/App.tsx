@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
+import { BusProvider } from './context/BusContext'
 import { useState } from 'react'
 import Layout from './layout/Layout'
 import LiveBusTrackerPage from './pages/liveBusTrackerPage'
@@ -7,14 +8,6 @@ import FavoritesPage from './pages/FavoritesPage'
 import BusRouteMapPage from './pages/BusRouteMapPage'
 import TripPlannerPage from './pages/TripPlannerPage'
 import SavedTripsPage from './pages/SavedTripsPage'
-
-interface TrackedBus {
-  id: number;
-  routeNumber: string;
-  destination: string;
-  eta: number;
-  status: "On Time" | "Delayed";
-}
 
 function App() {
   const [trackedBuses, setTrackedBuses] = useState<TrackedBus[]>([]);

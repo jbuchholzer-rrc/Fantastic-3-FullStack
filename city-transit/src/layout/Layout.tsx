@@ -1,4 +1,5 @@
-import Nav from '../components/live-bus-tracker/nav/nav'
+import React from 'react'
+import Nav from "../components/live-bus-tracker/nav/nav"
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
