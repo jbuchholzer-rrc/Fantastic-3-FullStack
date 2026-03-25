@@ -13,8 +13,8 @@
  */
 
 import useTrips from '../hooks/useTrips'
-import tripService from '../services/tripService'
-import type { Trip } from '../types/trip'
+import tripService from '../services/TripService'
+import type { Trip } from '../types/Trip'
 
 function SavedTripsPage() {
   // hook gives us saved trips and the remove function

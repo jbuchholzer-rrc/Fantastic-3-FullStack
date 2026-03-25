@@ -22,8 +22,8 @@
  */
 
 import { useState } from 'react'
-import type { Trip } from '../types/trip'
-import tripService from '../services/tripService'
+import type { Trip } from '../types/Trip'
+import tripService from '../services/TripService'
 
 function useTrips() {
   // form state

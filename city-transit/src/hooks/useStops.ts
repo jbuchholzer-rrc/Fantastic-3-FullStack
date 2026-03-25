@@ -1,23 +1,34 @@
-import { useState } from "react";
-import { stopService } from "../services/StopService";
-import type { Stop } from "../types/Stop";
+import { useEffect, useState } from "react";
+import * as repo from "../repositories/StopRepository";
 
-/**
- Custom hook for managing stops UI state
- Returns stop list and UI handlers
-*/
-export function useStops() {
-  const [stops, setStops] = useState<Stop[]>(stopService.getStops());
+export const useStops = () => {
+  const [stops, setStops] = useState<any[]>([]);
 
-  function addStop(name: string) {
-    stopService.addStop(name);
-    setStops([...stopService.getStops()]);
-  }
+  useEffect(() => {
+    loadStops();
+  }, []);
 
-  function removeStop(id: number) {
-    stopService.removeStop(id);
-    setStops([...stopService.getStops()]);
-  }
+  const loadStops = async () => {
+    const data = await repo.getStops();
+    setStops(data);
+  };
 
-  return { stops, addStop, removeStop };
-}
+  const addStop = async (name: string) => {
+    if (!name.trim()) return;
+
+    await repo.createStop({
+      name,
+      latitude: 49.8951,   // temp
+      longitude: -97.1384,
+    });
+
+    await loadStops(); // refresh from DB
+  };
+
+  const deleteStop = async (id: number) => {
+    await repo.deleteStop(id);
+    await loadStops();
+  };
+
+  return { stops, addStop, deleteStop };
+};

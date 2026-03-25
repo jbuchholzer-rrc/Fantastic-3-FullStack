@@ -1,3 +1,4 @@
+// src/services/TripService.ts
 /**
  * @author Jack Buchholzer
  * Trip Service — business logic layer
@@ -9,8 +10,8 @@
  * It does NOT fetch data directly (that's the repository's job).
  */
 
-import type { Trip } from '../types/trip'
-import tripRepository from '../repository/tripRepository'
+import type { Trip } from '../types/Trip'
+import tripRepository from '../repositories/TripRepository'
 
 // search for trips that match a from/to combination
 // if only "from" is provided, returns all trips leaving from that stop
