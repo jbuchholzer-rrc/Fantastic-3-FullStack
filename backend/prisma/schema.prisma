@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Bus {
+  id          Int    @id @default(autoincrement())
+  routeNumber String
+  destination String
+  nextStop    String
+  eta         Int
+  status      String
+}

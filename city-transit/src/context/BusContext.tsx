@@ -1,53 +1,40 @@
-/**
- * T.4: Bus Context - Shared Page State
- * 
- * Purpose:
- * This context provides shared state between pages (LiveBusTrackerPage and FavoritesPage).
- * It replaces prop drilling from App.tsx.
- * 
- * Architecture:
- * - Uses useTrackedBuses hook internally
- * - Provides state and actions to child components via React Context
- * 
- * Used by:
- * - LiveBusTrackerPage
- * - FavoritesPage
- * 
- * Note: This is the preferred pattern for sharing state that doesn't rely on external data.
- * For state that relies on external data, use the hook-service-repository pattern.
- */
-
-import { createContext, useContext, type ReactNode } from "react";
-import { useTrackedBuses } from "../hooks/useTrackedBuses";
+import { useEffect, useState } from "react";
 import type { Bus } from "../types/Bus";
 
-interface BusContextType {
-  trackedBuses: Bus[];
-  setTrackedBuses: React.Dispatch<React.SetStateAction<Bus[]>>;
-  favorites: Bus[];
-  setFavorites: React.Dispatch<React.SetStateAction<Bus[]>>;
-  addBus: (bus: Bus) => void;
-  removeBus: (id: string) => void;
-  toggleFavorite: (bus: Bus) => void;
-  isFavorite: (id: string) => boolean;
-}
+const FavoritesPage = () => {
+  const [favorites, setFavorites] = useState<Bus[]>([]);
 
-const BusContext = createContext<BusContextType | undefined>(undefined);
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem("favoriteBuses");
+    if (storedFavorites) {
+      setFavorites(JSON.parse(storedFavorites));
+    }
+  }, []);
 
-export const BusProvider = ({ children }: { children: ReactNode }) => {
-  const busState = useTrackedBuses();
+  const removeFavorite = (id: number) => {
+    const updatedFavorites = favorites.filter((bus) => bus.id !== id);
+    setFavorites(updatedFavorites);
+    localStorage.setItem("favoriteBuses", JSON.stringify(updatedFavorites));
+  };
 
   return (
-    <BusContext.Provider value={busState}>
-      {children}
-    </BusContext.Provider>
+    <section>
+      <h2>Favorite Buses</h2>
+
+      {favorites.length === 0 ? (
+        <p>No favorite buses yet.</p>
+      ) : (
+        <ul>
+          {favorites.map((bus) => (
+            <li key={bus.id}>
+              Route {bus.routeNumber} - {bus.destination} - ETA: {bus.eta} min - {bus.status}
+              <button onClick={() => removeFavorite(bus.id)}>Remove</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
   );
 };
 
-export const useBusContext = () => {
-  const context = useContext(BusContext);
-  if (!context) {
-    throw new Error("useBusContext must be used within a BusProvider");
-  }
-  return context;
-};
+export default FavoritesPage;

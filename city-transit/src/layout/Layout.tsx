@@ -1,5 +1,5 @@
-import React from 'react'
-import Nav from "../components/live-bus-tracker/nav/nav"
+import React from "react";
+import Nav from "../components/live-bus-tracker/nav/nav";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +15,7 @@ function Layout({ children }: { children: React.ReactNode }) {
         <p>Team: Harsh Pandya, Khush Patel, Jack Buchholzer</p>
       </footer>
     </>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

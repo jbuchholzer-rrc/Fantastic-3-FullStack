@@ -1,33 +1,41 @@
-// I.1 Repository Definition
-// I.2 Test Data integration
 import type { Bus } from "../types/Bus";
-import { busTestData } from "../data/busTestData";
+
+const API_BASE_URL = "http://localhost:3001/api/buses";
 
 export class BusRepository {
+  async getAll(): Promise<Bus[]> {
+    const response = await fetch(API_BASE_URL);
 
-  getAll(): Bus[] {
-    return busTestData;
-  }
-
-  getById(id: string): Bus | undefined {
-    return busTestData.find(bus => bus.id === id);
-  }
-
-  create(bus: Bus): void {
-    busTestData.push(bus);
-  }
-
-  update(updatedBus: Bus): void {
-    const index = busTestData.findIndex(bus => bus.id === updatedBus.id);
-    if (index !== -1) {
-      busTestData[index] = updatedBus;
+    if (!response.ok) {
+      throw new Error("Failed to fetch buses");
     }
+
+    return response.json();
   }
 
-  delete(id: string): void {
-    const index = busTestData.findIndex(bus => bus.id === id);
-    if (index !== -1) {
-      busTestData.splice(index, 1);
+  async create(bus: Omit<Bus, "id">): Promise<Bus> {
+    const response = await fetch(API_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bus),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create bus");
+    }
+
+    return response.json();
+  }
+
+  async delete(id: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete bus");
     }
   }
 }
