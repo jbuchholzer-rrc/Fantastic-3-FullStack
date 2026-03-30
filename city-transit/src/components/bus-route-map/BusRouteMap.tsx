@@ -15,7 +15,6 @@ export default function BusRouteMap() {
     <section>
       <h2>Bus Route Map</h2>
 
-      {/* Route Selector */}
       <select
         value={selectedRouteId}
         onChange={(e) => setSelectedRouteId(e.target.value)}
@@ -27,7 +26,6 @@ export default function BusRouteMap() {
         ))}
       </select>
 
-      {/* Map */}
       <div style={{ height: "500px", width: "100%", marginTop: "10px" }}>
         <MapContainer
           key={selectedRoute.id}
@@ -40,16 +38,13 @@ export default function BusRouteMap() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {/* Stops */}
           {selectedRoute.stops.map(stop => (
-            <Marker key={`${selectedRoute.id}-${stop.id}`} position={[stop.lat, stop.lng]}>
+            <Marker key={stop.id} position={[stop.lat, stop.lng]}>
               <Popup>{stop.name}</Popup>
             </Marker>
           ))}
 
-          {/* Route Line */}
           <Polyline
-            key={selectedRoute.id}
             positions={positions}
             pathOptions={{ color: selectedRoute.color, weight: 5 }}
           />

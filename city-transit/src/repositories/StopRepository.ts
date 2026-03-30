@@ -1,24 +1,23 @@
-import { stopTestData } from "../data/stopTestData";
-import type { Stop } from "../types/Stop";
+const BASE_URL = "http://localhost:3000/stops";
 
-let stops: Stop[] = [...stopTestData];
+export const getStops = async () => {
+  const res = await fetch(BASE_URL);
+  return res.json();
+};
 
-export const stopRepository = {
-  getAll(): Stop[] {
-    return stops;
-  },
+export const createStop = async (stop: any) => {
+  const res = await fetch(BASE_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(stop),
+  });
+  return res.json();
+};
 
-  add(name: string): Stop {
-    const newStop: Stop = {
-        id: Date.now(), name,
-        lat: 0,
-        lng: 0
-    };
-    stops.push(newStop);
-    return newStop;
-  },
-
-  remove(id: number): void {
-    stops = stops.filter(s => s.id !== id);
-  }
+export const deleteStop = async (id: number) => {
+  await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+  });
 };
