@@ -9,7 +9,7 @@
 
 import type { Trip } from '../types/trip'
 
-const API_BASE = "http://localhost:3000/api/trips"
+const API_BASE = "/api/trips"
 
 // get all trips from the database
 async function getAllTrips(): Promise<Trip[]> {

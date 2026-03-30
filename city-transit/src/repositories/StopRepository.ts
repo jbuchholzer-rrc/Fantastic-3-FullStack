@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000/stops";
+const BASE_URL = "/stops";
 
 export const getStops = async () => {
   const res = await fetch(BASE_URL);

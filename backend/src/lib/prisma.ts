@@ -1,17 +1,23 @@
-import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import "dotenv/config"
+import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
+import { Pool } from "pg"
 
-const connectionString = process.env.DATABASE_URL;
+function createPrismaClient() {
+  const databaseUrl = process.env.DATABASE_URL
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is not set.")
+  }
 
-if (!connectionString) {
-  throw new Error("DATABASE_URL is not set in the backend .env file.");
+  const pool = new Pool({
+    connectionString: databaseUrl,
+  })
+
+  return new PrismaClient({
+    adapter: new PrismaPg(pool),
+  })
 }
 
-const adapter = new PrismaBetterSqlite3({
-  url: connectionString,
-});
+const prisma = createPrismaClient()
 
-const prisma = new PrismaClient({ adapter });
-
-export default prisma;
+export default prisma
