@@ -1,14 +1,12 @@
-import "./busStatusCard.css";
-
-interface BusStatusCardProps {
+type BusStatusCardProps = {
   routeNumber: string;
   destination: string;
   eta: number;
-  status: "On Time" | "Delayed";
+  status: string;
   onRemove: () => void;
   onFavorite: () => void;
   isFavorite: boolean;
-}
+};
 
 const BusStatusCard = ({
   routeNumber,
@@ -20,14 +18,17 @@ const BusStatusCard = ({
   isFavorite,
 }: BusStatusCardProps) => {
   return (
-    <div className="bus-card">
-      <strong>Route {routeNumber}</strong> – {destination}
-      <div>ETA: {eta} min</div>
-      <div className={status === "On Time" ? "on-time" : "delayed"}>
-        {status}
-      </div>
+    <div>
+      <h3>{routeNumber}</h3>
+      <p>{destination}</p>
+      <p>ETA: {eta} min</p>
+      <p>Status: {status}</p>
+
+      <button onClick={onFavorite}>
+        {isFavorite ? "Unfavorite" : "Favorite"}
+      </button>
+
       <button onClick={onRemove}>Remove</button>
-      <button onClick={onFavorite}>{isFavorite ? "Unfavorite" : "Favorite"}</button>
     </div>
   );
 };

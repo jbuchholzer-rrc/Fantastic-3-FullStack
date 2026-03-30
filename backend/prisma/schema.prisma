@@ -4,12 +4,13 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
 }
 
-model Stop {
-  id        Int     @id @default(autoincrement())
-  name      String
-  latitude  Float
-  longitude Float
+model Bus {
+  id          Int    @id @default(autoincrement())
+  routeNumber String
+  destination String
+  nextStop    String
+  eta         Int
+  status      String
 }

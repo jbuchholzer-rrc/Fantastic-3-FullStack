@@ -1,7 +1,7 @@
-import Nav from '../components/live-bus-tracker/nav/nav'
-import type { ReactNode } from 'react'
+import React from "react";
+import Nav from "../components/live-bus-tracker/nav/nav";
 
-function Layout({ children }: { children: ReactNode }) {
+function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header>
@@ -9,9 +9,7 @@ function Layout({ children }: { children: ReactNode }) {
         <Nav />
       </header>
 
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
 
       <footer>
         <p>Team: Harsh Pandya, Khush Patel, Jack Buchholzer</p>
@@ -20,4 +18,4 @@ function Layout({ children }: { children: ReactNode }) {
   );
 }
 
-export default Layout
+export default Layout;

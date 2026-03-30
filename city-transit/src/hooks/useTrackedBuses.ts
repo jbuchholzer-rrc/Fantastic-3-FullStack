@@ -29,7 +29,7 @@ export const useTrackedBuses = () => {
   }, []);
 
   // Remove a bus from tracking
-  const removeBus = useCallback((id: string) => {
+  const removeBus = useCallback((id: number) => {
     setTrackedBuses(prev => prev.filter(bus => bus.id !== id));
   }, []);
 
@@ -45,7 +45,7 @@ export const useTrackedBuses = () => {
   }, []);
 
   // Check if a bus is a favorite
-  const isFavorite = useCallback((id: string): boolean => {
+  const isFavorite = useCallback((id: number): boolean => {
     return favorites.some(fav => fav.id === id);
   }, [favorites]);
 

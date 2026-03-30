@@ -1,20 +1,8 @@
-/**
- * I.3: DelayedBuses Component
- * 
- * Purpose:
- * This component displays a list of delayed bus routes.
- * It demonstrates the use of the useBuses hook (T.1).
- * 
- * Architecture:
- * - Uses useBuses hook to get delayed buses
- * - Hook uses BusService for business logic
- * - Service uses BusRepository for data access
- */
-
 import { useBuses } from "../../../hooks/useBuses";
 
 const DelayedBuses = () => {
-  const { delayedBuses } = useBuses();
+  const { buses } = useBuses();
+  const delayedBuses = buses.filter(bus => bus.status === "Delayed");
 
   return (
     <div>
