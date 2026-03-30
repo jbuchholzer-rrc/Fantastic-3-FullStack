@@ -15,7 +15,8 @@ const API_BASE = "/api/trips"
 async function getAllTrips(): Promise<Trip[]> {
   const response = await fetch(API_BASE)
   if (!response.ok) throw new Error("Failed to fetch trips")
-  return response.json()
+  const data = await response.json()
+  return data.map(mapTripFromApi)
 }
 
 // get a single trip by id
