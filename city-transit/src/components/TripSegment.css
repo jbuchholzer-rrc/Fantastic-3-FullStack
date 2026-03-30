@@ -1,0 +1,59 @@
+.trip-segment {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-left: 3px solid var(--color-border);
+}
+
+.trip-segment.walk {
+  border-left-color: var(--color-text-light);
+}
+
+.trip-segment.ride {
+  border-left-color: var(--color-primary);
+}
+
+.trip-segment.transfer {
+  border-left-color: var(--color-accent);
+}
+
+.segment-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.segment-icon.walk {
+  color: var(--color-text-light);
+}
+
+.segment-icon.ride {
+  color: var(--color-primary);
+}
+
+.segment-icon.transfer {
+  color: var(--color-accent);
+}
+
+.segment-details {
+  flex: 1;
+}
+
+.segment-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segment-info {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-top: 0.2rem;
+}
+
+.segment-time {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  white-space: nowrap;
+}
