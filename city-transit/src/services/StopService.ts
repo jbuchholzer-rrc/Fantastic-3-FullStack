@@ -1,16 +1,20 @@
-import { stopRepository } from "../repositories/StopRepository";
+import * as stopRepo from "../repositories/StopRepository";
 
 export const stopService = {
   getStops() {
-    return stopRepository.getAll();
+    return stopRepo.getStops();
   },
 
   addStop(name: string) {
     if (!name.trim()) return;
-    return stopRepository.add(name);
+    return stopRepo.createStop({
+      name,
+      latitude: 49.8951,
+      longitude: -97.1384,
+    });
   },
 
   removeStop(id: number) {
-    stopRepository.remove(id);
+    return stopRepo.deleteStop(id);
   }
 };

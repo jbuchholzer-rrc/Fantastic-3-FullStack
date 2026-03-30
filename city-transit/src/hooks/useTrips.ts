@@ -1,6 +1,6 @@
 /**
  * @author Jack Buchholzer
- * useTrips Hook — presentation logic layer
+ * useTrips Hook -- presentation logic layer
  *
  * This hook manages all the UI state for trip-related pages.
  * It calls the tripService for business logic but doesn't
@@ -8,20 +8,11 @@
  *
  * Used in: TripPlannerPage, SavedTripsPage
  *
- * Returned values:
- *   stops          - list of stop names for the dropdowns
- *   selectedFrom   - currently selected "from" stop
- *   selectedTo     - currently selected "to" stop
- *   setSelectedFrom - update the "from" selection
- *   setSelectedTo   - update the "to" selection
- *   searchResults  - trips matching the current from/to selection
- *   savedTrips     - trips the user has saved
- *   handleSearch   - run a search with current from/to values
- *   handleSaveTrip - save a trip to the saved list
- *   handleRemoveSavedTrip - remove a trip from saved list
+ * Updated for Sprint 4 to handle async API calls and
+ * persist trip data to the backend database.
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { Trip } from '../types/trip'
 import tripService from '../services/tripService'
 
@@ -30,33 +21,59 @@ function useTrips() {
   const [selectedFrom, setSelectedFrom] = useState('')
   const [selectedTo, setSelectedTo] = useState('')
 
+  // all stop names for the dropdowns
+  const [stops, setStops] = useState<string[]>([])
+
   // results from searching
   const [searchResults, setSearchResults] = useState<Trip[]>([])
 
-  // user's saved trips
+  // user's saved trips (loaded from database)
   const [savedTrips, setSavedTrips] = useState<Trip[]>([])
 
-  // get all stop names for the dropdowns
-  const stops = tripService.getStopNames()
+  // loading and error state for the UI
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  // load trips and stop names when the hook first mounts
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError('')
+      const [tripsData, stopsData] = await Promise.all([
+        tripService.searchTrips('', ''),
+        tripService.getStopNames(),
+      ])
+      setSavedTrips(tripsData)
+      setStops(stopsData)
+    } catch {
+      setError('Could not load trips from the backend.')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
 
   // search trips based on current from/to
-  function handleSearch() {
-    const results = tripService.searchTrips(selectedFrom, selectedTo)
+  async function handleSearch() {
+    const results = await tripService.searchTrips(selectedFrom, selectedTo)
     setSearchResults(results)
   }
 
-  // add a trip to the saved list
-  function handleSaveTrip(trip: Trip) {
-    // don't save duplicates
-    const alreadySaved = savedTrips.some((saved) => saved.id === trip.id)
-    if (alreadySaved) return
-
-    setSavedTrips([...savedTrips, trip])
+  // create a new trip and refresh the list
+  async function handleCreateTrip() {
+    const trip = await tripService.createTrip(selectedFrom, selectedTo)
+    if (trip) {
+      await loadData()
+    }
   }
 
-  // remove a trip from saved list
-  function handleRemoveSavedTrip(tripId: number) {
-    setSavedTrips(savedTrips.filter((trip) => trip.id !== tripId))
+  // remove a trip and refresh the list
+  async function handleRemoveSavedTrip(tripId: number) {
+    await tripService.deleteTrip(tripId)
+    await loadData()
   }
 
   return {
@@ -67,8 +84,10 @@ function useTrips() {
     setSelectedTo,
     searchResults,
     savedTrips,
+    loading,
+    error,
     handleSearch,
-    handleSaveTrip,
+    handleCreateTrip,
     handleRemoveSavedTrip,
   }
 }

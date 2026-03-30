@@ -1,53 +1,51 @@
-/**
- * T.1: Custom Hook - useBuses
- * 
- * Purpose:
- * This hook provides presentation logic for fetching and managing bus data.
- * It abstracts the business logic from components, making the code more reusable.
- * 
- * Returns:
- * - buses: Array of all buses from the service
- * - delayedBuses: Array of buses that are delayed
- * - sortByETA(): Function to get buses sorted by ETA
- * 
- * Used in:
- * - LiveBusTracker component (I.3)
- * - DelayedBuses component (T.1)
- * 
- * Note: This hook defines PRESENTATION LOGIC only. Business logic is delegated to BusService.
- */
-
 import { useEffect, useState, useCallback } from "react";
 import type { Bus } from "../types/Bus";
 import { BusService } from "../services/BusServices";
 
 export const useBuses = () => {
   const [buses, setBuses] = useState<Bus[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const service = new BusService();
 
-  // Fetch buses on component mount
-  useEffect(() => {
-    const fetchBuses = () => {
-      const data = service.getAllBuses();
+  const loadBuses = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const data = await service.getAllBuses();
       setBuses(data);
+    } catch {
+      setError("Could not load buses from the backend.");
+    } finally {
       setLoading(false);
-    };
-    fetchBuses();
+    }
   }, []);
 
-  // Get delayed buses
-  const delayedBuses = service.getDelayedBuses();
+  useEffect(() => {
+    loadBuses();
+  }, [loadBuses]);
 
-  // Sort by ETA - memoized for performance
-  const sortByETA = useCallback((): Bus[] => {
-    return service.sortByETA();
-  }, []);
+  const addBus = async (bus: Omit<Bus, "id">) => {
+    await service.addBus(bus);
+    await loadBuses();
+  };
+
+  const toggleFavorite = async (id: number, favorite: boolean) => {
+    await service.toggleFavorite(id, favorite);
+    await loadBuses();
+  };
+
+  const deleteBus = async (id: number) => {
+    await service.deleteBus(id);
+    await loadBuses();
+  };
 
   return {
     buses,
-    delayedBuses,
-    sortByETA,
     loading,
+    error,
+    addBus,
+    toggleFavorite,
+    deleteBus,
   };
 };

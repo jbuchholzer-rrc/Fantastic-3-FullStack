@@ -1,59 +1,78 @@
 /**
  * @author Jack Buchholzer
- * Trip Repository — data access layer
+ * Trip Repository -- data access layer
  *
  * All reads/writes to trip data go through here.
- * Right now it uses the test data array in memory.
- * Next sprint this will connect to a real database.
+ * Previously this used local test data, now it calls the backend API
+ * so trips are persisted in the database across sessions.
  */
 
 import type { Trip } from '../types/trip'
-import testTrips from '../data/tripData'
 
-// in-memory copy of our test data (acts like a database table)
-let trips: Trip[] = [...testTrips]
+const API_BASE = "/api/trips"
 
-// keeps track of the next id to use when creating a trip
-let nextId = trips.length + 1
-
-// ---------- CRUD Methods ----------
-
-// get all trips
-function getAllTrips(): Trip[] {
-  return [...trips]
+// get all trips from the database
+async function getAllTrips(): Promise<Trip[]> {
+  const response = await fetch(API_BASE)
+  if (!response.ok) throw new Error("Failed to fetch trips")
+  const data = await response.json()
+  return data.map(mapTripFromApi)
 }
 
-// get a single trip by its id
-function getTripById(id: number): Trip | undefined {
-  return trips.find((trip) => trip.id === id)
+// get a single trip by id
+async function getTripById(id: number): Promise<Trip | null> {
+  const response = await fetch(`${API_BASE}/${id}`)
+  if (!response.ok) return null
+  return response.json()
 }
 
-// add a new trip and return it with the generated id
-function addTrip(trip: Omit<Trip, 'id'>): Trip {
-  const newTrip: Trip = { ...trip, id: nextId }
-  nextId++
-  trips.push(newTrip)
-  return newTrip
+// create a new trip and return it with the generated id
+async function addTrip(trip: Omit<Trip, 'id'>): Promise<Trip> {
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      origin: trip.from,
+      destination: trip.to,
+      route: trip.route,
+      departureTime: trip.departureTime,
+      arrivalTime: trip.arrivalTime,
+      duration: trip.duration,
+      fare: trip.fare,
+      status: trip.status,
+    }),
+  })
+  if (!response.ok) throw new Error("Failed to create trip")
+  return mapTripFromApi(await response.json())
 }
 
-// update an existing trip, returns the updated trip or undefined if not found
-function updateTrip(id: number, updates: Partial<Trip>): Trip | undefined {
-  const index = trips.findIndex((trip) => trip.id === id)
-  if (index === -1) return undefined
-
-  trips[index] = { ...trips[index], ...updates }
-  return trips[index]
+// remove a trip by id
+async function removeTrip(id: number): Promise<boolean> {
+  const response = await fetch(`${API_BASE}/${id}`, {
+    method: "DELETE",
+  })
+  return response.ok
 }
 
-// remove a trip by id, returns true if it was removed
-function removeTrip(id: number): boolean {
-  const before = trips.length
-  trips = trips.filter((trip) => trip.id !== id)
-  return trips.length < before
+// the backend uses "origin" and "destination" but the frontend
+// uses "from" and "to", so we map between them here
+function mapTripFromApi(apiTrip: any): Trip {
+  return {
+    id: apiTrip.id,
+    from: apiTrip.origin,
+    to: apiTrip.destination,
+    route: apiTrip.route,
+    departureTime: apiTrip.departureTime,
+    arrivalTime: apiTrip.arrivalTime,
+    duration: apiTrip.duration,
+    fare: apiTrip.fare,
+    status: apiTrip.status,
+  }
 }
 
-// get all unique stop names from the trip data
-function getAllStops(): string[] {
+// get all unique stop names from the trip data (for dropdowns)
+async function getAllStops(): Promise<string[]> {
+  const trips = await getAllTrips()
   const stopSet = new Set<string>()
   trips.forEach((trip) => {
     stopSet.add(trip.from)
@@ -66,9 +85,9 @@ const tripRepository = {
   getAllTrips,
   getTripById,
   addTrip,
-  updateTrip,
   removeTrip,
   getAllStops,
+  mapTripFromApi,
 }
 
 export default tripRepository

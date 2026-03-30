@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Stop {
+  id        Int     @id @default(autoincrement())
+  name      String
+  latitude  Float
+  longitude Float
+}
+
+model Bus {
+  id          Int     @id @default(autoincrement())
+  routeNumber String
+  destination String
+  nextStop    String
+  eta         Int
+  status      String
+  favorite    Boolean @default(false)
+}
+
+model Trip {
+  id            Int     @id @default(autoincrement())
+  origin        String
+  destination   String
+  route         String
+  departureTime String
+  arrivalTime   String
+  duration      Int
+  fare          Float
+  status        String
+}
+
+model TransitStop {
+  id        Int      @id @default(autoincrement())
+  key       Int      @unique
+  name      String
+  latitude  Float
+  longitude Float
+  direction String?
+  street    String?
+  syncedAt  DateTime @default(now())
+}
+
+model TransitRoute {
+  id           Int      @id @default(autoincrement())
+  key          Int      @unique
+  number       String
+  name         String
+  coverageType String?
+  badgeLabel   String?
+  badgeStyle   String?
+  syncedAt     DateTime @default(now())
+}
