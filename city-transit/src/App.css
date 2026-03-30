@@ -32,6 +32,22 @@ header h1 {
   white-space: nowrap;
 }
 
+.header-docs-link {
+  color: #85ea2d;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #85ea2d;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.header-docs-link:hover {
+  background-color: rgba(133, 234, 45, 0.15);
+}
+
 main {
   max-width: 1200px;
   margin: 0 auto;

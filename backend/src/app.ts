@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swagger/swagger";
 import busRoutes from "./routes/busRoutes";
 import tripRoutes from "./routes/tripRoutes";
 import stopRoutes from "./routes/stopRoutes";
@@ -9,6 +11,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// swagger API docs
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "Backend is running" });
