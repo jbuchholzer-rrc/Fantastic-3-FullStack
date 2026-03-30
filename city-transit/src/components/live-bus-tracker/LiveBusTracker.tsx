@@ -22,10 +22,10 @@ import { useEffect, useState } from "react";
 import { useBuses } from "../../hooks/useBuses";
 import type { Bus } from "../../types/Bus";
 import "./LiveBusTracker.css";
-import "LiveBusTracker.css";
 
 const LiveBusTracker = () => {
-  const { buses, delayedBuses, sortByETA, loading } = useBuses();
+  const { buses, loading } = useBuses();
+  const delayedBuses = buses.filter(bus => bus.status === "Delayed");
   const [displayMode, setDisplayMode] = useState<"all" | "sorted">("all");
 
   // Local state for simulating real-time ETA updates
@@ -34,11 +34,11 @@ const LiveBusTracker = () => {
   // Update displayed buses based on mode
   useEffect(() => {
     if (displayMode === "sorted") {
-      setDisplayedBuses(sortByETA());
+      setDisplayedBuses([...buses].sort((a, b) => a.eta - b.eta));
     } else {
       setDisplayedBuses(buses);
     }
-  }, [buses, displayMode, sortByETA]);
+  }, [buses, displayMode]);
 
   // Simulate real-time ETA updates
   useEffect(() => {

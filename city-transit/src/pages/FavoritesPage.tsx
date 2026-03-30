@@ -8,7 +8,7 @@ import BusStatusCard from "../components/bus-status-card/busStatusCard";
 const FavoritesPage = () => {
   const { favorites, setFavorites } = useBusContext();
 
-  const removeFavorite = (id: string) => {
+  const removeFavorite = (id: number) => {
     setFavorites(favorites.filter((bus) => bus.id !== id));
   };
 

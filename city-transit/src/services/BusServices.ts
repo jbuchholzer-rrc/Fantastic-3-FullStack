@@ -1,4 +1,4 @@
-import { BusRepository } from "../respositories/BusRepository";
+import { BusRepository } from "../repositories/BusRepository";
 import type { Bus } from "../types/Bus";
 
 export class BusService {

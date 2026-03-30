@@ -1,40 +1,33 @@
-import { useEffect, useState } from "react";
+import { createContext, useContext, type ReactNode } from "react";
+import { useTrackedBuses } from "../hooks/useTrackedBuses";
 import type { Bus } from "../types/Bus";
 
-const FavoritesPage = () => {
-  const [favorites, setFavorites] = useState<Bus[]>([]);
+interface BusContextType {
+  trackedBuses: Bus[];
+  setTrackedBuses: React.Dispatch<React.SetStateAction<Bus[]>>;
+  favorites: Bus[];
+  setFavorites: React.Dispatch<React.SetStateAction<Bus[]>>;
+  addBus: (bus: Bus) => void;
+  removeBus: (id: number) => void;
+  toggleFavorite: (bus: Bus) => void;
+  isFavorite: (id: number) => boolean;
+}
 
-  useEffect(() => {
-    const storedFavorites = localStorage.getItem("favoriteBuses");
-    if (storedFavorites) {
-      setFavorites(JSON.parse(storedFavorites));
-    }
-  }, []);
+const BusContext = createContext<BusContextType | undefined>(undefined);
 
-  const removeFavorite = (id: number) => {
-    const updatedFavorites = favorites.filter((bus) => bus.id !== id);
-    setFavorites(updatedFavorites);
-    localStorage.setItem("favoriteBuses", JSON.stringify(updatedFavorites));
-  };
-
+export const BusProvider = ({ children }: { children: ReactNode }) => {
+  const busState = useTrackedBuses();
   return (
-    <section>
-      <h2>Favorite Buses</h2>
-
-      {favorites.length === 0 ? (
-        <p>No favorite buses yet.</p>
-      ) : (
-        <ul>
-          {favorites.map((bus) => (
-            <li key={bus.id}>
-              Route {bus.routeNumber} - {bus.destination} - ETA: {bus.eta} min - {bus.status}
-              <button onClick={() => removeFavorite(bus.id)}>Remove</button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <BusContext.Provider value={busState}>
+      {children}
+    </BusContext.Provider>
   );
 };
 
-export default FavoritesPage;
+export const useBusContext = () => {
+  const context = useContext(BusContext);
+  if (!context) {
+    throw new Error("useBusContext must be used within a BusProvider");
+  }
+  return context;
+};
