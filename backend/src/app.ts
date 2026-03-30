@@ -3,6 +3,7 @@ import cors from "cors";
 import busRoutes from "./routes/busRoutes";
 import tripRoutes from "./routes/tripRoutes";
 import stopRoutes from "./routes/stopRoutes";
+import transitRoutes from "./routes/transitRoutes";
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.get("/api/health", (req, res) => {
 app.use("/api/buses", busRoutes);
 app.use("/api/trips", tripRoutes);
 app.use("/stops", stopRoutes);
+app.use("/api/transit", transitRoutes);
 
 export default app;
