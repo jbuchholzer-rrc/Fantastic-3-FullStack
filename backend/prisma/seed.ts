@@ -36,7 +36,8 @@ async function seed() {
         "destination" TEXT NOT NULL,
         "nextStop" TEXT NOT NULL,
         "eta" INTEGER NOT NULL,
-        "status" TEXT NOT NULL
+        "status" TEXT NOT NULL,
+        "favorite" BOOLEAN NOT NULL DEFAULT false
       );
 
       CREATE TABLE IF NOT EXISTS "Trip" (

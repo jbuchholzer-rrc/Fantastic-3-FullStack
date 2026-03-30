@@ -14,12 +14,13 @@ model Stop {
 }
 
 model Bus {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   routeNumber String
   destination String
   nextStop    String
   eta         Int
   status      String
+  favorite    Boolean @default(false)
 }
 
 model Trip {

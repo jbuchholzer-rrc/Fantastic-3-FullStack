@@ -3,7 +3,7 @@ import { useBuses } from "../hooks/useBuses";
 import BusStatusCard from "../components/bus-status-card/busStatusCard";
 
 const LiveBusTrackerPage = () => {
-  const { buses, loading, error, addBus, deleteBus } = useBuses();
+  const { buses, loading, error, addBus, toggleFavorite, deleteBus } = useBuses();
   const [routeInput, setRouteInput] = useState("");
 
   const handleAddBus = async () => {
@@ -30,6 +30,7 @@ const LiveBusTrackerPage = () => {
       nextStop: "Upcoming",
       eta: Math.floor(Math.random() * 10) + 1,
       status: Math.random() > 0.7 ? "Delayed" : "On Time",
+      favorite: false,
     });
 
     setRouteInput("");
@@ -61,8 +62,8 @@ const LiveBusTrackerPage = () => {
             eta={bus.eta}
             status={bus.status}
             onRemove={() => deleteBus(bus.id)}
-            onFavorite={() => {}}
-            isFavorite={false}
+            onFavorite={() => toggleFavorite(bus.id, bus.favorite)}
+            isFavorite={bus.favorite}
           />
         ))}
       </div>

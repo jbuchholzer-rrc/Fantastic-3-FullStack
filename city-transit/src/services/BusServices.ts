@@ -12,6 +12,10 @@ export class BusService {
     return this.repository.create(bus);
   }
 
+  async toggleFavorite(id: number, favorite: boolean): Promise<Bus> {
+    return this.repository.toggleFavorite(id, favorite);
+  }
+
   async deleteBus(id: number): Promise<void> {
     return this.repository.delete(id);
   }
