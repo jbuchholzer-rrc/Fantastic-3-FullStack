@@ -37,14 +37,14 @@ function TripSegment({ type, from, to, duration, routeNumber, time }: TripSegmen
             </>
           )}
           {type === "transfer" && "Transfer"}
+          {duration ? <span className="segment-duration">{duration} min</span> : null}
         </div>
         <div className="segment-info">
           {from} to {to}
-          {duration ? ` -- ${duration} min` : ""}
         </div>
       </div>
 
-      {time && <div className="segment-time">{time}</div>}
+      {time && <div className="segment-time">{new Date(time).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</div>}
     </div>
   )
 }

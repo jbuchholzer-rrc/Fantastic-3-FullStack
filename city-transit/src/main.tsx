@@ -5,14 +5,11 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import './App.css'
 import App from './App.tsx'
-import { BusProvider } from './context/BusContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-      <BusProvider>
-        <App />
-      </BusProvider>
+      <App />
     </BrowserRouter>
   </StrictMode>,
 )

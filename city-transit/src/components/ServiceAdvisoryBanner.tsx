@@ -36,14 +36,20 @@ function ServiceAdvisoryBanner() {
 
   if (advisories.length === 0) return null
 
+  // clean up the markdown-style formatting the API sends back
+  const cleanBody = (text: string) => {
+    if (!text) return ""
+    return text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim()
+  }
+
   return (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
       {advisories.map((adv) => (
         <div key={adv.key} className="advisory-banner">
           <AlertTriangle size={18} className="advisory-icon" />
           <div>
             <div className="advisory-title">{adv.title}</div>
-            <div className="advisory-body">{adv.body}</div>
+            <div className="advisory-body">{cleanBody(adv.body)}</div>
           </div>
         </div>
       ))}

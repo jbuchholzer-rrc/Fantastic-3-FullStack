@@ -1,9 +1,9 @@
 .main-nav {
   display: flex;
   justify-content: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--color-primary-dark);
+  gap: 0.15rem;
+  padding: 0.35rem 1rem;
+  background: rgba(0, 30, 80, 0.6);
   flex-wrap: wrap;
 }
 
@@ -11,21 +11,21 @@
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.7rem;
   border-radius: var(--radius-sm);
-  transition: color 0.2s, background-color 0.2s;
+  transition: color 0.15s, background-color 0.15s;
 }
 
 .main-nav a:hover {
   color: white;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .main-nav a.active {
   color: var(--color-accent);
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(255, 255, 255, 0.1);
 }

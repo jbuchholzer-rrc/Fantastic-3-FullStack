@@ -5,21 +5,59 @@
 }
 
 .home-hero {
+  position: relative;
   background: var(--color-primary);
   color: white;
-  padding: 2rem;
+  padding: 3.5rem 2rem;
   border-radius: var(--radius);
   text-align: center;
+  overflow: hidden;
+  background-image: url('/bus-hero.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 30, 80, 0.7);
+}
+
+.weather-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-flex;
+}
+
+.weather-temp {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.weather-desc {
+  opacity: 0.85;
 }
 
 .home-hero h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  position: relative;
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
 }
 
 .home-hero p {
-  opacity: 0.85;
-  font-size: 0.9rem;
+  position: relative;
+  opacity: 0.9;
+  font-size: 0.95rem;
 }
 
 .home-stats {
@@ -36,6 +74,11 @@
   padding: 1.25rem;
 }
 
+.stat-card .stat-icon {
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+
 .stat-card .stat-number {
   font-size: 1.75rem;
   font-weight: 700;
@@ -49,7 +92,7 @@
 
 .home-links {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
 }
 
@@ -57,18 +100,22 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem;
+  padding: 1.25rem;
   text-decoration: none;
   color: var(--color-text);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.15s;
+  border-left: 3px solid transparent;
 }
 
 .home-link-card:hover {
   box-shadow: var(--shadow-md);
+  border-left-color: var(--color-primary);
+  transform: translateX(2px);
 }
 
 .home-link-card .link-icon {
   color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 .home-link-card .link-text {
@@ -90,4 +137,7 @@
 .home-advisories h3 {
   font-size: 1rem;
   color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }

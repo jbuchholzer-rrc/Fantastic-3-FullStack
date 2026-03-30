@@ -6,7 +6,11 @@
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+
+.schedule-card:hover {
+  border-color: var(--color-primary-light);
 }
 
 .schedule-card .route-info {
@@ -15,25 +19,31 @@
 
 .schedule-card .route-name {
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--color-text);
 }
 
 .schedule-card .route-destination {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--color-text-light);
+}
+
+.schedule-card .eta-block {
+  text-align: center;
+  min-width: 3rem;
 }
 
 .schedule-card .eta {
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  white-space: nowrap;
+  line-height: 1;
 }
 
 .schedule-card .eta-label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--color-text-light);
-  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .eta-soon {

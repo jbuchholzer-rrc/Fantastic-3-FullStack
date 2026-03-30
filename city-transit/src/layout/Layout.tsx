@@ -1,5 +1,4 @@
 import Nav from '../components/live-bus-tracker/nav/nav'
-import { Bus } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 function Layout({ children }: { children: ReactNode }) {
@@ -7,17 +6,14 @@ function Layout({ children }: { children: ReactNode }) {
     <>
       <header>
         <div className="header-content">
-          <Bus size={24} />
+          <img src="/transit-logo.png" alt="Winnipeg Transit" style={{ height: 28, filter: 'brightness(0) invert(1)' }} />
           <h1>Winnipeg Transit Tracker</h1>
+          <span className="header-team">Harsh Pandya, Khush Patel, Jack Buchholzer</span>
         </div>
         <Nav />
       </header>
 
       <main>{children}</main>
-
-      <footer>
-        <p>Winnipeg Transit Tracker -- Harsh Pandya, Khush Patel, Jack Buchholzer</p>
-      </footer>
     </>
   )
 }

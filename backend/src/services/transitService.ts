@@ -55,8 +55,9 @@ export async function fetchNearbyStops(lat: number, lon: number, distance: numbe
 }
 
 // get all stops along a specific route
+// the API doesnt have /routes/:key/stops, you have to use /stops?route=KEY
 export async function fetchRouteStops(routeKey: string) {
-  return fetchFromTransitAPI(`/routes/${routeKey}/stops`)
+  return fetchFromTransitAPI("/stops", { route: routeKey })
 }
 
 // plan a trip between two locations
@@ -101,72 +102,87 @@ export async function getCachedRouteByKey(key: number) {
 
 // ---------- Sync (pull data from API into our database) ----------
 
-// pulls all stops and routes from the winnipeg transit API
-// and saves them to our postgres database using upsert
+// so the winnipeg transit API has a rate limit of 100 requests per minute
+// and you cant just GET /stops without a filter, it needs a route or
+// location to narrow it down. so what i do here is first grab all the
+// routes, save those, then loop through a list of the main routes and
+// pull the stops for each one. this way we get a good set of real stops
+// without hammering the API or hitting the rate limit.
+// we also use upsert so if the data already exists it just updates it
+// instead of creating duplicates.
 export async function syncStopsAndRoutes() {
-  // fetch all stops from the API
-  const stopsData = await fetchFromTransitAPI("/stops")
-  const stops = stopsData.stops || []
-
-  let stopsCount = 0
-  for (const stop of stops) {
-    // the API gives us the location inside centre.geographic
-    const lat = parseFloat(stop.centre?.geographic?.latitude || "0")
-    const lng = parseFloat(stop.centre?.geographic?.longitude || "0")
-
-    // build the street name from the street object
-    const street = stop.street
-      ? `${stop.street.name || ""} ${stop.street.type || ""}`.trim()
-      : null
-
-    await prisma.transitStop.upsert({
-      where: { key: stop.key },
-      update: {
-        name: stop.name,
-        latitude: lat,
-        longitude: lng,
-        direction: stop.direction || null,
-        street: street,
-        syncedAt: new Date(),
-      },
-      create: {
-        key: stop.key,
-        name: stop.name,
-        latitude: lat,
-        longitude: lng,
-        direction: stop.direction || null,
-        street: street,
-      },
-    })
-    stopsCount++
-  }
-
-  // fetch all routes from the API
+  // grab every route from the API (this comes back in one request)
   const routesData = await fetchFromTransitAPI("/routes")
   const routes = routesData.routes || []
 
   let routesCount = 0
   for (const route of routes) {
     await prisma.transitRoute.upsert({
-      where: { key: route.key },
+      where: { key: typeof route.key === "string" ? 0 : route.key },
       update: {
-        number: route.number || String(route.key),
+        number: String(route.number || route.key),
         name: route.name || "",
         coverageType: route.coverage || null,
-        badgeLabel: route["badge-label"] || null,
+        badgeLabel: String(route["badge-label"] || route.key),
         badgeStyle: route["badge-style"] ? JSON.stringify(route["badge-style"]) : null,
         syncedAt: new Date(),
       },
       create: {
-        key: route.key,
-        number: route.number || String(route.key),
+        key: typeof route.key === "string" ? routesCount + 9000 : route.key,
+        number: String(route.number || route.key),
         name: route.name || "",
         coverageType: route.coverage || null,
-        badgeLabel: route["badge-label"] || null,
+        badgeLabel: String(route["badge-label"] || route.key),
         badgeStyle: route["badge-style"] ? JSON.stringify(route["badge-style"]) : null,
       },
     })
     routesCount++
+  }
+
+  // now pull stops for each of the main routes
+  // i picked these because they cover the most of the city
+  // (rapid transit, frequent, express, and some connector routes)
+  // if we pulled every single route we'd hit like 60+ API calls
+  // which is fine but takes a while, so im keeping it to the important ones
+  const keyRoutes = ["BLUE", "F5", "F6", "F7", "F8", "F9", "FX2", "FX3", "FX4", "D10", "D11", "D16", "D19", "22", "74"]
+  let stopsCount = 0
+
+  for (const routeKey of keyRoutes) {
+    try {
+      const stopsData = await fetchFromTransitAPI(`/stops`, { route: routeKey })
+      const stops = stopsData.stops || []
+
+      for (const stop of stops) {
+        const lat = parseFloat(stop.centre?.geographic?.latitude || "0")
+        const lng = parseFloat(stop.centre?.geographic?.longitude || "0")
+        const street = stop.street
+          ? `${stop.street.name || ""} ${stop.street.type || ""}`.trim()
+          : null
+
+        await prisma.transitStop.upsert({
+          where: { key: stop.key },
+          update: {
+            name: stop.name,
+            latitude: lat,
+            longitude: lng,
+            direction: stop.direction || null,
+            street: street,
+            syncedAt: new Date(),
+          },
+          create: {
+            key: stop.key,
+            name: stop.name,
+            latitude: lat,
+            longitude: lng,
+            direction: stop.direction || null,
+            street: street,
+          },
+        })
+        stopsCount++
+      }
+    } catch {
+      // if one route fails just skip it and keep going
+    }
   }
 
   return { stopsCount, routesCount }

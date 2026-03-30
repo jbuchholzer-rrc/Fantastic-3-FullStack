@@ -6,6 +6,7 @@ export const createBusSchema = z.object({
   nextStop: z.string().min(1, "Next stop is required"),
   eta: z.number().int().min(0, "ETA must be 0 or greater"),
   status: z.enum(["On Time", "Delayed"]),
+  favorite: z.boolean().optional(),
 });
 
 export const updateBusSchema = z.object({
@@ -14,4 +15,5 @@ export const updateBusSchema = z.object({
   nextStop: z.string().min(1).optional(),
   eta: z.number().int().min(0).optional(),
   status: z.enum(["On Time", "Delayed"]).optional(),
+  favorite: z.boolean().optional(),
 });

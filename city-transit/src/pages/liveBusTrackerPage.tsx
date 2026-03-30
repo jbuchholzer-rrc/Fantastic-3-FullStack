@@ -1,69 +1,99 @@
 /**
  * @author Jack Buchholzer
- * LiveBusTrackerPage -- real-time bus arrivals for any stop
+ * LiveBusTrackerPage -- browse routes and see live arrivals
  *
- * Enter a Winnipeg Transit stop number and see live arriving buses
- * with route badges, destinations, and ETAs from the real API.
- * Also keeps the manual bus tracking feature from earlier sprints.
+ * Click a route badge to see stops along that route and live
+ * bus arrivals. Uses the real Winnipeg Transit API for everything.
  */
 
-import { useState } from "react"
-import { Search } from "lucide-react"
-import { getStopSchedule } from "../hooks/useTransit"
+import { useState, useEffect } from "react"
+import { Radio, MapPin } from "lucide-react"
+import { getTransitRoutes, getRouteStops, getStopSchedule } from "../hooks/useTransit"
 import { useBuses } from "../hooks/useBuses"
+import RouteBadge from "../components/RouteBadge"
 import StopScheduleCard from "../components/StopScheduleCard"
 import BusStatusCard from "../components/bus-status-card/busStatusCard"
 import "./liveBusTrackerPage.css"
+
+type TransitRoute = {
+  key: number
+  number: string
+  name: string
+  badgeStyle?: string | null
+}
+
+type RouteStop = {
+  key: number
+  name: string
+}
 
 type ScheduleEntry = {
   routeNumber: string
   routeName: string
   destination: string
   etaMinutes: number
-  badgeStyle?: string | null
 }
 
 function LiveBusTrackerPage() {
-  const [stopKey, setStopKey] = useState("")
-  const [stopName, setStopName] = useState("")
+  const [routes, setRoutes] = useState<TransitRoute[]>([])
+  const [selectedRoute, setSelectedRoute] = useState<TransitRoute | null>(null)
+  const [stops, setStops] = useState<RouteStop[]>([])
+  const [selectedStopKey, setSelectedStopKey] = useState<number | null>(null)
+  const [selectedStopName, setSelectedStopName] = useState("")
   const [schedule, setSchedule] = useState<ScheduleEntry[]>([])
-  const [scheduleLoading, setScheduleLoading] = useState(false)
-  const [scheduleError, setScheduleError] = useState("")
+  const [loadingStops, setLoadingStops] = useState(false)
+  const [loadingSchedule, setLoadingSchedule] = useState(false)
 
-  // also keep the manual bus tracking from sprint 4
-  const { buses, loading, error, addBus, toggleFavorite, deleteBus } = useBuses()
+  const { buses, addBus, toggleFavorite, deleteBus } = useBuses()
 
-  // look up the live schedule for a stop number
-  const handleSearch = async () => {
-    const key = parseInt(stopKey)
-    if (isNaN(key)) return
+  // load all routes on mount
+  useEffect(() => {
+    getTransitRoutes()
+      .then((data) => setRoutes(data))
+      .catch(() => {})
+  }, [])
 
-    setScheduleLoading(true)
-    setScheduleError("")
+  // when a route is clicked, load its stops and auto-pick the first one
+  const handlePickRoute = async (route: TransitRoute) => {
+    setSelectedRoute(route)
+    setStops([])
+    setSchedule([])
+    setSelectedStopKey(null)
+    setLoadingStops(true)
+
+    try {
+      const data = await getRouteStops(String(route.number || route.key))
+      const routeStops = data.stops || []
+      setStops(routeStops.slice(0, 10))
+
+      // auto load the first stop's schedule
+      if (routeStops.length > 0) {
+        loadSchedule(routeStops[0].key, routeStops[0].name)
+      }
+    } catch {
+      setStops([])
+    } finally {
+      setLoadingStops(false)
+    }
+  }
+
+  // load schedule for a specific stop
+  const loadSchedule = async (stopKey: number, stopName: string) => {
+    setSelectedStopKey(stopKey)
+    setSelectedStopName(stopName)
+    setLoadingSchedule(true)
     setSchedule([])
 
     try {
-      const data = await getStopSchedule(key)
-
-      // grab the stop name from the response
-      const stop = data["stop-schedule"]?.stop || data.stopSchedule?.stop
-      if (stop) {
-        setStopName(stop.name || `Stop #${key}`)
-      }
-
-      // parse the route schedules into a flat list of arriving buses
-      const routeSchedules = data["stop-schedule"]?.["route-schedules"]
-        || data.stopSchedule?.routeSchedules
-        || []
-
+      const data = await getStopSchedule(stopKey)
+      const routeSchedules = data["stop-schedule"]?.["route-schedules"] || []
       const entries: ScheduleEntry[] = []
 
       for (const rs of routeSchedules) {
         const route = rs.route || {}
-        const stops = rs["scheduled-stops"] || rs.scheduledStops || []
+        const scheduled = rs["scheduled-stops"] || []
 
-        for (const s of stops) {
-          // figure out the ETA from the estimated or scheduled departure
+        for (const s of scheduled) {
           const times = s.times || {}
           const departure = times.departure || {}
           const estimated = departure.estimated || departure.scheduled || ""
@@ -74,66 +104,89 @@ function LiveBusTrackerPage() {
             etaMinutes = Math.max(0, Math.round(diff / 60000))
           }
 
-          // get the destination from the variant
           const variant = s.variant || {}
-
           entries.push({
-            routeNumber: route.number || route.key?.toString() || "?",
+            routeNumber: String(route.number || route.key || "?"),
             routeName: route.name || "",
-            destination: variant.name || variant.destination?.name || "",
+            destination: variant.name || "",
             etaMinutes,
           })
         }
       }
 
-      // sort by ETA so the soonest bus is first
       entries.sort((a, b) => a.etaMinutes - b.etaMinutes)
       setSchedule(entries)
     } catch {
-      setScheduleError("Could not load schedule. Check the stop number and try again.")
+      setSchedule([])
     } finally {
-      setScheduleLoading(false)
+      setLoadingSchedule(false)
     }
   }
 
-  // manual bus add (kept from sprint 4 for the CRUD demo)
-  const handleAddBus = async () => {
-    const destinations = ["Downtown", "Corydon", "Transcona", "Pembina", "St. Vital"]
-    await addBus({
-      routeNumber: stopKey || "??",
-      destination: destinations[Math.floor(Math.random() * destinations.length)],
-      nextStop: "Upcoming",
-      eta: Math.floor(Math.random() * 10) + 1,
-      status: Math.random() > 0.7 ? "Delayed" : "On Time",
-      favorite: false,
-    })
+  // toggle favorite on a bus from the live schedule
+  // if it already exists in our db, toggle the flag
+  // if not, create it as a favorite
+  const handleFavoriteFromSchedule = async (entry: ScheduleEntry) => {
+    const existing = buses.find((b) => b.routeNumber === entry.routeNumber)
+    if (existing) {
+      await toggleFavorite(existing.id, existing.favorite)
+    } else {
+      await addBus({
+        routeNumber: entry.routeNumber,
+        destination: entry.destination,
+        nextStop: selectedStopName,
+        eta: entry.etaMinutes,
+        status: "On Time",
+        favorite: true,
+      })
+    }
+  }
+
+  const isRouteFavorited = (routeNumber: string) => {
+    return buses.some((b) => b.routeNumber === routeNumber && b.favorite)
   }
 
   return (
     <div className="live-tracker">
       <h2 className="page-title">Live Bus Tracker</h2>
 
-      <div className="stop-search">
-        <input
-          type="text"
-          placeholder="Enter stop number (e.g. 10064)"
-          value={stopKey}
-          onChange={(e) => setStopKey(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        />
-        <button className="btn-primary" onClick={handleSearch}>
-          <Search size={16} />
-        </button>
+      <div className="route-grid">
+        {routes.map((route) => (
+          <div
+            key={route.key}
+            className={`route-chip ${selectedRoute?.key === route.key ? "selected" : ""}`}
+            onClick={() => handlePickRoute(route)}
+          >
+            <RouteBadge number={String(route.number)} badgeStyle={route.badgeStyle} />
+          </div>
+        ))}
       </div>
 
-      {stopName && (
-        <div className="stop-info">
-          Showing arrivals for: {stopName} (#{stopKey})
+      {loadingStops && <p>Loading stops...</p>}
+
+      {stops.length > 0 && (
+        <div className="stop-chips">
+          <MapPin size={14} style={{ color: "var(--color-text-light)", flexShrink: 0 }} />
+          {stops.map((stop) => (
+            <button
+              key={stop.key}
+              className={`stop-chip ${selectedStopKey === stop.key ? "active" : ""}`}
+              onClick={() => loadSchedule(stop.key, stop.name)}
+            >
+              {stop.name}
+            </button>
+          ))}
         </div>
       )}
 
-      {scheduleLoading && <p>Loading schedule...</p>}
-      {scheduleError && <p style={{ color: "var(--color-danger)" }}>{scheduleError}</p>}
+      {selectedStopName && (
+        <div className="stop-info">
+          <Radio size={16} />
+          Live arrivals at {selectedStopName}
+        </div>
+      )}
+
+      {loadingSchedule && <p>Loading schedule...</p>}
 
       {schedule.length > 0 && (
         <div className="schedule-list">
@@ -144,37 +197,33 @@ function LiveBusTrackerPage() {
               routeName={entry.routeName}
               destination={entry.destination}
               etaMinutes={entry.etaMinutes}
-              badgeStyle={entry.badgeStyle}
+              onFavorite={() => handleFavoriteFromSchedule(entry)}
+              isFavorite={isRouteFavorited(entry.routeNumber)}
             />
           ))}
         </div>
       )}
 
-      <hr className="tracker-divider" />
-
-      <div className="tracker-section-title">Your Tracked Buses</div>
-
-      <div style={{ display: "flex", gap: "0.5rem" }}>
-        <button className="btn-primary" onClick={handleAddBus}>Add Test Bus</button>
-      </div>
-
-      {loading && <p>Loading buses...</p>}
-      {error && <p style={{ color: "var(--color-danger)" }}>{error}</p>}
-
-      <div className="user-buses">
-        {buses.map((bus) => (
-          <BusStatusCard
-            key={bus.id}
-            routeNumber={bus.routeNumber}
-            destination={bus.destination}
-            eta={bus.eta}
-            status={bus.status}
-            onRemove={() => deleteBus(bus.id)}
-            onFavorite={() => toggleFavorite(bus.id, bus.favorite)}
-            isFavorite={bus.favorite}
-          />
-        ))}
-      </div>
+      {buses.filter(b => b.favorite).length > 0 && (
+        <>
+          <hr className="tracker-divider" />
+          <div className="tracker-section-title">Your Favorites</div>
+          <div className="user-buses">
+            {buses.filter(b => b.favorite).map((bus) => (
+              <BusStatusCard
+                key={bus.id}
+                routeNumber={bus.routeNumber}
+                destination={bus.destination}
+                eta={bus.eta}
+                status={bus.status}
+                onRemove={() => deleteBus(bus.id)}
+                onFavorite={() => toggleFavorite(bus.id, bus.favorite)}
+                isFavorite={bus.favorite}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

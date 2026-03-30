@@ -38,8 +38,20 @@
 }
 
 body {
-  background-color: var(--color-bg);
+  background-image: url('/winnipeg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
   min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.6);
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* shared form elements */
