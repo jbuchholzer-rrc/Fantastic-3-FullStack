@@ -1,6 +1,6 @@
 import type { Bus } from "../types/Bus";
 
-const API_BASE_URL = "http://localhost:3001/api/buses";
+const API_BASE_URL = "/api/buses";
 
 export class BusRepository {
   async getAll(): Promise<Bus[]> {
@@ -26,6 +26,16 @@ export class BusRepository {
       throw new Error("Failed to create bus");
     }
 
+    return response.json();
+  }
+
+  async toggleFavorite(id: number, favorite: boolean): Promise<Bus> {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ favorite: !favorite }),
+    });
+    if (!response.ok) throw new Error("Failed to toggle favorite");
     return response.json();
   }
 
