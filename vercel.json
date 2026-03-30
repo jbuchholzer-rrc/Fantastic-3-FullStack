@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd city-transit && npm run build",
+  "buildCommand": "cd city-transit && npm install && npm run build",
   "outputDirectory": "city-transit/dist",
   "framework": "vite",
   "rewrites": [
