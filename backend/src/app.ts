@@ -12,8 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// swagger API docs
-app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// swagger API docs - use CDN so the assets load on vercel
+const swaggerOptions = {
+  customCssUrl: "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css",
+  customJs: [
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js",
+    "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-standalone-preset.js",
+  ],
+}
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "Backend is running" });
