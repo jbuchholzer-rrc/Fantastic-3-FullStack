@@ -1,20 +1,12 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import busRoutes from "./routes/busRoutes";
 import tripRoutes from "./routes/tripRoutes";
 import stopRoutes from "./routes/stopRoutes";
 
-dotenv.config();
-
 const app = express();
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL,
-  })
-);
-
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/health", (req, res) => {
