@@ -3,7 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Stop {
+  id        Int     @id @default(autoincrement())
+  name      String
+  latitude  Float
+  longitude Float
 }
 
 model Bus {
@@ -13,4 +21,16 @@ model Bus {
   nextStop    String
   eta         Int
   status      String
+}
+
+model Trip {
+  id            Int     @id @default(autoincrement())
+  origin        String
+  destination   String
+  route         String
+  departureTime String
+  arrivalTime   String
+  duration      Int
+  fare          Float
+  status        String
 }
