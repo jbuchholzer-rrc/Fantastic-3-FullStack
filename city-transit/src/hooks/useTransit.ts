@@ -68,7 +68,16 @@ export async function getServiceAdvisories() {
 
 // trigger a sync of stops and routes from the transit API into our database
 export async function syncTransitData() {
-  const res = await fetch(`${TRANSIT_BASE}/sync`, { method: "POST" })
+  const res = await fetch(`${TRANSIT_BASE}/sync`)
   if (!res.ok) throw new Error("Failed to sync transit data")
   return res.json()
+}
+
+// checks if we have route data, if not triggers a sync first
+// call this on pages that need transit data
+export async function ensureTransitData() {
+  const routes = await getTransitRoutes()
+  if (routes.length === 0) {
+    await syncTransitData()
+  }
 }

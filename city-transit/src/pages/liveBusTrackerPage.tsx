@@ -8,7 +8,7 @@
 
 import { useState, useEffect } from "react"
 import { Radio, MapPin } from "lucide-react"
-import { getTransitRoutes, getRouteStops, getStopSchedule } from "../hooks/useTransit"
+import { getTransitRoutes, getRouteStops, getStopSchedule, ensureTransitData } from "../hooks/useTransit"
 import { useBuses } from "../hooks/useBuses"
 import RouteBadge from "../components/RouteBadge"
 import StopScheduleCard from "../components/StopScheduleCard"
@@ -46,9 +46,10 @@ function LiveBusTrackerPage() {
 
   const { buses, addBus, toggleFavorite, deleteBus } = useBuses()
 
-  // load all routes on mount
+  // load all routes on mount, sync from API if DB is empty
   useEffect(() => {
-    getTransitRoutes()
+    ensureTransitData()
+      .then(() => getTransitRoutes())
       .then((data) => setRoutes(data))
       .catch(() => {})
   }, [])

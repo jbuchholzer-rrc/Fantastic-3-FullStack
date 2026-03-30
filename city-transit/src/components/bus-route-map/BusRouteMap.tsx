@@ -9,7 +9,7 @@
 
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet"
 import { useState, useEffect } from "react"
-import { getTransitRoutes, getRouteStops } from "../../hooks/useTransit"
+import { getTransitRoutes, getRouteStops, ensureTransitData } from "../../hooks/useTransit"
 import RouteBadge from "../RouteBadge"
 import "./BusRouteMap.css"
 
@@ -39,9 +39,10 @@ export default function BusRouteMap() {
   const [routeStops, setRouteStops] = useState<RouteStop[]>([])
   const [loading, setLoading] = useState(false)
 
-  // load all routes on mount
+  // load all routes on mount, sync from API if DB is empty
   useEffect(() => {
-    getTransitRoutes()
+    ensureTransitData()
+      .then(() => getTransitRoutes())
       .then((data) => setRoutes(data))
       .catch(() => {})
   }, [])

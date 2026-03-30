@@ -43,6 +43,8 @@ router.get("/trip-planner", getTripPlan)
 router.get("/advisories", getServiceAdvisories)
 
 // sync stops and routes from the API into our database
+// GET so vercel cron can hit it, POST also works
+router.get("/sync", syncTransitData)
 router.post("/sync", syncTransitData)
 
 export default router
