@@ -34,3 +34,25 @@ model Trip {
   fare          Float
   status        String
 }
+
+model TransitStop {
+  id        Int      @id @default(autoincrement())
+  key       Int      @unique
+  name      String
+  latitude  Float
+  longitude Float
+  direction String?
+  street    String?
+  syncedAt  DateTime @default(now())
+}
+
+model TransitRoute {
+  id           Int      @id @default(autoincrement())
+  key          Int      @unique
+  number       String
+  name         String
+  coverageType String?
+  badgeLabel   String?
+  badgeStyle   String?
+  syncedAt     DateTime @default(now())
+}

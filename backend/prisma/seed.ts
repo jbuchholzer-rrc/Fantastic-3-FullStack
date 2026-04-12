@@ -51,6 +51,28 @@ async function seed() {
         "fare" DOUBLE PRECISION NOT NULL,
         "status" TEXT NOT NULL
       );
+
+      CREATE TABLE IF NOT EXISTS "TransitStop" (
+        "id" SERIAL PRIMARY KEY,
+        "key" INTEGER NOT NULL UNIQUE,
+        "name" TEXT NOT NULL,
+        "latitude" DOUBLE PRECISION NOT NULL,
+        "longitude" DOUBLE PRECISION NOT NULL,
+        "direction" TEXT,
+        "street" TEXT,
+        "syncedAt" TIMESTAMP NOT NULL DEFAULT NOW()
+      );
+
+      CREATE TABLE IF NOT EXISTS "TransitRoute" (
+        "id" SERIAL PRIMARY KEY,
+        "key" INTEGER NOT NULL UNIQUE,
+        "number" TEXT NOT NULL,
+        "name" TEXT NOT NULL,
+        "coverageType" TEXT,
+        "badgeLabel" TEXT,
+        "badgeStyle" TEXT,
+        "syncedAt" TIMESTAMP NOT NULL DEFAULT NOW()
+      );
     `)
 
     // check if there's already data
