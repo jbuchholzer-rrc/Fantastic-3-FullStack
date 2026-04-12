@@ -1,0 +1,26 @@
+.advisory-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.advisory-banner .advisory-icon {
+  color: var(--color-warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.advisory-banner .advisory-title {
+  font-weight: 600;
+}
+
+.advisory-banner .advisory-body {
+  color: var(--color-text-light);
+  font-size: 0.8rem;
+}

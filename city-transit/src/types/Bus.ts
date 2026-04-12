@@ -5,5 +5,6 @@ export type Bus = {
   destination: string;
   nextStop: string;
   eta: number;
-  status: "On Time" | "Delayed";
+  status: string;
+  favorite: boolean;
 };

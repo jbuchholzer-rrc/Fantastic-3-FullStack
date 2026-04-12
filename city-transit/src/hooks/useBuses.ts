@@ -30,6 +30,11 @@ export const useBuses = () => {
     await loadBuses();
   };
 
+  const toggleFavorite = async (id: number, favorite: boolean) => {
+    await service.toggleFavorite(id, favorite);
+    await loadBuses();
+  };
+
   const deleteBus = async (id: number) => {
     await service.deleteBus(id);
     await loadBuses();
@@ -40,6 +45,7 @@ export const useBuses = () => {
     loading,
     error,
     addBus,
+    toggleFavorite,
     deleteBus,
   };
 };
