@@ -4,7 +4,7 @@
  * This will be replaced with real database data next sprint
  */
 
-import type { Trip } from '../types/Trip'
+import type { Trip } from '../types/trip'
 
 const testTrips: Trip[] = [
   {

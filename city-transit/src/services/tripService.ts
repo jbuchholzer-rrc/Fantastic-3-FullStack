@@ -1,23 +1,22 @@
-// src/services/TripService.ts
 /**
  * @author Jack Buchholzer
- * Trip Service — business logic layer
+ * Trip Service -- frontend business logic layer
  *
  * This handles all the "thinking" about trips:
  * searching, filtering, validation, calculations.
  *
  * It does NOT touch the UI (that's the hook's job).
  * It does NOT fetch data directly (that's the repository's job).
+ *
+ * Updated for Sprint 4 to work with async API calls.
  */
 
-import type { Trip } from '../types/Trip'
-import tripRepository from '../repositories/TripRepository'
+import type { Trip } from '../types/trip'
+import tripRepository from '../repositories/tripRepository'
 
 // search for trips that match a from/to combination
-// if only "from" is provided, returns all trips leaving from that stop
-// if only "to" is provided, returns all trips going to that stop
-function searchTrips(from: string, to: string): Trip[] {
-  const allTrips = tripRepository.getAllTrips()
+async function searchTrips(from: string, to: string): Promise<Trip[]> {
+  const allTrips = await tripRepository.getAllTrips()
 
   return allTrips.filter((trip) => {
     const matchesFrom = from === '' || trip.from === from
@@ -27,23 +26,22 @@ function searchTrips(from: string, to: string): Trip[] {
 }
 
 // get trips filtered by status
-function getTripsByStatus(status: Trip['status']): Trip[] {
-  const allTrips = tripRepository.getAllTrips()
+async function getTripsByStatus(status: Trip['status']): Promise<Trip[]> {
+  const allTrips = await tripRepository.getAllTrips()
   return allTrips.filter((trip) => trip.status === status)
 }
 
 // get all the stop names (for populating dropdowns)
-function getStopNames(): string[] {
+async function getStopNames(): Promise<string[]> {
   return tripRepository.getAllStops()
 }
 
 // create a new trip from user input
-// this is where we validate and set defaults before saving
-function createTrip(from: string, to: string): Trip | null {
+async function createTrip(from: string, to: string): Promise<Trip | null> {
   if (!from || !to) return null
   if (from === to) return null
 
-  const newTrip = tripRepository.addTrip({
+  const newTrip = await tripRepository.addTrip({
     from,
     to,
     route: 'TBD',
@@ -58,18 +56,18 @@ function createTrip(from: string, to: string): Trip | null {
 }
 
 // remove a trip
-function deleteTrip(id: number): boolean {
+async function deleteTrip(id: number): Promise<boolean> {
   return tripRepository.removeTrip(id)
 }
 
 // get a single trip
-function getTrip(id: number): Trip | undefined {
+async function getTrip(id: number): Promise<Trip | null> {
   return tripRepository.getTripById(id)
 }
 
 // calculate some basic stats about the trips
-function getTripStats() {
-  const allTrips = tripRepository.getAllTrips()
+async function getTripStats() {
+  const allTrips = await tripRepository.getAllTrips()
 
   const totalTrips = allTrips.length
   const scheduled = allTrips.filter((t) => t.status === 'scheduled').length

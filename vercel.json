@@ -1,0 +1,27 @@
+{
+  "buildCommand": "npx prisma generate --schema=backend/prisma/schema.prisma && npx tsx backend/prisma/seed.ts && cd city-transit && npm install && npm run build",
+  "outputDirectory": "city-transit/dist",
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/docs",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/api/docs/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/stops/(.*)",
+      "destination": "/api/index.ts"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

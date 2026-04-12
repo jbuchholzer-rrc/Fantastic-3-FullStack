@@ -1,16 +1,8 @@
-import express from "express";
-import cors from "cors";
-import stopRoutes from "./routes/stopRoutes";
+import "dotenv/config"
+import app from "./app"
 
-const app = express();
-const PORT = 3000;
+const port = Number(process.env.PORT) || 3000
 
-app.use(cors());
-app.use(express.json());
-
-app.use("/stops", stopRoutes);
-
-app.listen(PORT, () => {
-  console.log(`Server running at: http://localhost:${PORT}`);
-  console.log(`Stops API: http://localhost:${PORT}/stops`);
-});
+app.listen(port, () => {
+  console.log(`Backend running on http://localhost:${port}`)
+})

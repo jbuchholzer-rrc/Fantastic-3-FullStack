@@ -1,31 +1,26 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Layout from "./layout/Layout";
-import BusRouteMapPage from "./pages/BusRouteMapPage";
-import LiveBusTrackerPage from "./pages/liveBusTrackerPage";
-import FavoritesPage from "./pages/FavoritesPage";
-import TripPlannerPage from "./pages/TripPlannerPage";
-import SavedTripsPage from "./pages/SavedTripsPage";
-
-import { StopsProvider } from "./context/StopsContext";
+import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Layout from './layout/Layout'
+import HomePage from './pages/HomePage'
+import LiveBusTrackerPage from './pages/liveBusTrackerPage'
+import FavoritesPage from './pages/FavoritesPage'
+import BusRouteMapPage from './pages/BusRouteMapPage'
+import TripPlannerPage from './pages/TripPlannerPage'
+import SavedTripsPage from './pages/SavedTripsPage'
 
 function App() {
   return (
-    <StopsProvider>
+    <Layout>
       <Routes>
-        <Route path="/" element={<Layout />}>
-
-          <Route index element={<Navigate to="bus-route-map" />} />
-
-          <Route path="bus-route-map" element={<BusRouteMapPage />} />
-          <Route path="live-bus-tracker" element={<LiveBusTrackerPage />} />
-          <Route path="favorites" element={<FavoritesPage />} />
-          <Route path="trip-planner" element={<TripPlannerPage />} />
-          <Route path="saved-trips" element={<SavedTripsPage />} />
-
-        </Route>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/live-bus-tracker" element={<LiveBusTrackerPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/bus-route-map" element={<BusRouteMapPage />} />
+        <Route path="/trip-planner" element={<TripPlannerPage />} />
+        <Route path="/saved-trips" element={<SavedTripsPage />} />
       </Routes>
-    </StopsProvider>
-  );
+    </Layout>
+  )
 }
 
-export default App;
+export default App

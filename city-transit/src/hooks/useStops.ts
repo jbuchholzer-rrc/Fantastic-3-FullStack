@@ -18,11 +18,11 @@ export const useStops = () => {
 
     await repo.createStop({
       name,
-      latitude: 49.8951,   // temp
+      latitude: 49.8951,
       longitude: -97.1384,
     });
 
-    await loadStops(); // refresh from DB
+    await loadStops();
   };
 
   const deleteStop = async (id: number) => {

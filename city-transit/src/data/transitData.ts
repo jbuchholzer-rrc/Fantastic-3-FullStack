@@ -1,9 +1,4 @@
-export type Stop = {
-  id: number;
-  name: string;
-  lat: number;
-  lng: number;
-};
+import type { Stop } from "../types/Stop";
 
 export type Route = {
   id: string;
