@@ -16,7 +16,7 @@ function Layout({ children }: { children: ReactNode }) {
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">
-              <button className="header-docs-link" style={{ cursor: 'pointer' }}>Sign In</button>
+              <button className="header-signin">Sign In</button>
             </SignInButton>
           </SignedOut>
         </div>
