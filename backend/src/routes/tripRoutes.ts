@@ -15,6 +15,7 @@ import {
   deleteTrip,
 } from "../controllers/tripController"
 import { validateRequest } from "../middleware/validateRequest"
+import { requireAuth } from "../middleware/requireAuth"
 import { createTripSchema, updateTripSchema } from "../schemas/tripSchemas"
 
 const router = Router()
@@ -29,7 +30,7 @@ const router = Router()
  *       200:
  *         description: List of all saved trips
  */
-router.get("/", getTrips)
+router.get("/", requireAuth, getTrips)
 
 /**
  * @swagger
@@ -49,7 +50,7 @@ router.get("/", getTrips)
  *       404:
  *         description: Trip not found
  */
-router.get("/:id", getTrip)
+router.get("/:id", requireAuth, getTrip)
 
 /**
  * @swagger
@@ -86,7 +87,7 @@ router.get("/:id", getTrip)
  *       201:
  *         description: Trip created
  */
-router.post("/", validateRequest(createTripSchema), createTrip)
+router.post("/", requireAuth, validateRequest(createTripSchema), createTrip)
 
 /**
  * @swagger
@@ -104,7 +105,7 @@ router.post("/", validateRequest(createTripSchema), createTrip)
  *       200:
  *         description: Trip updated
  */
-router.patch("/:id", validateRequest(updateTripSchema), updateTrip)
+router.patch("/:id", requireAuth, validateRequest(updateTripSchema), updateTrip)
 
 /**
  * @swagger
@@ -122,6 +123,6 @@ router.patch("/:id", validateRequest(updateTripSchema), updateTrip)
  *       204:
  *         description: Trip deleted
  */
-router.delete("/:id", deleteTrip)
+router.delete("/:id", requireAuth, deleteTrip)
 
 export default router
