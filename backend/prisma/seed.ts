@@ -52,6 +52,14 @@ async function seed() {
         "status" TEXT NOT NULL
       );
 
+      CREATE TABLE IF NOT EXISTS "User" (
+        "id" TEXT NOT NULL PRIMARY KEY,
+        "email" TEXT NOT NULL UNIQUE,
+        "name" TEXT
+      );
+
+      ALTER TABLE "Trip" ADD COLUMN IF NOT EXISTS "userId" TEXT REFERENCES "User"("id");
+
       CREATE TABLE IF NOT EXISTS "TransitStop" (
         "id" SERIAL PRIMARY KEY,
         "key" INTEGER NOT NULL UNIQUE,

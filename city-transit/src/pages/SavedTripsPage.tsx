@@ -8,6 +8,7 @@
 
 import { useState } from "react"
 import { Trash2, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { SignInButton } from "@clerk/clerk-react"
 import useTrips from "../hooks/useTrips"
 import { getTripPlan } from "../hooks/useTransit"
 import TripSegment from "../components/TripSegment"
@@ -37,7 +38,7 @@ type PlanSegment = {
 }
 
 function SavedTripsPage() {
-  const { savedTrips, loading, error, handleRemoveSavedTrip } = useTrips()
+  const { savedTrips, loading, error, isSignedIn, handleRemoveSavedTrip } = useTrips()
   const [expandedTripId, setExpandedTripId] = useState<number | null>(null)
   const [segments, setSegments] = useState<PlanSegment[]>([])
   const [planLoading, setPlanLoading] = useState(false)
@@ -114,6 +115,21 @@ function SavedTripsPage() {
     } finally {
       setPlanLoading(false)
     }
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div>
+        <h2 className="page-title">Saved Trips</h2>
+        <div className="empty-state">
+          <Clock size={32} style={{ marginBottom: "0.5rem", opacity: 0.4 }} />
+          <p>Sign in to view your saved trips</p>
+          <SignInButton mode="modal">
+            <button className="btn-primary" style={{ marginTop: "0.5rem" }}>Sign In</button>
+          </SignInButton>
+        </div>
+      </div>
+    )
   }
 
   if (loading) return <p>Loading saved trips...</p>

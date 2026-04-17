@@ -44,6 +44,23 @@ header h1 {
   transition: background-color 0.15s;
 }
 
+.header-signin {
+  background: white;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.header-signin:hover {
+  opacity: 0.9;
+}
+
 .header-docs-link:hover {
   background-color: rgba(133, 234, 45, 0.15);
 }

@@ -9,6 +9,8 @@
 
 import { useState } from "react"
 import { Navigation, Trash2, Save } from "lucide-react"
+import { useAuth } from "@clerk/clerk-react"
+import { SignInButton } from "@clerk/clerk-react"
 import { getTripPlan } from "../hooks/useTransit"
 import tripRepository from "../repositories/tripRepository"
 import useTrips from "../hooks/useTrips"
@@ -54,11 +56,15 @@ function TripPlannerPage() {
 
   const [tripSaved, setTripSaved] = useState(false)
 
+  const { isSignedIn } = useAuth()
+  const { getToken } = useAuth()
   const { savedTrips, loading, handleRemoveSavedTrip } = useTrips()
 
   // save the current planned trip to our database
   const handleSaveTrip = async () => {
     if (segments.length === 0) return
+
+    const token = await getToken()
 
     // figure out the total duration and route from the segments
     const totalDuration = segments.reduce((sum, s) => sum + (s.duration || 0), 0)
@@ -77,7 +83,7 @@ function TripPlannerPage() {
       duration: totalDuration,
       fare: 3.15,
       status: "scheduled",
-    })
+    }, token)
 
     setTripSaved(true)
     setTimeout(() => setTripSaved(false), 3000)
@@ -224,14 +230,22 @@ function TripPlannerPage() {
             <p className="trip-plan-note">
               Powered by Winnipeg Transit Open Data
             </p>
-            <button
-              className="btn-primary"
-              onClick={handleSaveTrip}
-              style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
-            >
-              <Save size={14} />
-              {tripSaved ? "Saved!" : "Save Trip"}
-            </button>
+            {isSignedIn ? (
+              <button
+                className="btn-primary"
+                onClick={handleSaveTrip}
+                style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+              >
+                <Save size={14} />
+                {tripSaved ? "Saved!" : "Save Trip"}
+              </button>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="btn-ghost" style={{ fontSize: "0.8rem" }}>
+                  Sign in to save trips
+                </button>
+              </SignInButton>
+            )}
           </div>
         </div>
       )}
