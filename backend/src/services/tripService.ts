@@ -4,6 +4,9 @@
  *
  * Handles all database operations for trips using the Prisma client.
  * Called by the trip controller, never directly by routes.
+ *
+ * Updated for Sprint 5 to scope trips by userId so each user
+ * only sees their own saved trips.
  */
 
 import prisma from "../lib/prisma"
@@ -21,8 +24,24 @@ export type CreateTripInput = {
 
 export type UpdateTripInput = Partial<CreateTripInput>
 
-export async function getAllTrips() {
+// create or find the user record in our database
+// clerk handles the actual auth, we just store the user id
+// so we can link trips to users
+export async function upsertUser(clerkId: string) {
+  return prisma.user.upsert({
+    where: { id: clerkId },
+    update: {},
+    create: {
+      id: clerkId,
+      email: clerkId,
+    },
+  })
+}
+
+// get all trips for a specific user
+export async function getAllTrips(userId: string) {
   return prisma.trip.findMany({
+    where: { userId },
     orderBy: { id: "asc" },
   })
 }
@@ -33,9 +52,13 @@ export async function getTripById(id: number) {
   })
 }
 
-export async function createTrip(data: CreateTripInput) {
+// create a trip and attach it to the user
+export async function createTrip(data: CreateTripInput, userId: string) {
   return prisma.trip.create({
-    data,
+    data: {
+      ...data,
+      userId,
+    },
   })
 }
 

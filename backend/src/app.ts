@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger/swagger";
 import busRoutes from "./routes/busRoutes";
@@ -11,6 +12,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+// clerk parses the auth token on every request
+// doesnt block anything, just makes auth info available via getAuth(req)
+app.use(clerkMiddleware());
 
 // swagger API docs - use CDN so the assets load on vercel
 const swaggerOptions = {
