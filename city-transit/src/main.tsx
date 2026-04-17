@@ -6,22 +6,27 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { ClerkProvider } from '@clerk/clerk-react'
 import './index.css'
 import './App.css'
 import App from './App.tsx'
 
 // fix leaflet marker icons not loading in production builds
-// vite changes the asset paths so we need to set them manually
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
 })
 
+// clerk needs the publishable key from the env
+const CLERK_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ClerkProvider publishableKey={CLERK_KEY}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ClerkProvider>
   </StrictMode>,
 )

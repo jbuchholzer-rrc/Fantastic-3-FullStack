@@ -6,23 +6,23 @@
  * It calls the tripService for business logic but doesn't
  * do any data fetching or business rules itself.
  *
- * Used in: TripPlannerPage, SavedTripsPage
- *
- * Updated for Sprint 4 to handle async API calls and
- * persist trip data to the backend database.
+ * Updated for Sprint 5 to use Clerk auth. When the user is
+ * signed out we skip the API calls and show empty data.
+ * When signed in we pass the token so the backend knows
+ * which user is making the request.
  */
 
 import { useState, useEffect, useCallback } from 'react'
+import { useAuth } from '@clerk/clerk-react'
 import type { Trip } from '../types/trip'
 import tripService from '../services/tripService'
 
 function useTrips() {
+  const { getToken, isSignedIn } = useAuth()
+
   // form state
   const [selectedFrom, setSelectedFrom] = useState('')
   const [selectedTo, setSelectedTo] = useState('')
-
-  // all stop names for the dropdowns
-  const [stops, setStops] = useState<string[]>([])
 
   // results from searching
   const [searchResults, setSearchResults] = useState<Trip[]>([])
@@ -34,23 +34,27 @@ function useTrips() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  // load trips and stop names when the hook first mounts
+  // load saved trips when the hook mounts or when sign-in state changes
   const loadData = useCallback(async () => {
+    // if not signed in, dont try to fetch trips (the api will return 401)
+    if (!isSignedIn) {
+      setSavedTrips([])
+      setLoading(false)
+      return
+    }
+
     try {
       setLoading(true)
       setError('')
-      const [tripsData, stopsData] = await Promise.all([
-        tripService.searchTrips('', ''),
-        tripService.getStopNames(),
-      ])
+      const token = await getToken()
+      const tripsData = await tripService.searchTrips('', '', token)
       setSavedTrips(tripsData)
-      setStops(stopsData)
     } catch {
       setError('Could not load trips from the backend.')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [isSignedIn, getToken])
 
   useEffect(() => {
     loadData()
@@ -58,13 +62,15 @@ function useTrips() {
 
   // search trips based on current from/to
   async function handleSearch() {
-    const results = await tripService.searchTrips(selectedFrom, selectedTo)
+    const token = await getToken()
+    const results = await tripService.searchTrips(selectedFrom, selectedTo, token)
     setSearchResults(results)
   }
 
   // create a new trip and refresh the list
   async function handleCreateTrip() {
-    const trip = await tripService.createTrip(selectedFrom, selectedTo)
+    const token = await getToken()
+    const trip = await tripService.createTrip(selectedFrom, selectedTo, token)
     if (trip) {
       await loadData()
     }
@@ -72,12 +78,12 @@ function useTrips() {
 
   // remove a trip and refresh the list
   async function handleRemoveSavedTrip(tripId: number) {
-    await tripService.deleteTrip(tripId)
+    const token = await getToken()
+    await tripService.deleteTrip(tripId, token)
     await loadData()
   }
 
   return {
-    stops,
     selectedFrom,
     selectedTo,
     setSelectedFrom,
@@ -86,6 +92,7 @@ function useTrips() {
     savedTrips,
     loading,
     error,
+    isSignedIn,
     handleSearch,
     handleCreateTrip,
     handleRemoveSavedTrip,

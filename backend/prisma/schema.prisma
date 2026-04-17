@@ -23,6 +23,13 @@ model Bus {
   favorite    Boolean @default(false)
 }
 
+model User {
+  id    String @id
+  email String @unique
+  name  String?
+  trips Trip[]
+}
+
 model Trip {
   id            Int     @id @default(autoincrement())
   origin        String
@@ -33,6 +40,8 @@ model Trip {
   duration      Int
   fare          Float
   status        String
+  userId        String?
+  user          User?   @relation(fields: [userId], references: [id])
 }
 
 model TransitStop {
