@@ -1,4 +1,4 @@
-const BASE_URL = "/stops";
+const BASE_URL = "/api/stops";
 
 export const getStops = async (token: string) => {
   const res = await fetch(BASE_URL, {
