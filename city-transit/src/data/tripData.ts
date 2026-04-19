@@ -1,10 +1,4 @@
-/**
- * @author Jack Buchholzer
- * Test data for Winnipeg Transit trips
- * This will be replaced with real database data next sprint
- */
-
-import type { Trip } from '../types/trip'
+import type { Trip } from '../types/Trip'
 
 const testTrips: Trip[] = [
   {

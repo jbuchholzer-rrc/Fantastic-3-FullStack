@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * FavoritesPage -- shows buses the user has favorited
- *
- * Favorites are stored in the database (favorite boolean on the Bus model)
- * so they persist across page refreshes and sessions.
- */
-
 import { Heart } from "lucide-react"
 import { Link } from "react-router-dom"
 import { useBuses } from "../hooks/useBuses"

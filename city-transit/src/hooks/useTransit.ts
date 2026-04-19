@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * useTransit -- hook for calling the Winnipeg Transit API endpoints
- *
- * All transit API calls go through our backend at /api/transit
- * so the API key stays on the server. This hook provides
- * simple functions for each endpoint the frontend needs.
- */
-
 const TRANSIT_BASE = "/api/transit"
 
 // get all cached transit stops from our database

@@ -1,8 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Zod validation schemas for trip API requests
- */
-
 import { z } from "zod"
 
 export const createTripSchema = z.object({

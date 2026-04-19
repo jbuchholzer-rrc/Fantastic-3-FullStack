@@ -1,13 +1,4 @@
-/**
- * @author Jack Buchholzer
- * Trip Repository -- data access layer
- *
- * All reads/writes to trip data go through here.
- * Calls the backend API with the user's auth token
- * so the backend knows who is making the request.
- */
-
-import type { Trip } from '../types/trip'
+import type { Trip } from "../types/Trip"
 
 const API_BASE = "/api/trips"
 
