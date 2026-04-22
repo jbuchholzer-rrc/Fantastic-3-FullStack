@@ -3,34 +3,47 @@
  * Trip Repository -- data access layer
  *
  * All reads/writes to trip data go through here.
- * Previously this used local test data, now it calls the backend API
- * so trips are persisted in the database across sessions.
+ * Calls the backend API with the user's auth token
+ * so the backend knows who is making the request.
  */
 
 import type { Trip } from '../types/trip'
 
 const API_BASE = "/api/trips"
 
-// get all trips from the database
-async function getAllTrips(): Promise<Trip[]> {
-  const response = await fetch(API_BASE)
+// builds headers with the auth token if we have one
+function buildHeaders(token: string | null): HeadersInit {
+  const headers: HeadersInit = { "Content-Type": "application/json" }
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`
+  }
+  return headers
+}
+
+// get all trips for the logged in user
+async function getAllTrips(token: string | null): Promise<Trip[]> {
+  const response = await fetch(API_BASE, {
+    headers: buildHeaders(token),
+  })
   if (!response.ok) throw new Error("Failed to fetch trips")
   const data = await response.json()
   return data.map(mapTripFromApi)
 }
 
 // get a single trip by id
-async function getTripById(id: number): Promise<Trip | null> {
-  const response = await fetch(`${API_BASE}/${id}`)
+async function getTripById(id: number, token: string | null): Promise<Trip | null> {
+  const response = await fetch(`${API_BASE}/${id}`, {
+    headers: buildHeaders(token),
+  })
   if (!response.ok) return null
   return response.json()
 }
 
 // create a new trip and return it with the generated id
-async function addTrip(trip: Omit<Trip, 'id'>): Promise<Trip> {
+async function addTrip(trip: Omit<Trip, 'id'>, token: string | null): Promise<Trip> {
   const response = await fetch(API_BASE, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: buildHeaders(token),
     body: JSON.stringify({
       origin: trip.from,
       destination: trip.to,
@@ -47,9 +60,10 @@ async function addTrip(trip: Omit<Trip, 'id'>): Promise<Trip> {
 }
 
 // remove a trip by id
-async function removeTrip(id: number): Promise<boolean> {
+async function removeTrip(id: number, token: string | null): Promise<boolean> {
   const response = await fetch(`${API_BASE}/${id}`, {
     method: "DELETE",
+    headers: buildHeaders(token),
   })
   return response.ok
 }
@@ -70,23 +84,11 @@ function mapTripFromApi(apiTrip: any): Trip {
   }
 }
 
-// get all unique stop names from the trip data (for dropdowns)
-async function getAllStops(): Promise<string[]> {
-  const trips = await getAllTrips()
-  const stopSet = new Set<string>()
-  trips.forEach((trip) => {
-    stopSet.add(trip.from)
-    stopSet.add(trip.to)
-  })
-  return Array.from(stopSet).sort()
-}
-
 const tripRepository = {
   getAllTrips,
   getTripById,
   addTrip,
   removeTrip,
-  getAllStops,
   mapTripFromApi,
 }
 
