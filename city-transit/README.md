@@ -1,22 +1,22 @@
 # Winnipeg Transit Tracker
 
-Full-stack transit tracking application built using React, TypeScript, Express, and Prisma.
+Team Name: Fantastic-3
 
-## Sprint 4
+Winnipeg Transit Tracker is a full-stack transit application built with React, TypeScript, Express, Prisma, Clerk, and PostgreSQL.
 
-* Backend implemented using Express + Prisma
-* Stops feature connected to database
-* API integration between frontend and backend
-* Data persists across sessions
+## Sprint 5 Updates
 
-## Run Project
+- Added Clerk authentication
+- Protected saved trips with user login
+- Added user-specific trip persistence
+- Connected frontend and backend with Clerk session token
+- Added API documentation with Swagger
+- Added Winnipeg Transit live API integration
 
-Frontend:
-cd city-transit
-npm install
-npm run dev
+## Local Setup
 
-Backend:
-cd backend
-npm install
-npm run dev
+### Backend
+1. Open terminal:
+   ```bash
+   cd backend
+   npm install

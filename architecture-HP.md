@@ -1,34 +1,104 @@
-# Architecture Document – Bus Resource (Harsh Pandya)
+# Architecture Document – Sprint 3 to Sprint 5 Progress (Harsh Pandya)
 
-This document explains how my Bus feature was designed in Sprint 3 and how I improved it in Sprint 4.
+## Overview
 
-In Sprint 3, my main goal was to build a clean and organized structure using layered architecture. I separated the application 
-into different parts: Component, Hook, Service, and Repository. Each layer had a clear responsibility, which made the code easier 
-to understand and maintain.
+This document explains how my work evolved across Sprint 3, Sprint 4, and Sprint 5 in the Winnipeg Transit Tracker project. The focus is on how the architecture improved from a basic frontend structure to a full-stack application with authentication and user-based data.
 
-The `useBuses` hook was responsible for handling frontend state and managing how data is displayed. It used React state and 
-effects to load and update bus data. I kept all UI-related logic inside the hook so that components stayed simple and focused only 
-on displaying information.
+## Sprint 3 – Layered Frontend Architecture
 
-The `BusService` handled business logic such as filtering delayed buses and sorting by ETA. I made sure it did not depend on React,
-so it could be reused easily and tested independently.
+In Sprint 3, I focused on building features using a layered architecture on the frontend. The goal was to improve code organization and maintainability.
 
-The `BusRepository` was used to manage data access. In Sprint 3, it worked with local test data (`busTestData.ts`). It provided 
-basic CRUD operations and acted as a bridge between the service layer and the data source.
+The structure was divided into:
 
-I also used `BusContext` to share state between pages like Live Bus Tracker and Favorites. This helped avoid passing props 
-through multiple components.
+* Component layer (UI)
+* Hook layer (state and logic)
+* Service layer (business logic)
+* Repository layer (data access)
 
-In Sprint 4, I made major improvements by connecting the frontend to a real backend. The biggest change was replacing test 
-data with API calls. Instead of reading from a local file, the repository now sends requests to the backend using endpoints like `/api/buses`.
+For example, in the bus feature:
 
-I also implemented a backend using Express and Prisma. I created a Bus model in the Prisma schema and used SQLite as the database. 
-This allowed me to store bus data permanently.
+* Components handled rendering
+* Hooks managed state and user interaction
+* Services processed logic like filtering and updates
+* Repository returned data from local test files
 
-Now, when a user adds or deletes a bus, the request goes to the backend, which updates the database. The frontend then reloads 
-the data. This means the data stays even after refreshing the page, which was not possible in Sprint 3.
+At this stage, all data was static and stored in local files. There was no backend connection.
 
-I also added validation on the backend to ensure only valid data is accepted.
+## Sprint 4 – Backend Integration with Database
 
-Overall, Sprint 3 helped me build a strong frontend structure, and Sprint 4 extended it into a full-stack system with real data 
-persistence. This made the application more realistic and closer to how real-world systems work.
+In Sprint 4, I extended the architecture by connecting the frontend to a backend system.
+
+Key improvements:
+
+* Added Express backend with TypeScript
+* Integrated Prisma ORM
+* Connected to PostgreSQL database
+* Replaced local data with API calls
+* Implemented CRUD operations
+
+The frontend now communicated with the backend through REST APIs. Data such as buses and trips became persistent and no longer reset on refresh.
+
+This improved the realism of the application and introduced full-stack development practices.
+
+## Sprint 5 – Authentication and User-Based Data
+
+In Sprint 5, the main focus was adding authentication and securing user-specific data.
+
+### Authentication (Clerk)
+
+* Integrated Clerk into the frontend for login and session management
+* Wrapped the application using ClerkProvider
+* Used `useAuth()` hook to manage authentication state
+
+### Backend Protection
+
+* Added Clerk middleware to backend routes
+* Protected trip-related endpoints (`/api/trips`)
+* Backend reads authenticated user from Clerk token
+
+### User-Based Data Handling
+
+* Trips are now linked to a specific user
+* Each request includes a session token
+* Backend filters trips using the logged-in user ID
+* Only the authenticated user can view or modify their trips
+
+### Updated Data Flow
+
+The application now follows this flow:
+
+UI Component
+→ useTrips Hook
+→ Trip Service
+→ Trip Repository
+→ Backend API (with Clerk token)
+→ Database (PostgreSQL via Prisma)
+
+## Key Improvements Across Sprints
+
+### From Sprint 3 to Sprint 4
+
+* Moved from static data to real backend
+* Added database persistence
+* Improved scalability
+
+### From Sprint 4 to Sprint 5
+
+* Added authentication
+* Secured API endpoints
+* Introduced user-specific data handling
+
+## Current State (Sprint 5)
+
+The application is now a full-stack system with:
+
+* Structured frontend using layered architecture
+* Backend with Express and Prisma
+* PostgreSQL database for persistent data
+* Clerk authentication for user management
+* Protected routes for secure access
+* User-specific trip storage and retrieval
+
+## Conclusion
+
+The project has evolved from a simple frontend structure into a complete full-stack application with authentication and secure data handling. Each sprint improved the architecture by adding more realistic and scalable features. Sprint 5 adds the most important real-world capability: user authentication and personalized data.

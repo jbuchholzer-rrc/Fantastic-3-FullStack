@@ -34,6 +34,4 @@ export const deleteStop = async (id: number, token: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-
-  if (!res.ok) throw new Error("Failed to delete stop");
 };
