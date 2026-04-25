@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * TripPlannerPage -- plan trips using real Winnipeg Transit data
- *
- * Pick an origin and destination from dropdown menus with
- * real winnipeg locations. The Winnipeg Transit trip planner
- * API figures out the best route for you.
- */
-
 import { useState } from "react"
 import { Navigation, Trash2, Save } from "lucide-react"
 import { useAuth } from "@clerk/clerk-react"
@@ -15,7 +6,7 @@ import { getTripPlan } from "../hooks/useTransit"
 import tripRepository from "../repositories/tripRepository"
 import useTrips from "../hooks/useTrips"
 import TripSegment from "../components/TripSegment"
-import type { Trip } from "../types/trip"
+import type { Trip } from "../types/Trip"
 import "./TripPlannerPage.css"
 
 // popular winnipeg locations with their coordinates

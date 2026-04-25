@@ -1,17 +1,4 @@
-/**
- * @author Jack Buchholzer
- * Trip Controller -- handles incoming HTTP requests for trips
- *
- * Each function maps to a route and delegates work to the trip service.
- * The controller only deals with req/res, the service handles the database.
- *
- * Updated for Sprint 5 to use Clerk auth. Every request goes through
- * requireAuth first so we know userId is always available here.
- * We also check ownership on get/update/delete so users can only
- * touch their own trips.
- */
-
-import { Request, Response } from "express"
+import type { Request, Response } from "express"
 import { getAuth } from "@clerk/express"
 import * as tripService from "../services/tripService"
 

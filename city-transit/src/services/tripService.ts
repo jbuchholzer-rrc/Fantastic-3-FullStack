@@ -1,15 +1,4 @@
-/**
- * @author Jack Buchholzer
- * Trip Service -- frontend business logic layer
- *
- * This handles all the "thinking" about trips:
- * searching, filtering, validation, calculations.
- *
- * Updated for Sprint 5 to pass the auth token through
- * to the repository so the backend knows who is calling.
- */
-
-import type { Trip } from '../types/trip'
+import type { Trip } from '../types/Trip'
 import tripRepository from '../repositories/tripRepository'
 
 // search for trips that match a from/to combination
