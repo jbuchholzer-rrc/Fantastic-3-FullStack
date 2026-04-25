@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * TripSegment -- one leg of a planned trip
- *
- * Shows a walk, ride, or transfer segment from the
- * Winnipeg Transit trip planner API results.
- */
-
 import { Footprints, Bus, ArrowLeftRight } from "lucide-react"
 import RouteBadge from "./RouteBadge"
 import "./TripSegment.css"

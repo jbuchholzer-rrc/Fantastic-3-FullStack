@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * HomePage -- landing page with weather, navigation, and service advisories
- *
- * Weather comes from Open-Meteo (free, no API key needed).
- * Uses WMO weather codes to pick the right icon and description.
- */
-
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { Radio, MapPin, Navigation, Heart, AlertTriangle, Wind, Cloud, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, CloudFog } from "lucide-react"

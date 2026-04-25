@@ -33,7 +33,7 @@ app.get("/api/health", (req, res) => {
 
 app.use("/api/buses", busRoutes);
 app.use("/api/trips", tripRoutes);
-app.use("/stops", stopRoutes);
+app.use("/api/stops", stopRoutes);
 app.use("/api/transit", transitRoutes);
 
 export default app;

@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * StopScheduleCard -- shows an arriving bus at a stop
- *
- * Used on the live tracker page. Takes the schedule data
- * from the Winnipeg Transit API and displays it as a card
- * with the route badge, destination, and ETA.
- */
-
 import { Heart } from "lucide-react"
 import RouteBadge from "./RouteBadge"
 import "./StopScheduleCard.css"

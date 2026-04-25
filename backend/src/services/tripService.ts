@@ -1,14 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Trip Service -- backend business logic layer
- *
- * Handles all database operations for trips using the Prisma client.
- * Called by the trip controller, never directly by routes.
- *
- * Updated for Sprint 5 to scope trips by userId so each user
- * only sees their own saved trips.
- */
-
 import prisma from "../lib/prisma"
 
 export type CreateTripInput = {

@@ -1,20 +1,6 @@
-/**
- * @author Jack Buchholzer
- * useTrips Hook -- presentation logic layer
- *
- * This hook manages all the UI state for trip-related pages.
- * It calls the tripService for business logic but doesn't
- * do any data fetching or business rules itself.
- *
- * Updated for Sprint 5 to use Clerk auth. When the user is
- * signed out we skip the API calls and show empty data.
- * When signed in we pass the token so the backend knows
- * which user is making the request.
- */
-
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@clerk/clerk-react'
-import type { Trip } from '../types/trip'
+import type { Trip } from '../types/Trip'
 import tripService from '../services/tripService'
 
 function useTrips() {

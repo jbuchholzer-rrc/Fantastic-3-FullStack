@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Transit Routes -- maps URLs to the transit controller
- *
- * All routes are read-only (GET) except the sync endpoint.
- * The /stops/nearby route has to come before /stops/:stopKey
- * otherwise express will think "nearby" is a stop key.
- */
-
 import { Router } from "express"
 import {
   getTransitStops,

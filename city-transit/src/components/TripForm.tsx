@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * TripForm -- the from/to dropdowns for trip planning
- *
- * This component only handles the form UI.
- * The stop names come from props (originally from the repository
- * through the hook) instead of being hardcoded.
- */
-
 type TripFormProps = {
   stops: string[]
   selectedFrom: string

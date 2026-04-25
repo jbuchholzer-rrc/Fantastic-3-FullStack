@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getStops, createStop, deleteStop } from "../controllers/stopController";
 import { validateStop } from "../middleware/validateStop";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router = Router();
 
@@ -8,19 +9,19 @@ const router = Router();
  * @swagger
  * /stops:
  *   get:
- *     summary: Get all custom stops
+ *     summary: Get all custom stops (user-specific)
  *     tags: [Stops]
  *     responses:
  *       200:
  *         description: List of user-created stops
  */
-router.get("/", getStops);
+router.get("/", requireAuth, getStops);
 
 /**
  * @swagger
  * /stops:
  *   post:
- *     summary: Create a custom stop
+ *     summary: Create a custom stop (requires login)
  *     tags: [Stops]
  *     requestBody:
  *       required: true
@@ -39,14 +40,16 @@ router.get("/", getStops);
  *     responses:
  *       200:
  *         description: Stop created
+ *       401:
+ *         description: Unauthorized
  */
-router.post("/", validateStop, createStop);
+router.post("/", requireAuth, validateStop, createStop);
 
 /**
  * @swagger
  * /stops/{id}:
  *   delete:
- *     summary: Delete a custom stop
+ *     summary: Delete a custom stop (requires login)
  *     tags: [Stops]
  *     parameters:
  *       - in: path
@@ -57,7 +60,9 @@ router.post("/", validateStop, createStop);
  *     responses:
  *       200:
  *         description: Stop deleted
+ *       401:
+ *         description: Unauthorized
  */
-router.delete("/:id", deleteStop);
+router.delete("/:id", requireAuth, deleteStop);
 
 export default router;

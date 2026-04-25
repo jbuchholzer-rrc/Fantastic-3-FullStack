@@ -1,0 +1,3373 @@
+﻿
+========== src/App.css ==========
+/* app layout */
+
+header {
+  background: rgba(0, 42, 107, 0.95);
+  backdrop-filter: blur(8px);
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+header .header-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.6rem 1.5rem;
+}
+
+header h1 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.header-team {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.header-docs-link {
+  color: #85ea2d;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid #85ea2d;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  transition: background-color 0.15s;
+}
+
+.header-signin {
+  background: white;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.header-signin:hover {
+  opacity: 0.9;
+}
+
+.header-docs-link:hover {
+  background-color: rgba(133, 234, 45, 0.15);
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+main > * {
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+
+========== src/App.tsx ==========
+import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import Layout from './layout/Layout'
+import HomePage from './pages/HomePage'
+import LiveBusTrackerPage from './pages/liveBusTrackerPage'
+import FavoritesPage from './pages/FavoritesPage'
+import BusRouteMapPage from './pages/BusRouteMapPage'
+import TripPlannerPage from './pages/TripPlannerPage'
+import SavedTripsPage from './pages/SavedTripsPage'
+
+function App() {
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/live-bus-tracker" element={<LiveBusTrackerPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/bus-route-map" element={<BusRouteMapPage />} />
+        <Route path="/trip-planner" element={<TripPlannerPage />} />
+        <Route path="/saved-trips" element={<SavedTripsPage />} />
+      </Routes>
+    </Layout>
+  )
+}
+
+export default App
+
+========== src/index.css ==========
+/* design system for winnipeg transit tracker */
+
+:root {
+  /* winnipeg transit colors */
+  --color-primary: #003a8f;
+  --color-primary-dark: #002a6b;
+  --color-primary-light: #e3f2fd;
+  --color-accent: #f59e0b;
+  --color-accent-light: #fef3c7;
+  --color-success: #16a34a;
+  --color-danger: #dc2626;
+  --color-warning: #d97706;
+
+  /* neutrals */
+  --color-bg: #f5f7fa;
+  --color-card: #ffffff;
+  --color-text: #1e293b;
+  --color-text-light: #64748b;
+  --color-border: #e2e8f0;
+
+  /* shared values */
+  --radius: 8px;
+  --radius-sm: 4px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* type */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url('/winnipeg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 20, 40, 0.6);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* shared form elements */
+
+input, select {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-card);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--color-primary);
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+/* primary button */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* danger button */
+.btn-danger {
+  background-color: var(--color-danger);
+  color: white;
+}
+
+/* ghost/outline button */
+.btn-ghost {
+  background: none;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+/* card style */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+/* status pills */
+.status-on-time {
+  color: var(--color-success);
+  font-weight: 600;
+}
+
+.status-delayed {
+  color: var(--color-danger);
+  font-weight: 600;
+}
+
+/* page titles */
+.page-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 1rem;
+}
+
+/* helper for empty states */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-light);
+}
+
+========== src/main.tsx ==========
+import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png'
+import markerIcon from 'leaflet/dist/images/marker-icon.png'
+import markerShadow from 'leaflet/dist/images/marker-shadow.png'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { ClerkProvider } from '@clerk/clerk-react'
+import './index.css'
+import './App.css'
+import App from './App.tsx'
+
+// fix leaflet marker icons not loading in production builds
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+})
+
+// clerk needs the publishable key from the env
+const CLERK_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <ClerkProvider publishableKey={CLERK_KEY}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ClerkProvider>
+  </StrictMode>,
+)
+
+========== src/assets\react.svg ==========
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--logos" width="35.93" height="32" preserveAspectRatio="xMidYMid meet" viewBox="0 0 256 228"><path fill="#00D8FF" d="M210.483 73.824a171.49 171.49 0 0 0-8.24-2.597c.465-1.9.893-3.777 1.273-5.621c6.238-30.281 2.16-54.676-11.769-62.708c-13.355-7.7-35.196.329-57.254 19.526a171.23 171.23 0 0 0-6.375 5.848a155.866 155.866 0 0 0-4.241-3.917C100.759 3.829 77.587-4.822 63.673 3.233C50.33 10.957 46.379 33.89 51.995 62.588a170.974 170.974 0 0 0 1.892 8.48c-3.28.932-6.445 1.924-9.474 2.98C17.309 83.498 0 98.307 0 113.668c0 15.865 18.582 31.778 46.812 41.427a145.52 145.52 0 0 0 6.921 2.165a167.467 167.467 0 0 0-2.01 9.138c-5.354 28.2-1.173 50.591 12.134 58.266c13.744 7.926 36.812-.22 59.273-19.855a145.567 145.567 0 0 0 5.342-4.923a168.064 168.064 0 0 0 6.92 6.314c21.758 18.722 43.246 26.282 56.54 18.586c13.731-7.949 18.194-32.003 12.4-61.268a145.016 145.016 0 0 0-1.535-6.842c1.62-.48 3.21-.974 4.76-1.488c29.348-9.723 48.443-25.443 48.443-41.52c0-15.417-17.868-30.326-45.517-39.844Zm-6.365 70.984c-1.4.463-2.836.91-4.3 1.345c-3.24-10.257-7.612-21.163-12.963-32.432c5.106-11 9.31-21.767 12.459-31.957c2.619.758 5.16 1.557 7.61 2.4c23.69 8.156 38.14 20.213 38.14 29.504c0 9.896-15.606 22.743-40.946 31.14Zm-10.514 20.834c2.562 12.94 2.927 24.64 1.23 33.787c-1.524 8.219-4.59 13.698-8.382 15.893c-8.067 4.67-25.32-1.4-43.927-17.412a156.726 156.726 0 0 1-6.437-5.87c7.214-7.889 14.423-17.06 21.459-27.246c12.376-1.098 24.068-2.894 34.671-5.345a134.17 134.17 0 0 1 1.386 6.193ZM87.276 214.515c-7.882 2.783-14.16 2.863-17.955.675c-8.075-4.657-11.432-22.636-6.853-46.752a156.923 156.923 0 0 1 1.869-8.499c10.486 2.32 22.093 3.988 34.498 4.994c7.084 9.967 14.501 19.128 21.976 27.15a134.668 134.668 0 0 1-4.877 4.492c-9.933 8.682-19.886 14.842-28.658 17.94ZM50.35 144.747c-12.483-4.267-22.792-9.812-29.858-15.863c-6.35-5.437-9.555-10.836-9.555-15.216c0-9.322 13.897-21.212 37.076-29.293c2.813-.98 5.757-1.905 8.812-2.773c3.204 10.42 7.406 21.315 12.477 32.332c-5.137 11.18-9.399 22.249-12.634 32.792a134.718 134.718 0 0 1-6.318-1.979Zm12.378-84.26c-4.811-24.587-1.616-43.134 6.425-47.789c8.564-4.958 27.502 2.111 47.463 19.835a144.318 144.318 0 0 1 3.841 3.545c-7.438 7.987-14.787 17.08-21.808 26.988c-12.04 1.116-23.565 2.908-34.161 5.309a160.342 160.342 0 0 1-1.76-7.887Zm110.427 27.268a347.8 347.8 0 0 0-7.785-12.803c8.168 1.033 15.994 2.404 23.343 4.08c-2.206 7.072-4.956 14.465-8.193 22.045a381.151 381.151 0 0 0-7.365-13.322Zm-45.032-43.861c5.044 5.465 10.096 11.566 15.065 18.186a322.04 322.04 0 0 0-30.257-.006c4.974-6.559 10.069-12.652 15.192-18.18ZM82.802 87.83a323.167 323.167 0 0 0-7.227 13.238c-3.184-7.553-5.909-14.98-8.134-22.152c7.304-1.634 15.093-2.97 23.209-3.984a321.524 321.524 0 0 0-7.848 12.897Zm8.081 65.352c-8.385-.936-16.291-2.203-23.593-3.793c2.26-7.3 5.045-14.885 8.298-22.6a321.187 321.187 0 0 0 7.257 13.246c2.594 4.48 5.28 8.868 8.038 13.147Zm37.542 31.03c-5.184-5.592-10.354-11.779-15.403-18.433c4.902.192 9.899.29 14.978.29c5.218 0 10.376-.117 15.453-.343c-4.985 6.774-10.018 12.97-15.028 18.486Zm52.198-57.817c3.422 7.8 6.306 15.345 8.596 22.52c-7.422 1.694-15.436 3.058-23.88 4.071a382.417 382.417 0 0 0 7.859-13.026a347.403 347.403 0 0 0 7.425-13.565Zm-16.898 8.101a358.557 358.557 0 0 1-12.281 19.815a329.4 329.4 0 0 1-23.444.823c-7.967 0-15.716-.248-23.178-.732a310.202 310.202 0 0 1-12.513-19.846h.001a307.41 307.41 0 0 1-10.923-20.627a310.278 310.278 0 0 1 10.89-20.637l-.001.001a307.318 307.318 0 0 1 12.413-19.761c7.613-.576 15.42-.876 23.31-.876H128c7.926 0 15.743.303 23.354.883a329.357 329.357 0 0 1 12.335 19.695a358.489 358.489 0 0 1 11.036 20.54a329.472 329.472 0 0 1-11 20.722Zm22.56-122.124c8.572 4.944 11.906 24.881 6.52 51.026c-.344 1.668-.73 3.367-1.15 5.09c-10.622-2.452-22.155-4.275-34.23-5.408c-7.034-10.017-14.323-19.124-21.64-27.008a160.789 160.789 0 0 1 5.888-5.4c18.9-16.447 36.564-22.941 44.612-18.3ZM128 90.808c12.625 0 22.86 10.235 22.86 22.86s-10.235 22.86-22.86 22.86s-22.86-10.235-22.86-22.86s10.235-22.86 22.86-22.86Z"></path></svg>
+
+========== src/components\RouteBadge.css ==========
+.route-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 3rem;
+  text-align: center;
+}
+
+========== src/components\RouteBadge.tsx ==========
+import "./RouteBadge.css"
+
+type RouteBadgeProps = {
+  number: string
+  badgeStyle?: string | null
+}
+
+function RouteBadge({ number, badgeStyle }: RouteBadgeProps) {
+  // the API stores badge colors as a JSON string
+  // parse it to get background-color, border-color, and text color
+  let style: React.CSSProperties = {
+    backgroundColor: "var(--color-primary)",
+    color: "#ffffff",
+  }
+
+  if (badgeStyle) {
+    try {
+      const parsed = JSON.parse(badgeStyle)
+      style = {
+        backgroundColor: parsed["background-color"] || "var(--color-primary)",
+        color: parsed["color"] || "#ffffff",
+        borderColor: parsed["border-color"] || "transparent",
+        borderWidth: "1px",
+        borderStyle: "solid",
+      }
+    } catch {
+      // if parsing fails just use the default blue
+    }
+  }
+
+  return (
+    <span className="route-badge" style={style}>
+      {number}
+    </span>
+  )
+}
+
+export default RouteBadge
+
+========== src/components\ServiceAdvisoryBanner.css ==========
+.advisory-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.advisory-banner .advisory-icon {
+  color: var(--color-warning);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.advisory-banner .advisory-title {
+  font-weight: 600;
+}
+
+.advisory-banner .advisory-body {
+  color: var(--color-text-light);
+  font-size: 0.8rem;
+}
+
+========== src/components\ServiceAdvisoryBanner.tsx ==========
+import { useEffect, useState } from "react"
+import { AlertTriangle } from "lucide-react"
+import { getServiceAdvisories } from "../hooks/useTransit"
+import "./ServiceAdvisoryBanner.css"
+
+type Advisory = {
+  key: number
+  priority: number
+  title: string
+  body: string
+}
+
+function ServiceAdvisoryBanner() {
+  const [advisories, setAdvisories] = useState<Advisory[]>([])
+
+  useEffect(() => {
+    getServiceAdvisories()
+      .then((data) => {
+        // the API wraps advisories in a top-level object
+        const items = data["service-advisories"] || data.serviceAdvisories || []
+        setAdvisories(items.slice(0, 3))
+      })
+      .catch(() => {
+        // if the API is down just show nothing
+      })
+  }, [])
+
+  if (advisories.length === 0) return null
+
+  // clean up the markdown-style formatting the API sends back
+  const cleanBody = (text: string) => {
+    if (!text) return ""
+    return text.replace(/\*\*/g, "").replace(/\s+/g, " ").trim()
+  }
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+      {advisories.map((adv) => (
+        <div key={adv.key} className="advisory-banner">
+          <AlertTriangle size={18} className="advisory-icon" />
+          <div>
+            <div className="advisory-title">{adv.title}</div>
+            <div className="advisory-body">{cleanBody(adv.body)}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default ServiceAdvisoryBanner
+
+========== src/components\StopScheduleCard.css ==========
+.schedule-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: border-color 0.15s;
+}
+
+.schedule-card:hover {
+  border-color: var(--color-primary-light);
+}
+
+.schedule-card .route-info {
+  flex: 1;
+}
+
+.schedule-card .route-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.schedule-card .route-destination {
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+}
+
+.schedule-card .eta-block {
+  text-align: center;
+  min-width: 3rem;
+}
+
+.schedule-card .eta {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.schedule-card .eta-label {
+  font-size: 0.6rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eta-soon {
+  color: var(--color-danger);
+}
+
+.eta-normal {
+  color: var(--color-primary);
+}
+
+========== src/components\StopScheduleCard.tsx ==========
+import { Heart } from "lucide-react"
+import RouteBadge from "./RouteBadge"
+import "./StopScheduleCard.css"
+
+type StopScheduleCardProps = {
+  routeNumber: string
+  routeName: string
+  destination: string
+  etaMinutes: number
+  badgeStyle?: string | null
+  onFavorite?: () => void
+  isFavorite?: boolean
+}
+
+function StopScheduleCard({ routeNumber, routeName, destination, etaMinutes, badgeStyle, onFavorite, isFavorite }: StopScheduleCardProps) {
+  const etaClass = etaMinutes <= 3 ? "eta-soon" : "eta-normal"
+
+  return (
+    <div className="schedule-card">
+      <RouteBadge number={routeNumber} badgeStyle={badgeStyle} />
+
+      <div className="route-info">
+        <div className="route-name">{routeName}</div>
+        <div className="route-destination">to {destination}</div>
+      </div>
+
+      {onFavorite && (
+        <button
+          className="btn-ghost"
+          onClick={onFavorite}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          style={{ padding: "0.3rem" }}
+        >
+          <Heart
+            size={16}
+            fill={isFavorite ? "var(--color-danger)" : "none"}
+            color={isFavorite ? "var(--color-danger)" : "var(--color-text-light)"}
+          />
+        </button>
+      )}
+
+      <div className="eta-block">
+        <div className={`eta ${etaClass}`}>{etaMinutes}</div>
+        <div className="eta-label">min</div>
+      </div>
+    </div>
+  )
+}
+
+export default StopScheduleCard
+
+========== src/components\TripForm.tsx ==========
+type TripFormProps = {
+  stops: string[]
+  selectedFrom: string
+  setSelectedFrom: (value: string) => void
+  selectedTo: string
+  setSelectedTo: (value: string) => void
+}
+
+function TripForm({ stops, selectedFrom, setSelectedFrom, selectedTo, setSelectedTo }: TripFormProps) {
+  return (
+    <div>
+      <select value={selectedFrom} onChange={(e) => setSelectedFrom(e.target.value)}>
+        <option value="">From</option>
+        {stops.map((stop) => (
+          <option key={stop} value={stop}>{stop}</option>
+        ))}
+      </select>
+
+      <select value={selectedTo} onChange={(e) => setSelectedTo(e.target.value)}>
+        <option value="">To</option>
+        {stops.map((stop) => (
+          <option key={stop} value={stop}>{stop}</option>
+        ))}
+      </select>
+    </div>
+  )
+}
+
+export default TripForm
+
+========== src/components\TripSegment.css ==========
+.trip-segment {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-left: 3px solid var(--color-border);
+}
+
+.trip-segment.walk {
+  border-left-color: var(--color-text-light);
+}
+
+.trip-segment.ride {
+  border-left-color: var(--color-primary);
+}
+
+.trip-segment.transfer {
+  border-left-color: var(--color-accent);
+}
+
+.segment-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.segment-icon.walk {
+  color: var(--color-text-light);
+}
+
+.segment-icon.ride {
+  color: var(--color-primary);
+}
+
+.segment-icon.transfer {
+  color: var(--color-accent);
+}
+
+.segment-details {
+  flex: 1;
+}
+
+.segment-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.segment-info {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  margin-top: 0.2rem;
+}
+
+.segment-duration {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-light);
+  margin-left: 0.4rem;
+}
+
+.segment-map {
+  height: 120px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-top: 0.4rem;
+  border: 1px solid var(--color-border);
+}
+
+.segment-time {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  white-space: nowrap;
+}
+
+========== src/components\TripSegment.tsx ==========
+import { Footprints, Bus, ArrowLeftRight } from "lucide-react"
+import RouteBadge from "./RouteBadge"
+import "./TripSegment.css"
+
+type TripSegmentProps = {
+  type: "walk" | "ride" | "transfer"
+  from: string
+  to: string
+  duration?: number
+  routeNumber?: string
+  time?: string
+}
+
+function TripSegment({ type, from, to, duration, routeNumber, time }: TripSegmentProps) {
+  const Icon = type === "walk" ? Footprints : type === "ride" ? Bus : ArrowLeftRight
+
+  return (
+    <div className={`trip-segment ${type}`}>
+      <div className={`segment-icon ${type}`}>
+        <Icon size={18} />
+      </div>
+
+      <div className="segment-details">
+        <div className="segment-title">
+          {type === "walk" && "Walk"}
+          {type === "ride" && routeNumber && (
+            <>
+              Ride <RouteBadge number={routeNumber} />
+            </>
+          )}
+          {type === "transfer" && "Transfer"}
+          {duration ? <span className="segment-duration">{duration} min</span> : null}
+        </div>
+        <div className="segment-info">
+          {from} to {to}
+        </div>
+      </div>
+
+      {time && <div className="segment-time">{new Date(time).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</div>}
+    </div>
+  )
+}
+
+export default TripSegment
+
+========== src/components\bus-route-map\BusRouteMap.css ==========
+.route-map-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1rem;
+  height: 550px;
+}
+
+/* scrollable route list on the left */
+.route-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-card);
+}
+
+.route-panel-header {
+  position: sticky;
+  top: 0;
+  background: var(--color-card);
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  z-index: 1;
+}
+
+.route-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.route-item:hover {
+  background-color: var(--color-primary-light);
+}
+
+.route-item.active {
+  background-color: var(--color-primary-light);
+  border-left: 3px solid var(--color-primary);
+}
+
+.route-item-name {
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.route-item-coverage {
+  font-size: 0.65rem;
+  color: var(--color-text-light);
+}
+
+/* map on the right */
+.map-wrapper {
+  height: 100%;
+  width: 100%;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.map-wrapper .leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+/* stops list below the map */
+.route-stops-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.route-stop-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  color: var(--color-text);
+}
+
+.route-stop-chip .stop-key {
+  color: var(--color-text-light);
+}
+
+/* loading overlay on the map area */
+.map-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+}
+
+========== src/components\bus-route-map\BusRouteMap.tsx ==========
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet"
+import { useState, useEffect } from "react"
+import { getTransitRoutes, getRouteStops, ensureTransitData } from "../../hooks/useTransit"
+import RouteBadge from "../RouteBadge"
+import "./BusRouteMap.css"
+
+type TransitRoute = {
+  key: number
+  number: string
+  name: string
+  coverageType?: string | null
+  badgeStyle?: string | null
+}
+
+type RouteStop = {
+  key: number
+  name: string
+  centre?: {
+    geographic?: {
+      latitude: string
+      longitude: string
+    }
+  }
+}
+
+export default function BusRouteMap() {
+  const [routes, setRoutes] = useState<TransitRoute[]>([])
+  const [selectedRouteKey, setSelectedRouteKey] = useState("")
+  const [selectedRoute, setSelectedRoute] = useState<TransitRoute | null>(null)
+  const [routeStops, setRouteStops] = useState<RouteStop[]>([])
+  const [loading, setLoading] = useState(false)
+
+  // load all routes on mount, sync from API if DB is empty
+  useEffect(() => {
+    ensureTransitData()
+      .then(() => getTransitRoutes())
+      .then((data) => setRoutes(data))
+      .catch(() => {})
+  }, [])
+
+  // when you click a route, fetch the stops along it
+  const handleSelectRoute = (route: TransitRoute) => {
+    const key = String(route.key)
+    if (key === selectedRouteKey) return
+
+    setSelectedRouteKey(key)
+    setSelectedRoute(route)
+    setLoading(true)
+    setRouteStops([])
+
+    getRouteStops(String(route.number || route.key))
+      .then((data) => {
+        const stops = data.stops || []
+        setRouteStops(stops)
+      })
+      .catch(() => setRouteStops([]))
+      .finally(() => setLoading(false))
+  }
+
+  // turn the API stop data into lat/lng markers
+  const markers = routeStops
+    .filter((s) => s.centre?.geographic)
+    .map((s) => ({
+      key: s.key,
+      name: s.name,
+      lat: parseFloat(s.centre!.geographic!.latitude),
+      lng: parseFloat(s.centre!.geographic!.longitude),
+    }))
+
+  // draw a line connecting the stops
+  const polylinePositions = markers.map((m) => [m.lat, m.lng] as [number, number])
+
+  // figure out the route color from the badge style
+  let routeColor = "var(--color-primary)"
+  if (selectedRoute?.badgeStyle) {
+    try {
+      const parsed = JSON.parse(selectedRoute.badgeStyle)
+      routeColor = parsed["background-color"] || routeColor
+    } catch {}
+  }
+
+  // center on first stop or downtown winnipeg
+  const center: [number, number] = markers.length > 0
+    ? [markers[0].lat, markers[0].lng]
+    : [49.8951, -97.1384]
+
+  return (
+    <div>
+      <div className="route-map-layout">
+        <div className="route-panel">
+          <div className="route-panel-header">
+            {routes.length} Routes
+          </div>
+          {routes.map((route) => (
+            <div
+              key={route.key}
+              className={`route-item ${String(route.key) === selectedRouteKey ? "active" : ""}`}
+              onClick={() => handleSelectRoute(route)}
+            >
+              <RouteBadge number={String(route.number)} badgeStyle={route.badgeStyle} />
+              <div>
+                <div className="route-item-name">{route.name}</div>
+                {route.coverageType && (
+                  <div className="route-item-coverage">{route.coverageType}</div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="map-wrapper">
+          {loading ? (
+            <div className="map-loading">Loading stops...</div>
+          ) : (
+            <MapContainer
+              key={center.join(",")}
+              center={center}
+              zoom={markers.length > 0 ? 13 : 12}
+              style={{ height: "100%", width: "100%" }}
+            >
+              <TileLayer
+                attribution="&copy; OpenStreetMap contributors"
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {markers.map((stop) => (
+                <Marker key={stop.key} position={[stop.lat, stop.lng]}>
+                  <Popup>
+                    <strong>{stop.name}</strong><br />
+                    Stop #{stop.key}
+                  </Popup>
+                </Marker>
+              ))}
+
+              {polylinePositions.length > 1 && (
+                <Polyline
+                  positions={polylinePositions}
+                  pathOptions={{ color: routeColor, weight: 4, opacity: 0.7 }}
+                />
+              )}
+            </MapContainer>
+          )}
+        </div>
+      </div>
+
+    </div>
+  )
+}
+
+========== src/components\bus-status-card\busStatusCard.css ==========
+.bus-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.bus-card-badge {
+  background: var(--color-primary);
+  color: white;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-sm);
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.bus-card-info {
+  flex: 1;
+}
+
+.bus-card-destination {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.bus-card-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.1rem;
+}
+
+.bus-card-actions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+========== src/components\bus-status-card\busStatusCard.tsx ==========
+import { Heart, Trash2 } from "lucide-react"
+import "./busStatusCard.css"
+
+type BusStatusCardProps = {
+  routeNumber: string
+  destination: string
+  eta: number
+  status: string
+  onRemove: () => void
+  onFavorite: () => void
+  isFavorite: boolean
+}
+
+const BusStatusCard = ({
+  routeNumber,
+  destination,
+  eta,
+  status,
+  onRemove,
+  onFavorite,
+  isFavorite,
+}: BusStatusCardProps) => {
+  const statusClass = status === "On Time" ? "status-on-time" : "status-delayed"
+
+  return (
+    <div className="bus-card">
+      <div className="bus-card-badge">{routeNumber}</div>
+
+      <div className="bus-card-info">
+        <div className="bus-card-destination">{destination}</div>
+        <div className="bus-card-meta">
+          <span>{eta} min</span>
+          <span className={statusClass}>{status}</span>
+        </div>
+      </div>
+
+      <div className="bus-card-actions">
+        <button
+          className="btn-ghost"
+          onClick={onFavorite}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        >
+          <Heart size={16} fill={isFavorite ? "var(--color-danger)" : "none"} color={isFavorite ? "var(--color-danger)" : "var(--color-text-light)"} />
+        </button>
+        <button className="btn-ghost" onClick={onRemove} title="Remove">
+          <Trash2 size={16} />
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export default BusStatusCard
+
+========== src/components\live-bus-tracker\LiveBusTracker.css ==========
+.live-bus-tracker {
+  background-color: #fbeae8ff; /* Sky Blue background */
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  color: #003A8F; /* Transit Blue text */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.live-bus-tracker h2 {
+  font-size: 30px; /* H2: 30px */
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #003A8F; /* Transit Blue */
+}
+
+.bus-list {
+  list-style: none;
+  padding: 0;
+}
+
+.bus-card {
+  background-color: #FFFFFF; /* White background */
+  border: 1px solid #6B7280; /* Neutral Gray border */
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bus-card div {
+  margin-bottom: 5px;
+  font-size: 16px; /* Body text */
+}
+
+.bus-card strong {
+  color: #003A8F; /* Transit Blue */
+}
+
+.status-on-time {
+  color: #003A8F; /* Transit Blue for on time */
+  font-weight: bold;
+}
+
+.status-delayed {
+  color: hsla(8, 92%, 50%, 1.00); /* Warning Orange for delayed */
+  font-weight: bold;
+}
+
+========== src/components\live-bus-tracker\LiveBusTracker.tsx ==========
+/**
+ * I.3: LiveBusTracker Component
+ * 
+ * Purpose:
+ * This is the main component that demonstrates the complete hook-service-repository architecture.
+ * It shows how all three layers work together.
+ * 
+ * Architecture:
+ * 1. Presentation Layer: This component (LiveBusTracker)
+ * 2. Hook Layer: useBuses - handles presentation logic
+ * 3. Service Layer: BusService - handles business logic
+ * 4. Repository Layer: BusRepository - handles data access
+ * 
+ * How it works:
+ * - Component uses useBuses hook for presentation logic
+ * - Hook uses BusService for business operations
+ * - Service uses BusRepository for CRUD operations
+ * - Repository manages test data (will be replaced with database in next module)
+ */
+
+import { useEffect, useState } from "react";
+import { useBuses } from "../../hooks/useBuses";
+import type { Bus } from "../../types/Bus";
+import "./LiveBusTracker.css";
+
+const LiveBusTracker = () => {
+  const { buses, loading } = useBuses();
+  const delayedBuses = buses.filter(bus => bus.status === "Delayed");
+  const [displayMode, setDisplayMode] = useState<"all" | "sorted">("all");
+
+  // Local state for simulating real-time ETA updates
+  const [displayedBuses, setDisplayedBuses] = useState<Bus[]>([]);
+
+  // Update displayed buses based on mode
+  useEffect(() => {
+    if (displayMode === "sorted") {
+      setDisplayedBuses([...buses].sort((a, b) => a.eta - b.eta));
+    } else {
+      setDisplayedBuses(buses);
+    }
+  }, [buses, displayMode]);
+
+  // Simulate real-time ETA updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDisplayedBuses(prev => 
+        prev.map(bus => ({
+          ...bus,
+          eta: bus.eta > 1 ? bus.eta - 1 : 1,
+        }))
+      );
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (loading) {
+    return <div>Loading buses...</div>;
+  }
+
+  return (
+    <section className="live-bus-tracker">
+      <h2>Live Bus Tracker</h2>
+      
+      {/* Display mode toggle */}
+      <div className="controls">
+        <button 
+          onClick={() => setDisplayMode("all")}
+          className={displayMode === "all" ? "active" : ""}
+        >
+          All Buses
+        </button>
+        <button 
+          onClick={() => setDisplayMode("sorted")}
+          className={displayMode === "sorted" ? "active" : ""}
+        >
+          Sort by ETA
+        </button>
+      </div>
+
+      {/* Show delayed count */}
+      <p className="delayed-count">
+        Delayed Buses: {delayedBuses.length}
+      </p>
+
+      {/* Bus list */}
+      <div className="bus-list">
+        {displayedBuses.map(bus => (
+          <div key={bus.id} className={`bus-item ${bus.status.toLowerCase().replace(" ", "-")}`}>
+            <h3>{bus.routeNumber}</h3>
+            <p>Destination: {bus.destination}</p>
+            <p>Next Stop: {bus.nextStop}</p>
+            <p>ETA: {bus.eta} min</p>
+            <p className="status">Status: {bus.status}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default LiveBusTracker;
+
+========== src/components\live-bus-tracker\nav\nav.css ==========
+.main-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.15rem;
+  padding: 0.35rem 1rem;
+  background: rgba(0, 30, 80, 0.6);
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background-color 0.15s;
+}
+
+.main-nav a:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.main-nav a.active {
+  color: var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.main-nav .docs-link {
+  margin-left: auto;
+  color: #85ea2d;
+  font-size: 0.72rem;
+}
+
+.main-nav .docs-link:hover {
+  color: #85ea2d;
+  background-color: rgba(133, 234, 45, 0.15);
+}
+
+========== src/components\live-bus-tracker\nav\nav.tsx ==========
+import { NavLink } from "react-router-dom"
+import { Home, Radio, Heart, MapPin, Navigation, Clock } from "lucide-react"
+import "./nav.css"
+
+const Nav = () => {
+  return (
+    <nav className="main-nav">
+      <NavLink to="/" end>
+        <Home size={16} />
+        Home
+      </NavLink>
+      <NavLink to="/live-bus-tracker">
+        <Radio size={16} />
+        Live Tracker
+      </NavLink>
+      <NavLink to="/bus-route-map">
+        <MapPin size={16} />
+        Route Map
+      </NavLink>
+      <NavLink to="/trip-planner">
+        <Navigation size={16} />
+        Trip Planner
+      </NavLink>
+      <NavLink to="/saved-trips">
+        <Clock size={16} />
+        Saved Trips
+      </NavLink>
+      <NavLink to="/favorites">
+        <Heart size={16} />
+        Favorites
+      </NavLink>
+    </nav>
+  )
+}
+
+export default Nav
+
+========== src/data\busTestData.ts ==========
+/**
+ * I.2: Test Data for Bus Resource
+ * Contains pre-made TypeScript objects for testing the bus tracking functionality.
+ * This data will be replaced with database data in the next module.
+ */
+import type { Bus } from "../types/Bus";
+
+export const busTestData: Bus[] = [
+  { id: 1, routeNumber: "D19", destination: "Corydon", nextStop: "Stafford St", eta: 2, status: "On Time", favorite: false },
+  { id: 2, routeNumber: "FX3", destination: "Transcona", nextStop: "Plessis Rd", eta: 7, status: "Delayed", favorite: false },
+  { id: 3, routeNumber: "F8", destination: "Pembina", nextStop: "Plaza Dr", eta: 3, status: "On Time", favorite: false },
+  { id: 4, routeNumber: "16", destination: "Downtown", nextStop: "Main St", eta: 5, status: "On Time", favorite: false },
+  { id: 5, routeNumber: "21", destination: "St. Vital", nextStop: "St. Mary's Rd", eta: 12, status: "Delayed", favorite: false },
+  { id: 6, routeNumber: "55", destination: "Fort Garry", nextStop: "University", eta: 8, status: "On Time", favorite: false },
+  { id: 7, routeNumber: "60", destination: "Waverley", nextStop: "Taylor Ave", eta: 4, status: "On Time", favorite: false },
+  { id: 8, routeNumber: "71", destination: "Selkirk", nextStop: "McPhillips St", eta: 15, status: "Delayed", favorite: false },
+  { id: 9, routeNumber: "10", destination: "St. Boniface", nextStop: "Goulet St", eta: 6, status: "On Time", favorite: false },
+  { id: 10, routeNumber: "18", destination: "North Kildonan", nextStop: "Henderson Hwy", eta: 9, status: "On Time", favorite: false },
+  { id: 11, routeNumber: "35", destination: "River Heights", nextStop: "Corydon Ave", eta: 3, status: "Delayed", favorite: false },
+  { id: 12, routeNumber: "44", destination: "East Kildonan", nextStop: "Regent Ave", eta: 11, status: "On Time", favorite: false },
+];
+
+========== src/data\stopTestData.ts ==========
+import type { Stop } from "../types/Stop";
+
+export const stopTestData: Stop[] = [
+  { id: 1, name: "Downtown", lat: 49.8951, lng: -97.1384 },
+  { id: 2, name: "The Forks", lat: 49.8889, lng: -97.1313 },
+  { id: 3, name: "Osborne Village", lat: 49.8814, lng: -97.1470 },
+  { id: 4, name: "St Vital Centre", lat: 49.8286, lng: -97.1130 },
+  { id: 5, name: "University of Manitoba", lat: 49.8094, lng: -97.1327 },
+  { id: 6, name: "Polo Park", lat: 49.8815, lng: -97.1973 },
+  { id: 7, name: "RRC Notre Dame", lat: 49.9044, lng: -97.2030 },
+  { id: 8, name: "Health Sciences Centre", lat: 49.9037, lng: -97.1642 },
+  { id: 9, name: "Kildonan Place", lat: 49.8957, lng: -97.0474 },
+  { id: 10, name: "Garden City Centre", lat: 49.9445, lng: -97.1547 }
+];
+
+========== src/data\transitData.ts ==========
+import type { Stop } from "../types/Stop";
+
+export type Route = {
+  id: string;
+  label: string;
+  color: string;
+  stops: Stop[];
+};
+
+export const transitRoutes: Route[] = [
+
+  // BLUE
+  {
+  id: "BLUE",
+  label: "Blue Line â€“ Rapid Transit",
+  color: "#0074D9",
+  stops: [
+    { id: 1, name: "Unicity", lat: 49.8814, lng: -97.2872 },
+    { id: 2, name: "Polo Park", lat: 49.8815, lng: -97.1967 },
+    { id: 3, name: "Downtown (Portage & Main)", lat: 49.8951, lng: -97.1384 },
+    { id: 4, name: "Osborne Station", lat: 49.8761, lng: -97.1453 },
+    { id: 5, name: "Fort Rouge Station", lat: 49.8550, lng: -97.1527 },
+    { id: 6, name: "University of Manitoba", lat: 49.8094, lng: -97.1328 },
+    { id: 7, name: "St Norbert", lat: 49.7496, lng: -97.1492 }
+  ]
+},
+
+  // F8
+  {
+  id: "F8",
+  label: "F8 â€“ Henderson",
+  color: "#2ECC40",
+  stops: [
+    { id: 1, name: "Glenway", lat: 49.9307, lng: -97.0710 },
+    { id: 2, name: "Kildonan Park", lat: 49.9293, lng: -97.1190 },
+    { id: 3, name: "City Hall", lat: 49.8988, lng: -97.1376 },
+    { id: 4, name: "Pembina", lat: 49.8430, lng: -97.1436 },
+    { id: 5, name: "University of Manitoba", lat: 49.8094, lng: -97.1328 }
+  ]
+},
+
+  // D16
+  {
+  id: "D16",
+  label: "D16 â€“ Academy",
+  color: "#033606",
+  stops: [
+    { id: 1, name: "Polo Park", lat: 49.8815, lng: -97.1967 },
+    { id: 2, name: "Academy & Stafford", lat: 49.8782, lng: -97.1701 },
+    { id: 3, name: "Downtown", lat: 49.8951, lng: -97.1384 },
+    { id: 4, name: "Notre Dame", lat: 49.9057, lng: -97.1639 },
+    { id: 5, name: "RRC Polytech", lat: 49.9036, lng: -97.1586 }
+  ]
+},
+
+// FX4
+{
+  id: "FX4",
+  label: "FX4 â€“ Gateway",
+  color: "#800080",
+  stops: [
+    { id: 1, name: "Raleigh", lat: 49.9441, lng: -97.0582 },
+    { id: 2, name: "Kildonan Place", lat: 49.8948, lng: -97.0630 },
+    { id: 3, name: "Downtown", lat: 49.8951, lng: -97.1384 },
+    { id: 4, name: "Portage Ave", lat: 49.8810, lng: -97.1917 },
+    { id: 5, name: "Polo Park", lat: 49.8815, lng: -97.1967 }
+  ]
+},
+
+// 74
+{
+  id: "74",
+  label: "74 â€“ Kenaston",
+  color: "#00008B",
+  stops: [
+    { id: 1, name: "Waterford Green", lat: 49.9520, lng: -97.1970 },
+    { id: 2, name: "Polo Park", lat: 49.8815, lng: -97.1967 },
+    { id: 3, name: "Kenaston Common", lat: 49.8444, lng: -97.2137 },
+    { id: 4, name: "Victoria Hospital", lat: 49.8151, lng: -97.1895 },
+    { id: 5, name: "University of Manitoba", lat: 49.8094, lng: -97.1328 }
+  ]
+}
+];
+
+========== src/data\tripData.ts ==========
+import type { Trip } from '../types/Trip'
+
+const testTrips: Trip[] = [
+  {
+    id: 1,
+    from: 'Portage & Main',
+    to: 'U of M',
+    route: 'BLUE',
+    departureTime: '8:00 AM',
+    arrivalTime: '8:35 AM',
+    duration: 35,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 2,
+    from: 'The Forks',
+    to: 'Polo Park',
+    route: '11',
+    departureTime: '9:15 AM',
+    arrivalTime: '9:40 AM',
+    duration: 25,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 3,
+    from: 'Osborne Village',
+    to: 'HSC',
+    route: '36',
+    departureTime: '7:30 AM',
+    arrivalTime: '7:45 AM',
+    duration: 15,
+    fare: 3.15,
+    status: 'completed',
+  },
+  {
+    id: 4,
+    from: 'U of M',
+    to: 'St Vital Centre',
+    route: '75',
+    departureTime: '12:00 PM',
+    arrivalTime: '12:20 PM',
+    duration: 20,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 5,
+    from: 'Kildonan Place',
+    to: 'Portage & Main',
+    route: '47',
+    departureTime: '6:45 AM',
+    arrivalTime: '7:15 AM',
+    duration: 30,
+    fare: 3.15,
+    status: 'in-progress',
+  },
+  {
+    id: 6,
+    from: 'Polo Park',
+    to: 'The Forks',
+    route: '11',
+    departureTime: '2:00 PM',
+    arrivalTime: '2:25 PM',
+    duration: 25,
+    fare: 3.15,
+    status: 'completed',
+  },
+  {
+    id: 7,
+    from: 'HSC',
+    to: 'U of M',
+    route: '36',
+    departureTime: '3:30 PM',
+    arrivalTime: '4:10 PM',
+    duration: 40,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 8,
+    from: 'St Vital Centre',
+    to: 'Osborne Village',
+    route: '16',
+    departureTime: '11:00 AM',
+    arrivalTime: '11:20 AM',
+    duration: 20,
+    fare: 3.15,
+    status: 'cancelled',
+  },
+  {
+    id: 9,
+    from: 'Portage & Main',
+    to: 'Kildonan Place',
+    route: '47',
+    departureTime: '5:00 PM',
+    arrivalTime: '5:30 PM',
+    duration: 30,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 10,
+    from: 'The Forks',
+    to: 'U of M',
+    route: 'BLUE',
+    departureTime: '10:00 AM',
+    arrivalTime: '10:28 AM',
+    duration: 28,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 11,
+    from: 'U of M',
+    to: 'Portage & Main',
+    route: 'BLUE',
+    departureTime: '4:30 PM',
+    arrivalTime: '5:05 PM',
+    duration: 35,
+    fare: 3.15,
+    status: 'scheduled',
+  },
+  {
+    id: 12,
+    from: 'Osborne Village',
+    to: 'The Forks',
+    route: '16',
+    departureTime: '1:00 PM',
+    arrivalTime: '1:12 PM',
+    duration: 12,
+    fare: 3.15,
+    status: 'completed',
+  },
+]
+
+export default testTrips
+
+========== src/hooks\useBuses.ts ==========
+import { useEffect, useState, useCallback } from "react";
+import type { Bus } from "../types/Bus";
+import { BusService } from "../services/BusServices";
+
+export const useBuses = () => {
+  const [buses, setBuses] = useState<Bus[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const service = new BusService();
+
+  const loadBuses = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const data = await service.getAllBuses();
+      setBuses(data);
+    } catch {
+      setError("Could not load buses from the backend.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadBuses();
+  }, [loadBuses]);
+
+  const addBus = async (bus: Omit<Bus, "id">) => {
+    await service.addBus(bus);
+    await loadBuses();
+  };
+
+  const toggleFavorite = async (id: number, favorite: boolean) => {
+    await service.toggleFavorite(id, favorite);
+    await loadBuses();
+  };
+
+  const deleteBus = async (id: number) => {
+    await service.deleteBus(id);
+    await loadBuses();
+  };
+
+  return {
+    buses,
+    loading,
+    error,
+    addBus,
+    toggleFavorite,
+    deleteBus,
+  };
+};
+
+========== src/hooks\useStops.ts ==========
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/clerk-react";
+import * as repo from "../repositories/StopRepository";
+
+export const useStops = () => {
+  const [stops, setStops] = useState<any[]>([]);
+  const { getToken, isSignedIn } = useAuth();
+
+  useEffect(() => {
+    if (isSignedIn) {
+      loadStops();
+    }
+  }, [isSignedIn]);
+
+  const loadStops = async () => {
+    const token = await getToken();
+
+    if (!token) return; 
+
+    const data = await repo.getStops(token);
+    setStops(data);
+  };
+
+  const addStop = async (name: string) => {
+    if (!name.trim()) return;
+
+    const token = await getToken();
+    if (!token) return;
+
+    await repo.createStop(
+      {
+        name,
+        latitude: 49.8951,
+        longitude: -97.1384,
+      },
+      token
+    );
+
+    await loadStops();
+  };
+
+  const deleteStop = async (id: number) => {
+    const token = await getToken();
+    if (!token) return;
+
+    await repo.deleteStop(id, token);
+    await loadStops();
+  };
+
+  return { stops, addStop, deleteStop };
+};
+
+========== src/hooks\useTransit.ts ==========
+const TRANSIT_BASE = "/api/transit"
+
+// get all cached transit stops from our database
+export async function getTransitStops() {
+  const res = await fetch(`${TRANSIT_BASE}/stops`)
+  if (!res.ok) throw new Error("Failed to fetch transit stops")
+  return res.json()
+}
+
+// get stops near a lat/lng
+export async function getNearbyStops(lat: number, lon: number, distance: number = 500) {
+  const res = await fetch(`${TRANSIT_BASE}/stops/nearby?lat=${lat}&lon=${lon}&distance=${distance}`)
+  if (!res.ok) throw new Error("Failed to fetch nearby stops")
+  return res.json()
+}
+
+// get live schedule for a stop (arriving buses and ETAs)
+export async function getStopSchedule(stopKey: number) {
+  const res = await fetch(`${TRANSIT_BASE}/schedule/${stopKey}`)
+  if (!res.ok) throw new Error("Failed to fetch stop schedule")
+  return res.json()
+}
+
+// get all cached transit routes from our database
+export async function getTransitRoutes() {
+  const res = await fetch(`${TRANSIT_BASE}/routes`)
+  if (!res.ok) throw new Error("Failed to fetch transit routes")
+  return res.json()
+}
+
+// get a single route by key
+export async function getTransitRoute(routeKey: number) {
+  const res = await fetch(`${TRANSIT_BASE}/routes/${routeKey}`)
+  if (!res.ok) throw new Error("Failed to fetch route")
+  return res.json()
+}
+
+// get all stops along a route
+export async function getRouteStops(routeKey: string) {
+  const res = await fetch(`${TRANSIT_BASE}/routes/${routeKey}/stops`)
+  if (!res.ok) throw new Error("Failed to fetch route stops")
+  return res.json()
+}
+
+// plan a trip using the winnipeg transit trip planner
+export async function getTripPlan(origin: string, destination: string) {
+  const params = new URLSearchParams({ origin, destination })
+  const res = await fetch(`${TRANSIT_BASE}/trip-planner?${params}`)
+  if (!res.ok) throw new Error("Failed to plan trip")
+  return res.json()
+}
+
+// get current service advisories
+export async function getServiceAdvisories() {
+  const res = await fetch(`${TRANSIT_BASE}/advisories`)
+  if (!res.ok) throw new Error("Failed to fetch advisories")
+  return res.json()
+}
+
+// trigger a sync of stops and routes from the transit API into our database
+export async function syncTransitData() {
+  const res = await fetch(`${TRANSIT_BASE}/sync`)
+  if (!res.ok) throw new Error("Failed to sync transit data")
+  return res.json()
+}
+
+// checks if we have route data, if not triggers a sync first
+// call this on pages that need transit data
+export async function ensureTransitData() {
+  const routes = await getTransitRoutes()
+  if (routes.length === 0) {
+    await syncTransitData()
+  }
+}
+
+========== src/hooks\useTrips.ts ==========
+import { useState, useEffect, useCallback } from 'react'
+import { useAuth } from '@clerk/clerk-react'
+import type { Trip } from '../types/Trip'
+import tripService from '../services/tripService'
+
+function useTrips() {
+  const { getToken, isSignedIn } = useAuth()
+
+  // form state
+  const [selectedFrom, setSelectedFrom] = useState('')
+  const [selectedTo, setSelectedTo] = useState('')
+
+  // results from searching
+  const [searchResults, setSearchResults] = useState<Trip[]>([])
+
+  // user's saved trips (loaded from database)
+  const [savedTrips, setSavedTrips] = useState<Trip[]>([])
+
+  // loading and error state for the UI
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+
+  // load saved trips when the hook mounts or when sign-in state changes
+  const loadData = useCallback(async () => {
+    // if not signed in, dont try to fetch trips (the api will return 401)
+    if (!isSignedIn) {
+      setSavedTrips([])
+      setLoading(false)
+      return
+    }
+
+    try {
+      setLoading(true)
+      setError('')
+      const token = await getToken()
+      const tripsData = await tripService.searchTrips('', '', token)
+      setSavedTrips(tripsData)
+    } catch {
+      setError('Could not load trips from the backend.')
+    } finally {
+      setLoading(false)
+    }
+  }, [isSignedIn, getToken])
+
+  useEffect(() => {
+    loadData()
+  }, [loadData])
+
+  // search trips based on current from/to
+  async function handleSearch() {
+    const token = await getToken()
+    const results = await tripService.searchTrips(selectedFrom, selectedTo, token)
+    setSearchResults(results)
+  }
+
+  // create a new trip and refresh the list
+  async function handleCreateTrip() {
+    const token = await getToken()
+    const trip = await tripService.createTrip(selectedFrom, selectedTo, token)
+    if (trip) {
+      await loadData()
+    }
+  }
+
+  // remove a trip and refresh the list
+  async function handleRemoveSavedTrip(tripId: number) {
+    const token = await getToken()
+    await tripService.deleteTrip(tripId, token)
+    await loadData()
+  }
+
+  return {
+    selectedFrom,
+    selectedTo,
+    setSelectedFrom,
+    setSelectedTo,
+    searchResults,
+    savedTrips,
+    loading,
+    error,
+    isSignedIn,
+    handleSearch,
+    handleCreateTrip,
+    handleRemoveSavedTrip,
+  }
+}
+
+export default useTrips
+
+========== src/layout\Layout.tsx ==========
+import Nav from '../components/live-bus-tracker/nav/nav'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react'
+import type { ReactNode } from 'react'
+
+function Layout({ children }: { children: ReactNode }) {
+  return (
+    <>
+      <header>
+        <div className="header-content">
+          <img src="/transit-logo.png" alt="Winnipeg Transit" style={{ height: 28, filter: 'brightness(0) invert(1)' }} />
+          <h1>Winnipeg Transit Tracker</h1>
+          <span className="header-team">Harsh Pandya, Khush Patel, Jack Buchholzer</span>
+          <a href="/api/docs" target="_blank" rel="noopener noreferrer" className="header-docs-link">API Docs</a>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="header-signin">Sign In</button>
+            </SignInButton>
+          </SignedOut>
+        </div>
+        <Nav />
+      </header>
+
+      <main>{children}</main>
+    </>
+  )
+}
+
+export default Layout
+
+========== src/pages\BusRouteMapPage.tsx ==========
+import BusRouteMap from "../components/bus-route-map/BusRouteMap"
+
+function BusRouteMapPage() {
+  return (
+    <div>
+      <h2 className="page-title">Route Map</h2>
+      <BusRouteMap />
+    </div>
+  )
+}
+
+export default BusRouteMapPage
+
+========== src/pages\FavoritesPage.tsx ==========
+import { Heart } from "lucide-react"
+import { Link } from "react-router-dom"
+import { useBuses } from "../hooks/useBuses"
+import BusStatusCard from "../components/bus-status-card/busStatusCard"
+
+const FavoritesPage = () => {
+  const { buses, loading, error, toggleFavorite, deleteBus } = useBuses()
+  const favorites = buses.filter((bus) => bus.favorite)
+
+  if (loading) return <p>Loading favorites...</p>
+  if (error) return <p style={{ color: "var(--color-danger)" }}>{error}</p>
+
+  return (
+    <div>
+      <h2 className="page-title">Favorites</h2>
+
+      {favorites.length === 0 ? (
+        <div className="empty-state">
+          <Heart size={32} style={{ marginBottom: "0.5rem", opacity: 0.4 }} />
+          <p>No favorite buses yet</p>
+          <p style={{ fontSize: "0.8rem", marginTop: "0.25rem" }}>
+            <Link to="/live-bus-tracker" style={{ color: "var(--color-primary)" }}>
+              Go to the Live Tracker
+            </Link>{" "}
+            to favorite some buses
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          {favorites.map((bus) => (
+            <BusStatusCard
+              key={bus.id}
+              routeNumber={bus.routeNumber}
+              destination={bus.destination}
+              eta={bus.eta}
+              status={bus.status}
+              onRemove={() => deleteBus(bus.id)}
+              onFavorite={() => toggleFavorite(bus.id, bus.favorite)}
+              isFavorite={true}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default FavoritesPage
+
+========== src/pages\HomePage.css ==========
+.home-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.home-hero {
+  position: relative;
+  background: var(--color-primary);
+  color: white;
+  padding: 3.5rem 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  overflow: hidden;
+  background-image: url('/bus-hero.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 30, 80, 0.7);
+}
+
+.weather-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: inline-flex;
+}
+
+.weather-temp {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.weather-desc {
+  opacity: 0.85;
+}
+
+.home-hero h2 {
+  position: relative;
+  font-size: 1.8rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+}
+
+.home-hero p {
+  position: relative;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.home-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1.25rem;
+}
+
+.stat-card .stat-icon {
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-card .stat-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.stat-card .stat-label {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+.home-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.home-link-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: box-shadow 0.2s, transform 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.home-link-card:hover {
+  box-shadow: var(--shadow-md);
+  border-left-color: var(--color-primary);
+  transform: translateX(2px);
+}
+
+.home-link-card .link-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.home-link-card .link-text {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.home-link-card .link-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.home-advisories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.home-advisories h3 {
+  font-size: 1rem;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+========== src/pages\HomePage.tsx ==========
+import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
+import { Radio, MapPin, Navigation, Heart, AlertTriangle, Wind, Cloud, Sun, CloudRain, CloudSnow, CloudDrizzle, CloudLightning, CloudFog } from "lucide-react"
+import ServiceAdvisoryBanner from "../components/ServiceAdvisoryBanner"
+import "./HomePage.css"
+
+// WMO weather codes mapped to descriptions and icons
+// https://open-meteo.com/en/docs
+function getWeatherInfo(code: number) {
+  if (code === 0) return { desc: "Clear sky", Icon: Sun }
+  if (code <= 3) return { desc: "Partly cloudy", Icon: Cloud }
+  if (code <= 49) return { desc: "Foggy", Icon: CloudFog }
+  if (code <= 59) return { desc: "Drizzle", Icon: CloudDrizzle }
+  if (code <= 69) return { desc: "Rain", Icon: CloudRain }
+  if (code <= 79) return { desc: "Snow", Icon: CloudSnow }
+  if (code <= 84) return { desc: "Rain showers", Icon: CloudRain }
+  if (code <= 86) return { desc: "Snow showers", Icon: CloudSnow }
+  if (code <= 99) return { desc: "Thunderstorm", Icon: CloudLightning }
+  return { desc: "Unknown", Icon: Cloud }
+}
+
+type Weather = {
+  temp: number
+  windSpeed: number
+  code: number
+}
+
+function HomePage() {
+  const [weather, setWeather] = useState<Weather | null>(null)
+
+  useEffect(() => {
+    // winnipeg coordinates, no API key needed
+    fetch("https://api.open-meteo.com/v1/forecast?latitude=49.8951&longitude=-97.1384&current=temperature_2m,weather_code,wind_speed_10m&timezone=America/Winnipeg")
+      .then((res) => res.json())
+      .then((data) => {
+        setWeather({
+          temp: Math.round(data.current.temperature_2m),
+          windSpeed: Math.round(data.current.wind_speed_10m),
+          code: data.current.weather_code,
+        })
+      })
+      .catch(() => {})
+  }, [])
+
+  const weatherInfo = weather ? getWeatherInfo(weather.code) : null
+
+  return (
+    <div className="home-page">
+      <div className="home-hero">
+        <h2>Winnipeg Transit Tracker</h2>
+        <p>Live bus tracking and trip planning powered by real city data</p>
+
+        {weather && weatherInfo && (
+          <div className="weather-bar">
+            <weatherInfo.Icon size={20} />
+            <span className="weather-temp">{weather.temp}Â°C</span>
+            <span className="weather-desc">{weatherInfo.desc}</span>
+            <Wind size={14} />
+            <span>{weather.windSpeed} km/h</span>
+          </div>
+        )}
+      </div>
+
+      <div className="home-links">
+        <Link to="/live-bus-tracker" className="card home-link-card">
+          <Radio size={24} className="link-icon" />
+          <div>
+            <div className="link-text">Live Bus Tracker</div>
+            <div className="link-desc">Real-time arrivals at any stop</div>
+          </div>
+        </Link>
+
+        <Link to="/bus-route-map" className="card home-link-card">
+          <MapPin size={24} className="link-icon" />
+          <div>
+            <div className="link-text">Route Map</div>
+            <div className="link-desc">View routes and stops on the map</div>
+          </div>
+        </Link>
+
+        <Link to="/trip-planner" className="card home-link-card">
+          <Navigation size={24} className="link-icon" />
+          <div>
+            <div className="link-text">Trip Planner</div>
+            <div className="link-desc">Plan your trip with transit data</div>
+          </div>
+        </Link>
+
+        <Link to="/favorites" className="card home-link-card">
+          <Heart size={24} className="link-icon" />
+          <div>
+            <div className="link-text">Favorites</div>
+            <div className="link-desc">Your saved favorite buses</div>
+          </div>
+        </Link>
+      </div>
+
+      <div className="home-advisories">
+        <h3>
+          <AlertTriangle size={16} />
+          Service Advisories
+        </h3>
+        <ServiceAdvisoryBanner />
+      </div>
+    </div>
+  )
+}
+
+export default HomePage
+
+========== src/pages\liveBusTrackerPage.css ==========
+.live-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.route-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+.route-chip {
+  cursor: pointer;
+  padding: 0.2rem;
+  border-radius: var(--radius-sm);
+  border: 2px solid transparent;
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.route-chip:hover {
+  transform: scale(1.08);
+}
+
+.route-chip.selected {
+  border-color: var(--color-accent);
+  background: var(--color-accent-light);
+}
+
+.stop-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.5rem;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+.stop-chip {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.15s;
+}
+
+.stop-chip:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.stop-chip.active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.stop-info {
+  padding: 0.6rem 1rem;
+  background: var(--color-primary-light);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tracker-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 0.25rem 0;
+}
+
+.tracker-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.user-buses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+========== src/pages\liveBusTrackerPage.tsx ==========
+import { useState, useEffect } from "react"
+import { Radio, MapPin } from "lucide-react"
+import { getTransitRoutes, getRouteStops, getStopSchedule, ensureTransitData } from "../hooks/useTransit"
+import { useBuses } from "../hooks/useBuses"
+import RouteBadge from "../components/RouteBadge"
+import StopScheduleCard from "../components/StopScheduleCard"
+import BusStatusCard from "../components/bus-status-card/busStatusCard"
+import "./liveBusTrackerPage.css"
+
+type TransitRoute = {
+  key: number
+  number: string
+  name: string
+  badgeStyle?: string | null
+}
+
+type RouteStop = {
+  key: number
+  name: string
+}
+
+type ScheduleEntry = {
+  routeNumber: string
+  routeName: string
+  destination: string
+  etaMinutes: number
+}
+
+function LiveBusTrackerPage() {
+  const [routes, setRoutes] = useState<TransitRoute[]>([])
+  const [selectedRoute, setSelectedRoute] = useState<TransitRoute | null>(null)
+  const [stops, setStops] = useState<RouteStop[]>([])
+  const [selectedStopKey, setSelectedStopKey] = useState<number | null>(null)
+  const [selectedStopName, setSelectedStopName] = useState("")
+  const [schedule, setSchedule] = useState<ScheduleEntry[]>([])
+  const [loadingStops, setLoadingStops] = useState(false)
+  const [loadingSchedule, setLoadingSchedule] = useState(false)
+
+  const { buses, addBus, toggleFavorite, deleteBus } = useBuses()
+
+  // load all routes on mount, sync from API if DB is empty
+  useEffect(() => {
+    ensureTransitData()
+      .then(() => getTransitRoutes())
+      .then((data) => setRoutes(data))
+      .catch(() => {})
+  }, [])
+
+  // when a route is clicked, load its stops and auto-pick the first one
+  const handlePickRoute = async (route: TransitRoute) => {
+    setSelectedRoute(route)
+    setStops([])
+    setSchedule([])
+    setSelectedStopKey(null)
+    setLoadingStops(true)
+
+    try {
+      const data = await getRouteStops(String(route.number || route.key))
+      const routeStops = data.stops || []
+      setStops(routeStops.slice(0, 10))
+
+      // auto load the first stop's schedule
+      if (routeStops.length > 0) {
+        loadSchedule(routeStops[0].key, routeStops[0].name)
+      }
+    } catch {
+      setStops([])
+    } finally {
+      setLoadingStops(false)
+    }
+  }
+
+  // load schedule for a specific stop
+  const loadSchedule = async (stopKey: number, stopName: string) => {
+    setSelectedStopKey(stopKey)
+    setSelectedStopName(stopName)
+    setLoadingSchedule(true)
+    setSchedule([])
+
+    try {
+      const data = await getStopSchedule(stopKey)
+      const routeSchedules = data["stop-schedule"]?.["route-schedules"] || []
+      const entries: ScheduleEntry[] = []
+
+      for (const rs of routeSchedules) {
+        const route = rs.route || {}
+        const scheduled = rs["scheduled-stops"] || []
+
+        for (const s of scheduled) {
+          const times = s.times || {}
+          const departure = times.departure || {}
+          const estimated = departure.estimated || departure.scheduled || ""
+
+          let etaMinutes = 0
+          if (estimated) {
+            const diff = new Date(estimated).getTime() - Date.now()
+            etaMinutes = Math.max(0, Math.round(diff / 60000))
+          }
+
+          const variant = s.variant || {}
+          entries.push({
+            routeNumber: String(route.number || route.key || "?"),
+            routeName: route.name || "",
+            destination: variant.name || "",
+            etaMinutes,
+          })
+        }
+      }
+
+      entries.sort((a, b) => a.etaMinutes - b.etaMinutes)
+      setSchedule(entries)
+    } catch {
+      setSchedule([])
+    } finally {
+      setLoadingSchedule(false)
+    }
+  }
+
+  // toggle favorite on a bus from the live schedule
+  // if it already exists in our db, toggle the flag
+  // if not, create it as a favorite
+  const handleFavoriteFromSchedule = async (entry: ScheduleEntry) => {
+    const existing = buses.find((b) => b.routeNumber === entry.routeNumber)
+    if (existing) {
+      await toggleFavorite(existing.id, existing.favorite)
+    } else {
+      await addBus({
+        routeNumber: entry.routeNumber,
+        destination: entry.destination,
+        nextStop: selectedStopName,
+        eta: entry.etaMinutes,
+        status: "On Time",
+        favorite: true,
+      })
+    }
+  }
+
+  const isRouteFavorited = (routeNumber: string) => {
+    return buses.some((b) => b.routeNumber === routeNumber && b.favorite)
+  }
+
+  return (
+    <div className="live-tracker">
+      <h2 className="page-title">Live Bus Tracker</h2>
+
+      <div className="route-grid">
+        {routes.map((route) => (
+          <div
+            key={route.key}
+            className={`route-chip ${selectedRoute?.key === route.key ? "selected" : ""}`}
+            onClick={() => handlePickRoute(route)}
+          >
+            <RouteBadge number={String(route.number)} badgeStyle={route.badgeStyle} />
+          </div>
+        ))}
+      </div>
+
+      {loadingStops && <p>Loading stops...</p>}
+
+      {stops.length > 0 && (
+        <div className="stop-chips">
+          <MapPin size={14} style={{ color: "var(--color-text-light)", flexShrink: 0 }} />
+          {stops.map((stop) => (
+            <button
+              key={stop.key}
+              className={`stop-chip ${selectedStopKey === stop.key ? "active" : ""}`}
+              onClick={() => loadSchedule(stop.key, stop.name)}
+            >
+              {stop.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {selectedStopName && (
+        <div className="stop-info">
+          <Radio size={16} />
+          Live arrivals at {selectedStopName}
+        </div>
+      )}
+
+      {loadingSchedule && <p>Loading schedule...</p>}
+
+      {schedule.length > 0 && (
+        <div className="schedule-list">
+          {schedule.map((entry, i) => (
+            <StopScheduleCard
+              key={i}
+              routeNumber={entry.routeNumber}
+              routeName={entry.routeName}
+              destination={entry.destination}
+              etaMinutes={entry.etaMinutes}
+              onFavorite={() => handleFavoriteFromSchedule(entry)}
+              isFavorite={isRouteFavorited(entry.routeNumber)}
+            />
+          ))}
+        </div>
+      )}
+
+      {buses.filter(b => b.favorite).length > 0 && (
+        <>
+          <hr className="tracker-divider" />
+          <div className="tracker-section-title">Your Favorites</div>
+          <div className="user-buses">
+            {buses.filter(b => b.favorite).map((bus) => (
+              <BusStatusCard
+                key={bus.id}
+                routeNumber={bus.routeNumber}
+                destination={bus.destination}
+                eta={bus.eta}
+                status={bus.status}
+                onRemove={() => deleteBus(bus.id)}
+                onFavorite={() => toggleFavorite(bus.id, bus.favorite)}
+                isFavorite={bus.favorite}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+export default LiveBusTrackerPage
+
+========== src/pages\SavedTripsPage.tsx ==========
+import { useState } from "react"
+import { Trash2, Clock, ChevronDown, ChevronUp } from "lucide-react"
+import { SignInButton } from "@clerk/clerk-react"
+import useTrips from "../hooks/useTrips"
+import { getTripPlan } from "../hooks/useTransit"
+import TripSegment from "../components/TripSegment"
+import type { Trip } from "../types/Trip"
+
+// same locations list from the trip planner so we can look up coords
+const LOCATIONS: Record<string, string> = {
+  "Portage and Main": "geo/49.8951,-97.1384",
+  "University of Manitoba": "geo/49.8094,-97.1327",
+  "The Forks": "geo/49.8889,-97.1313",
+  "Polo Park": "geo/49.8815,-97.1973",
+  "St Vital Centre": "geo/49.8286,-97.1130",
+  "Kildonan Place": "geo/49.8957,-97.0474",
+  "Health Sciences Centre": "geo/49.9037,-97.1642",
+  "City Hall": "geo/49.8988,-97.1376",
+  "Osborne Village": "geo/49.8814,-97.1470",
+  "RRC Polytech Notre Dame": "geo/49.9044,-97.2030",
+}
+
+type PlanSegment = {
+  type: "walk" | "ride" | "transfer"
+  from: string
+  to: string
+  duration?: number
+  routeNumber?: string
+  time?: string
+}
+
+function SavedTripsPage() {
+  const { savedTrips, loading, error, isSignedIn, handleRemoveSavedTrip } = useTrips()
+  const [expandedTripId, setExpandedTripId] = useState<number | null>(null)
+  const [segments, setSegments] = useState<PlanSegment[]>([])
+  const [planLoading, setPlanLoading] = useState(false)
+
+  // when you click a trip, re-plan it to show the steps
+  const handleExpandTrip = async (trip: Trip) => {
+    // if already expanded, collapse it
+    if (expandedTripId === trip.id) {
+      setExpandedTripId(null)
+      setSegments([])
+      return
+    }
+
+    setExpandedTripId(trip.id)
+    setSegments([])
+    setPlanLoading(true)
+
+    // look up the geo coordinates for this trip's origin and destination
+    const originGeo = LOCATIONS[trip.from]
+    const destGeo = LOCATIONS[trip.to]
+
+    if (!originGeo || !destGeo) {
+      setPlanLoading(false)
+      return
+    }
+
+    try {
+      const data = await getTripPlan(originGeo, destGeo)
+      const plans = data.plans || []
+      if (plans.length === 0) {
+        setPlanLoading(false)
+        return
+      }
+
+      const plan = plans[0]
+      const planSegments: PlanSegment[] = []
+
+      for (const seg of plan.segments || []) {
+        const segType = seg.type as string
+
+        if (segType === "walk") {
+          const walk = seg.walk || seg
+          planSegments.push({
+            type: "walk",
+            from: walk.from?.name || walk.from?.origin?.name || "Start",
+            to: walk.to?.name || walk.to?.destination?.name || "End",
+            duration: walk.times?.durations?.total,
+          })
+        } else if (segType === "ride") {
+          const ride = seg.ride || seg
+          const route = ride.route || {}
+          planSegments.push({
+            type: "ride",
+            from: ride.from?.stop?.name || "Stop",
+            to: ride.to?.stop?.name || "Stop",
+            routeNumber: route.number || route.key?.toString(),
+            duration: ride.times?.durations?.total,
+            time: ride.times?.start,
+          })
+        } else if (segType === "transfer") {
+          const transfer = seg.transfer || seg
+          planSegments.push({
+            type: "transfer",
+            from: transfer.from?.stop?.name || "Stop",
+            to: transfer.to?.stop?.name || "Stop",
+            duration: transfer.times?.durations?.total,
+          })
+        }
+      }
+
+      setSegments(planSegments)
+    } catch {
+      setSegments([])
+    } finally {
+      setPlanLoading(false)
+    }
+  }
+
+  if (!isSignedIn) {
+    return (
+      <div>
+        <h2 className="page-title">Saved Trips</h2>
+        <div className="empty-state">
+          <Clock size={32} style={{ marginBottom: "0.5rem", opacity: 0.4 }} />
+          <p>Sign in to view your saved trips</p>
+          <SignInButton mode="modal">
+            <button className="btn-primary" style={{ marginTop: "0.5rem" }}>Sign In</button>
+          </SignInButton>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading) return <p>Loading saved trips...</p>
+  if (error) return <p style={{ color: "var(--color-danger)" }}>{error}</p>
+
+  return (
+    <div>
+      <h2 className="page-title">Saved Trips</h2>
+
+      {savedTrips.length === 0 ? (
+        <div className="empty-state">
+          <Clock size={32} style={{ marginBottom: "0.5rem", opacity: 0.4 }} />
+          <p>No saved trips yet</p>
+          <p style={{ fontSize: "0.8rem", marginTop: "0.25rem" }}>
+            Go to the Trip Planner to create and save trips
+          </p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          {savedTrips.map((trip: Trip) => (
+            <div key={trip.id}>
+              <div
+                className="card"
+                style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.75rem 1rem", cursor: "pointer" }}
+                onClick={() => handleExpandTrip(trip)}
+              >
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <span style={{ color: "var(--color-primary)" }}>Route {trip.route}</span>
+                    {trip.from} to {trip.to}
+                  </div>
+                  <div style={{ fontSize: "0.8rem", color: "var(--color-text-light)", marginTop: "0.15rem" }}>
+                    {trip.duration} min | ${trip.fare.toFixed(2)} | {trip.status}
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
+                  {expandedTripId === trip.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                  <button className="btn-ghost" onClick={(e) => { e.stopPropagation(); handleRemoveSavedTrip(trip.id) }}>
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              </div>
+
+              {expandedTripId === trip.id && (
+                <div style={{ borderLeft: "2px solid var(--color-primary)", marginLeft: "1rem", marginTop: "0.25rem" }}>
+                  {planLoading && <p style={{ padding: "0.5rem 1rem", fontSize: "0.85rem" }}>Loading directions...</p>}
+                  {segments.map((seg, i) => (
+                    <TripSegment
+                      key={i}
+                      type={seg.type}
+                      from={seg.from}
+                      to={seg.to}
+                      duration={seg.duration}
+                      routeNumber={seg.routeNumber}
+                      time={seg.time}
+                    />
+                  ))}
+                  {!planLoading && segments.length === 0 && (
+                    <p style={{ padding: "0.5rem 1rem", fontSize: "0.85rem", color: "var(--color-text-light)" }}>
+                      Could not load directions for this trip
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+export default SavedTripsPage
+
+========== src/pages\TripPlannerPage.css ==========
+.trip-planner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.trip-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trip-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.trip-form-row label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.trip-form-row select {
+  padding: 0.65rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.trip-plan-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.trip-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--color-primary-light);
+  border-radius: var(--radius) var(--radius) 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.trip-plan-segments {
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  overflow: hidden;
+}
+
+.trip-plan-note {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  padding: 0.5rem 0;
+}
+
+.saved-trips-section {
+  margin-top: 0.5rem;
+}
+
+.saved-trip-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.saved-trip-info {
+  font-size: 0.85rem;
+}
+
+.saved-trip-info strong {
+  color: var(--color-primary);
+}
+
+.saved-trip-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+========== src/pages\TripPlannerPage.tsx ==========
+import { useState } from "react"
+import { Navigation, Trash2, Save } from "lucide-react"
+import { useAuth } from "@clerk/clerk-react"
+import { SignInButton } from "@clerk/clerk-react"
+import { getTripPlan } from "../hooks/useTransit"
+import tripRepository from "../repositories/tripRepository"
+import useTrips from "../hooks/useTrips"
+import TripSegment from "../components/TripSegment"
+import type { Trip } from "../types/Trip"
+import "./TripPlannerPage.css"
+
+// popular winnipeg locations with their coordinates
+// the transit trip planner API needs locations as geo/lat,lng
+const LOCATIONS = [
+  { name: "Portage and Main", value: "geo/49.8951,-97.1384" },
+  { name: "University of Manitoba", value: "geo/49.8094,-97.1327" },
+  { name: "The Forks", value: "geo/49.8889,-97.1313" },
+  { name: "Polo Park", value: "geo/49.8815,-97.1973" },
+  { name: "St Vital Centre", value: "geo/49.8286,-97.1130" },
+  { name: "Kildonan Place", value: "geo/49.8957,-97.0474" },
+  { name: "Health Sciences Centre", value: "geo/49.9037,-97.1642" },
+  { name: "City Hall", value: "geo/49.8988,-97.1376" },
+  { name: "Osborne Village", value: "geo/49.8814,-97.1470" },
+  { name: "RRC Polytech Notre Dame", value: "geo/49.9044,-97.2030" },
+]
+
+type LatLng = { lat: number, lng: number }
+
+type PlanSegment = {
+  type: "walk" | "ride" | "transfer"
+  from: string
+  to: string
+  duration?: number
+  routeNumber?: string
+  time?: string
+  fromCoord?: LatLng
+  toCoord?: LatLng
+}
+
+function TripPlannerPage() {
+  const [origin, setOrigin] = useState("")
+  const [destination, setDestination] = useState("")
+  const [segments, setSegments] = useState<PlanSegment[]>([])
+  const [fare, setFare] = useState<number | null>(null)
+  const [planLoading, setPlanLoading] = useState(false)
+  const [planError, setPlanError] = useState("")
+
+  const [tripSaved, setTripSaved] = useState(false)
+
+  const { isSignedIn } = useAuth()
+  const { getToken } = useAuth()
+  const { savedTrips, loading, handleRemoveSavedTrip } = useTrips()
+
+  // save the current planned trip to our database
+  const handleSaveTrip = async () => {
+    if (segments.length === 0) return
+
+    const token = await getToken()
+
+    // figure out the total duration and route from the segments
+    const totalDuration = segments.reduce((sum, s) => sum + (s.duration || 0), 0)
+    const rideSegment = segments.find((s) => s.type === "ride")
+    const routeName = rideSegment?.routeNumber || "Walk"
+
+    const originName = LOCATIONS.find(l => l.value === origin)?.name || "Unknown"
+    const destName = LOCATIONS.find(l => l.value === destination)?.name || "Unknown"
+
+    await tripRepository.addTrip({
+      from: originName,
+      to: destName,
+      route: routeName,
+      departureTime: rideSegment?.time || "Now",
+      arrivalTime: "TBD",
+      duration: totalDuration,
+      fare: 3.15,
+      status: "scheduled",
+    }, token)
+
+    setTripSaved(true)
+    setTimeout(() => setTripSaved(false), 3000)
+  }
+
+  const handlePlanTrip = async () => {
+    setTripSaved(false)
+    if (!origin || !destination) return
+    if (origin === destination) {
+      setPlanError("Pick two different locations")
+      return
+    }
+
+    setPlanLoading(true)
+    setPlanError("")
+    setSegments([])
+
+    try {
+      const data = await getTripPlan(origin, destination)
+
+      const plans = data.plans || []
+      if (plans.length === 0) {
+        setPlanError("No routes found between those locations.")
+        return
+      }
+
+      const plan = plans[0]
+
+      // grab the fare if the API returns it
+      const planFare = plan.costs?.adult || plan.fare?.adult || null
+      setFare(planFare ? parseFloat(planFare) : null)
+
+      const planSegments: PlanSegment[] = []
+
+      // helper to pull lat/lng from the API's geographic object
+      const getCoord = (obj: any): LatLng | undefined => {
+        const geo = obj?.centre?.geographic || obj?.geographic
+        if (geo) return { lat: parseFloat(geo.latitude), lng: parseFloat(geo.longitude) }
+        // the origin/destination come back as geo/lat,lng strings
+        const point = obj?.origin?.point || obj?.destination?.point || obj?.point
+        if (point?.geographic) return { lat: parseFloat(point.geographic.latitude), lng: parseFloat(point.geographic.longitude) }
+        return undefined
+      }
+
+      for (const seg of plan.segments || []) {
+        const segType = seg.type as string
+
+        if (segType === "walk") {
+          const walk = seg.walk || seg
+          planSegments.push({
+            type: "walk",
+            from: walk.from?.name || walk.from?.origin?.name || "Start",
+            to: walk.to?.name || walk.to?.destination?.name || "End",
+            duration: walk.times?.durations?.total,
+            fromCoord: getCoord(walk.from?.stop || walk.from?.origin || walk.from),
+            toCoord: getCoord(walk.to?.stop || walk.to?.destination || walk.to),
+          })
+        } else if (segType === "ride") {
+          const ride = seg.ride || seg
+          const route = ride.route || {}
+          planSegments.push({
+            type: "ride",
+            from: ride.from?.stop?.name || "Stop",
+            to: ride.to?.stop?.name || "Stop",
+            routeNumber: route.number || route.key?.toString(),
+            duration: ride.times?.durations?.total,
+            time: ride.times?.start,
+            fromCoord: getCoord(ride.from?.stop),
+            toCoord: getCoord(ride.to?.stop),
+          })
+        } else if (segType === "transfer") {
+          const transfer = seg.transfer || seg
+          planSegments.push({
+            type: "transfer",
+            from: transfer.from?.stop?.name || "Stop",
+            to: transfer.to?.stop?.name || "Stop",
+            duration: transfer.times?.durations?.total,
+            fromCoord: getCoord(transfer.from?.stop),
+            toCoord: getCoord(transfer.to?.stop),
+          })
+        }
+      }
+
+      setSegments(planSegments)
+    } catch {
+      setPlanError("Could not plan trip. Try different locations.")
+    } finally {
+      setPlanLoading(false)
+    }
+  }
+
+  return (
+    <div className="trip-planner">
+      <h2 className="page-title">Trip Planner</h2>
+
+      <div className="card trip-form">
+        <div className="trip-form-row">
+          <label>From</label>
+          <select value={origin} onChange={(e) => setOrigin(e.target.value)}>
+            <option value="">Select origin</option>
+            {LOCATIONS.map((loc) => (
+              <option key={loc.name} value={loc.value}>{loc.name}</option>
+            ))}
+          </select>
+        </div>
+        <div className="trip-form-row">
+          <label>To</label>
+          <select value={destination} onChange={(e) => setDestination(e.target.value)}>
+            <option value="">Select destination</option>
+            {LOCATIONS.map((loc) => (
+              <option key={loc.name} value={loc.value}>{loc.name}</option>
+            ))}
+          </select>
+        </div>
+        <button className="btn-primary" onClick={handlePlanTrip} style={{ display: "flex", alignItems: "center", gap: "0.4rem", justifyContent: "center" }}>
+          <Navigation size={16} />
+          Plan Trip
+        </button>
+      </div>
+
+      {planLoading && <p>Planning your trip...</p>}
+      {planError && <p style={{ color: "var(--color-danger)", fontSize: "0.9rem" }}>{planError}</p>}
+
+      {segments.length > 0 && (
+        <div className="trip-plan-result">
+          <div className="trip-plan-header">
+            <span>{LOCATIONS.find(l => l.value === origin)?.name} to {LOCATIONS.find(l => l.value === destination)?.name}</span>
+            <span>{fare ? `$${fare.toFixed(2)}` : ""} {segments.length} steps</span>
+          </div>
+          <div className="trip-plan-segments">
+            {segments.map((seg, i) => (
+              <TripSegment
+                key={i}
+                type={seg.type}
+                from={seg.from}
+                to={seg.to}
+                duration={seg.duration}
+                routeNumber={seg.routeNumber}
+                time={seg.time}
+              />
+            ))}
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.25rem" }}>
+            <p className="trip-plan-note">
+              Powered by Winnipeg Transit Open Data
+            </p>
+            {isSignedIn ? (
+              <button
+                className="btn-primary"
+                onClick={handleSaveTrip}
+                style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+              >
+                <Save size={14} />
+                {tripSaved ? "Saved!" : "Save Trip"}
+              </button>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="btn-ghost" style={{ fontSize: "0.8rem" }}>
+                  Sign in to save trips
+                </button>
+              </SignInButton>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="saved-trips-section">
+        <h3 style={{ fontSize: "1rem", marginBottom: "0.5rem" }}>Saved Trips</h3>
+
+        {loading && <p>Loading...</p>}
+
+        {savedTrips.length === 0 && !loading ? (
+          <p className="empty-state">No saved trips yet</p>
+        ) : (
+          savedTrips.map((trip: Trip) => (
+            <div key={trip.id} className="card saved-trip-card">
+              <div className="saved-trip-info">
+                <strong>Route {trip.route}</strong> -- {trip.from} to {trip.to}
+                <div className="saved-trip-meta">
+                  {trip.departureTime} - {trip.arrivalTime} | {trip.duration} min | ${trip.fare.toFixed(2)}
+                </div>
+              </div>
+              <button className="btn-ghost" onClick={() => handleRemoveSavedTrip(trip.id)}>
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default TripPlannerPage
+
+========== src/repositories\BusRepository.ts ==========
+import type { Bus } from "../types/Bus";
+
+const API_BASE_URL = "/api/buses";
+
+export class BusRepository {
+  async getAll(): Promise<Bus[]> {
+    const response = await fetch(API_BASE_URL);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch buses");
+    }
+
+    return response.json();
+  }
+
+  async create(bus: Omit<Bus, "id">): Promise<Bus> {
+    const response = await fetch(API_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bus),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create bus");
+    }
+
+    return response.json();
+  }
+
+  async toggleFavorite(id: number, favorite: boolean): Promise<Bus> {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ favorite: !favorite }),
+    });
+    if (!response.ok) throw new Error("Failed to toggle favorite");
+    return response.json();
+  }
+
+  async delete(id: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete bus");
+    }
+  }
+}
+
+========== src/repositories\StopRepository.ts ==========
+const BASE_URL = "/stops";
+
+export const getStops = async (token: string) => {
+  const res = await fetch(BASE_URL, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Failed to fetch stops");
+
+  return res.json();
+};
+
+export const createStop = async (stop: any, token: string) => {
+  const res = await fetch(BASE_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(stop),
+  });
+
+  if (!res.ok) throw new Error("Failed to create stop");
+
+  return res.json();
+};
+
+export const deleteStop = async (id: number, token: string) => {
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) throw new Error("Failed to delete stop");
+};
+
+========== src/repositories\tripRepository.ts ==========
+import type { Trip } from "../types/Trip"
+
+const API_BASE = "/api/trips"
+
+// builds headers with the auth token if we have one
+function buildHeaders(token: string | null): HeadersInit {
+  const headers: HeadersInit = { "Content-Type": "application/json" }
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`
+  }
+  return headers
+}
+
+// get all trips for the logged in user
+async function getAllTrips(token: string | null): Promise<Trip[]> {
+  const response = await fetch(API_BASE, {
+    headers: buildHeaders(token),
+  })
+  if (!response.ok) throw new Error("Failed to fetch trips")
+  const data = await response.json()
+  return data.map(mapTripFromApi)
+}
+
+// get a single trip by id
+async function getTripById(id: number, token: string | null): Promise<Trip | null> {
+  const response = await fetch(`${API_BASE}/${id}`, {
+    headers: buildHeaders(token),
+  })
+  if (!response.ok) return null
+  return response.json()
+}
+
+// create a new trip and return it with the generated id
+async function addTrip(trip: Omit<Trip, 'id'>, token: string | null): Promise<Trip> {
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    headers: buildHeaders(token),
+    body: JSON.stringify({
+      origin: trip.from,
+      destination: trip.to,
+      route: trip.route,
+      departureTime: trip.departureTime,
+      arrivalTime: trip.arrivalTime,
+      duration: trip.duration,
+      fare: trip.fare,
+      status: trip.status,
+    }),
+  })
+  if (!response.ok) throw new Error("Failed to create trip")
+  return mapTripFromApi(await response.json())
+}
+
+// remove a trip by id
+async function removeTrip(id: number, token: string | null): Promise<boolean> {
+  const response = await fetch(`${API_BASE}/${id}`, {
+    method: "DELETE",
+    headers: buildHeaders(token),
+  })
+  return response.ok
+}
+
+// the backend uses "origin" and "destination" but the frontend
+// uses "from" and "to", so we map between them here
+function mapTripFromApi(apiTrip: any): Trip {
+  return {
+    id: apiTrip.id,
+    from: apiTrip.origin,
+    to: apiTrip.destination,
+    route: apiTrip.route,
+    departureTime: apiTrip.departureTime,
+    arrivalTime: apiTrip.arrivalTime,
+    duration: apiTrip.duration,
+    fare: apiTrip.fare,
+    status: apiTrip.status,
+  }
+}
+
+const tripRepository = {
+  getAllTrips,
+  getTripById,
+  addTrip,
+  removeTrip,
+  mapTripFromApi,
+}
+
+export default tripRepository
+
+========== src/services\BusServices.ts ==========
+import { BusRepository } from "../repositories/BusRepository";
+import type { Bus } from "../types/Bus";
+
+export class BusService {
+  private repository = new BusRepository();
+
+  async getAllBuses(): Promise<Bus[]> {
+    return this.repository.getAll();
+  }
+
+  async addBus(bus: Omit<Bus, "id">): Promise<Bus> {
+    return this.repository.create(bus);
+  }
+
+  async toggleFavorite(id: number, favorite: boolean): Promise<Bus> {
+    return this.repository.toggleFavorite(id, favorite);
+  }
+
+  async deleteBus(id: number): Promise<void> {
+    return this.repository.delete(id);
+  }
+}
+
+========== src/services\StopService.ts ==========
+import * as stopRepo from "../repositories/StopRepository";
+
+export const stopService = {
+  getStops() {
+    return stopRepo.getStops();
+  },
+
+  addStop(name: string) {
+    if (!name.trim()) return;
+    return stopRepo.createStop({
+      name,
+      latitude: 49.8951,
+      longitude: -97.1384,
+    });
+  },
+
+  removeStop(id: number) {
+    return stopRepo.deleteStop(id);
+  }
+};
+
+========== src/services\tripService.ts ==========
+import type { Trip } from '../types/Trip'
+import tripRepository from '../repositories/tripRepository'
+
+// search for trips that match a from/to combination
+async function searchTrips(from: string, to: string, token: string | null): Promise<Trip[]> {
+  const allTrips = await tripRepository.getAllTrips(token)
+
+  return allTrips.filter((trip) => {
+    const matchesFrom = from === '' || trip.from === from
+    const matchesTo = to === '' || trip.to === to
+    return matchesFrom && matchesTo
+  })
+}
+
+// create a new trip from user input
+async function createTrip(from: string, to: string, token: string | null): Promise<Trip | null> {
+  if (!from || !to) return null
+  if (from === to) return null
+
+  const newTrip = await tripRepository.addTrip({
+    from,
+    to,
+    route: 'TBD',
+    departureTime: 'TBD',
+    arrivalTime: 'TBD',
+    duration: 0,
+    fare: 3.15,
+    status: 'scheduled',
+  }, token)
+
+  return newTrip
+}
+
+// remove a trip
+async function deleteTrip(id: number, token: string | null): Promise<boolean> {
+  return tripRepository.removeTrip(id, token)
+}
+
+const tripService = {
+  searchTrips,
+  createTrip,
+  deleteTrip,
+}
+
+export default tripService
+
+========== src/types\Bus.ts ==========
+// I.1: TypeScript type defining the resource
+export type Bus = {
+  id: number;
+  routeNumber: string;
+  destination: string;
+  nextStop: string;
+  eta: number;
+  status: string;
+  favorite: boolean;
+};
+
+========== src/types\Stop.ts ==========
+export type Stop = {
+  id: number;
+  name: string;
+  lat: number;
+  lng: number;
+};
+
+========== src/types\Trip.ts ==========
+/**
+ * Trip type definition
+ * Represents a single transit trip in the Winnipeg Transit system
+ */
+export type Trip = {
+  id: number
+  from: string
+  to: string
+  route: string
+  departureTime: string
+  arrivalTime: string
+  duration: number // minutes
+  fare: number
+  status: 'scheduled' | 'in-progress' | 'completed' | 'cancelled'
+}

@@ -1,18 +1,10 @@
-/**
- * @author Jack Buchholzer
- * SavedTripsPage -- shows all trips stored in the database
- *
- * Click on a saved trip to re-plan it and see the step by step
- * directions from the Winnipeg Transit API.
- */
-
 import { useState } from "react"
 import { Trash2, Clock, ChevronDown, ChevronUp } from "lucide-react"
 import { SignInButton } from "@clerk/clerk-react"
 import useTrips from "../hooks/useTrips"
 import { getTripPlan } from "../hooks/useTransit"
 import TripSegment from "../components/TripSegment"
-import type { Trip } from "../types/trip"
+import type { Trip } from "../types/Trip"
 
 // same locations list from the trip planner so we can look up coords
 const LOCATIONS: Record<string, string> = {
