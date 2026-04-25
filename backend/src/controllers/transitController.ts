@@ -1,47 +1,60 @@
-/**
- * @author Jack Buchholzer
- * Transit Controller -- handles requests for Winnipeg Transit data
- *
- * Some endpoints return cached data from our database (stops, routes).
- * Others proxy live data from the Winnipeg Transit API (schedules, trip plans).
- * The API key stays on the server so it never reaches the browser.
- */
-
 import { Request, Response } from "express"
 import * as transitService from "../services/transitService"
 
-// return all cached transit stops from our database
+// normalize query params safely
+const getQueryParam = (param: unknown): string | undefined => {
+  if (!param) return undefined
+
+  if (typeof param === "string") return param
+
+  if (Array.isArray(param)) {
+    const first = param[0]
+    return typeof first === "string" ? first : undefined
+  }
+
+  return undefined
+}
+
+// normalize route params safely
+const getParam = (param: string | string[]): string => {
+  return Array.isArray(param) ? param[0] : param
+}
+
+// -----------------------------
+
 export async function getTransitStops(req: Request, res: Response) {
   try {
     const stops = await transitService.getCachedStops()
     res.json(stops)
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Failed to fetch transit stops" })
   }
 }
 
-// find stops near a lat/lng (calls the live API)
+// -----------------------------
+
 export async function getNearbyStops(req: Request, res: Response) {
   try {
-    const lat = parseFloat(req.query.lat as string)
-    const lon = parseFloat(req.query.lon as string)
-    const distance = parseInt(req.query.distance as string) || 500
+    const lat = parseFloat(getQueryParam(req.query.lat) || "")
+    const lon = parseFloat(getQueryParam(req.query.lon) || "")
+    const distance = parseInt(getQueryParam(req.query.distance) || "500")
 
     if (isNaN(lat) || isNaN(lon)) {
-      return res.status(400).json({ message: "lat and lon query params are required" })
+      return res.status(400).json({ message: "lat and lon required" })
     }
 
     const data = await transitService.fetchNearbyStops(lat, lon, distance)
     res.json(data)
-  } catch (error) {
-    res.status(502).json({ message: "Winnipeg Transit API is unavailable" })
+  } catch {
+    res.status(502).json({ message: "Winnipeg Transit API unavailable" })
   }
 }
 
-// get a single stop by its winnipeg transit key
+// -----------------------------
+
 export async function getTransitStop(req: Request, res: Response) {
   try {
-    const key = parseInt(req.params.stopKey)
+    const key = parseInt(getParam(req.params.stopKey))
     const stop = await transitService.getCachedStopByKey(key)
 
     if (!stop) {
@@ -49,36 +62,39 @@ export async function getTransitStop(req: Request, res: Response) {
     }
 
     res.json(stop)
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Failed to fetch stop" })
   }
 }
 
-// get the live schedule for a stop (arriving buses and ETAs)
+// -----------------------------
+
 export async function getStopSchedule(req: Request, res: Response) {
   try {
-    const stopKey = parseInt(req.params.stopKey)
+    const stopKey = parseInt(getParam(req.params.stopKey))
     const data = await transitService.fetchStopSchedule(stopKey)
     res.json(data)
-  } catch (error) {
-    res.status(502).json({ message: "Winnipeg Transit API is unavailable" })
+  } catch {
+    res.status(502).json({ message: "Winnipeg Transit API unavailable" })
   }
 }
 
-// return all cached transit routes from our database
+// -----------------------------
+
 export async function getTransitRoutes(req: Request, res: Response) {
   try {
     const routes = await transitService.getCachedRoutes()
     res.json(routes)
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch transit routes" })
+  } catch {
+    res.status(500).json({ message: "Failed to fetch routes" })
   }
 }
 
-// get a single route by its key
+// -----------------------------
+
 export async function getTransitRoute(req: Request, res: Response) {
   try {
-    const key = parseInt(req.params.routeKey)
+    const key = parseInt(getParam(req.params.routeKey))
     const route = await transitService.getCachedRouteByKey(key)
 
     if (!route) {
@@ -86,50 +102,54 @@ export async function getTransitRoute(req: Request, res: Response) {
     }
 
     res.json(route)
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Failed to fetch route" })
   }
 }
 
-// get all stops along a route (calls the live API)
+// -----------------------------
+
 export async function getRouteStops(req: Request, res: Response) {
   try {
-    const routeKey = req.params.routeKey
+    const routeKey = getParam(req.params.routeKey)
     const data = await transitService.fetchRouteStops(routeKey)
     res.json(data)
-  } catch (error) {
-    res.status(502).json({ message: "Winnipeg Transit API is unavailable" })
+  } catch {
+    res.status(502).json({ message: "Winnipeg Transit API unavailable" })
   }
 }
 
-// plan a trip between two locations (calls the live API)
+// -----------------------------
+
 export async function getTripPlan(req: Request, res: Response) {
   try {
-    const origin = req.query.origin as string
-    const destination = req.query.destination as string
+    const origin = getQueryParam(req.query.origin)
+    const destination = getQueryParam(req.query.destination)
 
     if (!origin || !destination) {
-      return res.status(400).json({ message: "origin and destination query params are required" })
+      return res.status(400).json({ message: "origin and destination required" })
     }
 
     const data = await transitService.fetchTripPlan(origin, destination)
     res.json(data)
-  } catch (error) {
-    res.status(502).json({ message: "Winnipeg Transit API is unavailable" })
+  } catch {
+    res.status(502).json({ message: "Winnipeg Transit API unavailable" })
   }
 }
 
-// get current service advisories (calls the live API)
+// -----------------------------
+
 export async function getServiceAdvisories(req: Request, res: Response) {
   try {
     const data = await transitService.fetchServiceAdvisories()
     res.json(data)
-  } catch (error) {
-    res.status(502).json({ message: "Winnipeg Transit API is unavailable" })
+  } catch {
+    res.status(502).json({ message: "Winnipeg Transit API unavailable" })
   }
 }
 
-// pull all stops and routes from the API into our database
+// -----------------------------
+
 export async function syncTransitData(req: Request, res: Response) {
   try {
     const result = await transitService.syncStopsAndRoutes()
@@ -138,7 +158,7 @@ export async function syncTransitData(req: Request, res: Response) {
       stopsCount: result.stopsCount,
       routesCount: result.routesCount,
     })
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Failed to sync transit data" })
   }
 }

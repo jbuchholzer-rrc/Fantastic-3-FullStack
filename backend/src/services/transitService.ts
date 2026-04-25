@@ -1,16 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Transit Service -- wraps the Winnipeg Transit API v3
- *
- * This service handles all communication with the Winnipeg Transit
- * Open Data API. The API key is kept server-side so it never
- * reaches the browser.
- *
- * Two types of data:
- *   - Cached: stops and routes get saved to our database (they rarely change)
- *   - Live: schedules, trip plans, and advisories are fetched fresh every time
- */
-
 import prisma from "../lib/prisma"
 
 const BASE_URL = "https://api.winnipegtransit.com/v3"

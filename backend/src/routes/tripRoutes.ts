@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Trip Routes -- maps HTTP methods to controller functions
- *
- * POST and PATCH requests go through validation middleware
- * before reaching the controller.
- */
-
 import { Router } from "express"
 import {
   getTrips,

@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * RouteBadge -- displays a route number with real transit colors
- *
- * The Winnipeg Transit API returns badge colors for each route.
- * We parse those and use them to style the badge so it matches
- * what you see on the real buses and signs around the city.
- */
-
 import "./RouteBadge.css"
 
 type RouteBadgeProps = {

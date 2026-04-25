@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * LiveBusTrackerPage -- browse routes and see live arrivals
- *
- * Click a route badge to see stops along that route and live
- * bus arrivals. Uses the real Winnipeg Transit API for everything.
- */
-
 import { useState, useEffect } from "react"
 import { Radio, MapPin } from "lucide-react"
 import { getTransitRoutes, getRouteStops, getStopSchedule, ensureTransitData } from "../hooks/useTransit"

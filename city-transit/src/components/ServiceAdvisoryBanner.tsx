@@ -1,12 +1,3 @@
-/**
- * @author Jack Buchholzer
- * ServiceAdvisoryBanner -- shows transit service alerts
- *
- * Fetches live advisories from the Winnipeg Transit API
- * and displays them as warning banners. Shows up on the
- * home page and can be reused anywhere.
- */
-
 import { useEffect, useState } from "react"
 import { AlertTriangle } from "lucide-react"
 import { getServiceAdvisories } from "../hooks/useTransit"

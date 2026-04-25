@@ -1,11 +1,3 @@
-/**
- * @author Jack Buchholzer
- * Swagger/OpenAPI spec for the API documentation
- *
- * writing the spec directly instead of scanning JSDoc comments
- * because vercel serverless cant find the route files at runtime
- */
-
 const swaggerSpec = {
   openapi: "3.0.0",
   info: {
